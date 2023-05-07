@@ -4,6 +4,7 @@ export const colors = {
   white: '#fff',
   transparent: 'transparent',
   purple: '#5460FE',
+  green: '#3A984D',
 };
 
 export type TColors = typeof colors;

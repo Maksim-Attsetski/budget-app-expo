@@ -1,10 +1,14 @@
-import React, { FC, memo } from 'react';
+import React, { Dispatch, FC, SetStateAction, memo } from 'react';
 import { TextInput, View, TextInputProps, StyleSheet } from 'react-native';
+
 import { TColors, colors } from '../shared';
 
-interface IProps extends TextInputProps {}
+interface IProps extends TextInputProps {
+  setValue: Dispatch<SetStateAction<string>>;
+  disabled?: boolean;
+}
 
-const Input: FC<IProps> = ({ style, ...props }) => {
+const Input: FC<IProps> = ({ setValue, style, disabled, ...props }) => {
   const styles = getStyles(colors, props?.multiline);
 
   return (
@@ -12,6 +16,7 @@ const Input: FC<IProps> = ({ style, ...props }) => {
       <TextInput
         style={[styles.input, style]}
         {...props}
+        onChangeText={setValue}
         cursorColor={colors.white}
         placeholderTextColor={colors.white}
       />
@@ -22,14 +27,12 @@ const Input: FC<IProps> = ({ style, ...props }) => {
 const getStyles = (color: TColors, multiline?: boolean) =>
   StyleSheet.create({
     input: {
-      borderRadius: 12,
-      minWidth: 200,
+      backgroundColor: colors.darkBlock,
       paddingHorizontal: 16,
       paddingVertical: 10,
       fontSize: 18,
-      backgroundColor: colors.darkBlock,
-      color: color.white,
-      minHeight: multiline ? 100 : undefined,
+      borderRadius: 12,
+      color: colors.white,
     },
   });
 

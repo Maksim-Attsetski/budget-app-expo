@@ -1,5 +1,5 @@
 import { useState, useMemo, memo } from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { colors } from '../shared';
 import { Layout } from '../widgets/App';
@@ -28,12 +28,12 @@ const HomeScreen = ({ navigation }) => {
 
     const data = {
       first: {
-        color: colors.purple,
+        color: colors.green,
         value: (inc / total) * 100,
         title: 'Доходы',
       },
       second: {
-        color: colors.dark,
+        color: colors.purple,
         value: (dec / total) * 100,
         title: 'Расходы',
       },
@@ -41,10 +41,13 @@ const HomeScreen = ({ navigation }) => {
 
     return data;
   }, [budget]);
+
   return (
     <Layout>
       <View>
-        <ProgressChart data={chartData} />
+        <View style={styles.chartContainer}>
+          <ProgressChart data={chartData} />
+        </View>
         {/* <BudgetForm /> */}
 
         <Button onPress={() => navigation.navigate('Details')}>
@@ -54,5 +57,14 @@ const HomeScreen = ({ navigation }) => {
     </Layout>
   );
 };
+
+const styles = StyleSheet.create({
+  chartContainer: {
+    padding: 20,
+    backgroundColor: colors.darkBlock,
+    borderRadius: 20,
+    marginVertical: 20,
+  },
+});
 
 export default memo(HomeScreen);

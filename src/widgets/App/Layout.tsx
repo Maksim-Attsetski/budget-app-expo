@@ -8,7 +8,6 @@ import { colors } from '../../shared';
 const Layout: FC<PropsWithChildren> = ({ children }) => {
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style='dark' />
       {children}
       <BottomTabs />
     </SafeAreaView>

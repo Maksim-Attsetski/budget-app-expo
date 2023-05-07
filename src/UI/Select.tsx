@@ -1,10 +1,9 @@
-import React, { FC, memo, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { FC, memo, useEffect, useRef, useState } from 'react';
+import { View, StyleSheet, Animated } from 'react-native';
 
 import Text from './Text';
 import Button from './Button';
-import { colors } from '../shared';
-import Animated from 'react-native-reanimated';
+import { colors, getTiming } from '../shared';
 
 interface IOption {
   name: string;
@@ -24,17 +23,19 @@ const Select: FC<IProps> = ({ options, onChange, value, title }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const styles = getStyles(isOpen);
 
+  const opacity = useRef(new Animated.Value(0)).current;
+  const translateY = useRef(new Animated.Value(-20)).current;
+
   const curOptions = options.filter((el) => el.name !== value);
+
+  useEffect(() => {
+    getTiming(opacity, isOpen ? 1 : 0);
+    getTiming(translateY, isOpen ? 20 : -20, 200);
+  }, [isOpen]);
 
   const onPressOption = () => {
     setIsOpen((prev) => !prev);
   };
-
-  // const optionsContainer = useAnimatedStyle(() => {
-  //   return {
-  //     opacity: withTiming(isOpen ? 1 : 0),
-  //   };
-  // }, [isOpen]);
 
   return (
     <>
@@ -47,7 +48,9 @@ const Select: FC<IProps> = ({ options, onChange, value, title }) => {
         >
           {value}
         </Button>
-        <Animated.View style={[styles.options, { opacity: isOpen ? 1 : 0 }]}>
+        <Animated.View
+          style={[styles.options, { opacity, transform: [{ translateY }] }]}
+        >
           {curOptions.map((el, inx) => (
             <Button
               key={inx}
@@ -76,13 +79,18 @@ const getStyles = (isOpen: boolean) =>
       backgroundColor: colors.darkBlock,
     },
     title: {
+      zIndex: 3,
       // color: colors.white,
     },
     options: {
       position: 'absolute',
-      top: '110%',
-      left: paddingHorizontal,
-      opacity: isOpen ? 1 : 0,
+      top: '100%',
+      left: 0,
+      zIndex: 2,
+      borderRadius: 12,
+      paddingHorizontal,
+      paddingVertical: 7,
+      backgroundColor: colors.darkBlock,
     },
   });
 
