@@ -1,18 +1,13 @@
-import { useState, useMemo, memo } from 'react';
+import { useMemo, memo } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { colors } from '../shared';
 import { Layout } from '../widgets/App';
-import { IBudget, ProgressChart } from '../widgets/Budget';
-import { Button } from '../UI';
+import { ProgressChart, useBudget } from '../widgets/Budget';
+import { Text, Card, Gap } from '../UI';
 
 const HomeScreen = ({ navigation }) => {
-  const [budget, setBudget] = useState<IBudget[]>([
-    { id: 1, type: 'dec', value: 23, date: Date.now() },
-    { id: 2, type: 'dec', value: 10, date: Date.now() },
-    { id: 3, type: 'dec', value: 15, date: Date.now() },
-    { id: 4, type: 'inc', value: 37, date: Date.now() },
-  ]);
+  const { budget } = useBudget();
 
   const chartData = useMemo(() => {
     const inc = budget.reduce(
@@ -44,16 +39,25 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <Layout>
-      <View>
-        <View style={styles.chartContainer}>
-          <ProgressChart data={chartData} />
-        </View>
-        {/* <BudgetForm /> */}
-
-        <Button onPress={() => navigation.navigate('Details')}>
-          To details
-        </Button>
+      <View style={styles.chartContainer}>
+        <ProgressChart data={chartData} />
       </View>
+      {budget[0] && (
+        <Card>
+          <Text style={{ textAlign: 'center' }}>Недавняя активнось</Text>
+          <Gap y={5} />
+          <Text>Цена: {budget[0].value} р.</Text>
+          <Gap y={5} />
+          <Text>Тип: {budget[0].type === 'inc' ? 'Доход' : 'Расходы'}</Text>
+
+          {budget[0].description && (
+            <>
+              <Gap y={5} />
+              <Text>Описание: {budget[0].description}</Text>
+            </>
+          )}
+        </Card>
+      )}
     </Layout>
   );
 };

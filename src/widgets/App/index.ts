@@ -1,4 +1,6 @@
 import Layout from './Layout';
-import MainComponent from './MainComponent';
+import Navigation from './Navigation';
 
-export { MainComponent, Layout };
+export * from './state';
+
+export { Navigation, Layout };

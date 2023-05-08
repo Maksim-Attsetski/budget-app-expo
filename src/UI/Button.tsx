@@ -1,5 +1,5 @@
 import React, { FC, memo } from 'react';
-import { TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
+import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import Text from './Text';
 import { colors } from '../shared';
 
@@ -10,16 +10,17 @@ interface IProps extends TouchableOpacityProps {
 const Button: FC<IProps> = ({
   textColor = colors.white,
   children,
+  disabled = false,
   ...props
 }) => {
   return (
     <TouchableOpacity
-      style={[props.style, { opacity: props?.disabled ? 0.1 : 1 }]}
       {...props}
+      style={[props.style, { opacity: disabled ? 0.6 : 1 }]}
     >
       <Text style={{ color: textColor }}>{children}</Text>
     </TouchableOpacity>
   );
 };
 
-export default memo(Button);
+export default Button;

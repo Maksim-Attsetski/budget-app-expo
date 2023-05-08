@@ -8,6 +8,8 @@ import HomeSvg from '../../../assets/homeSvg';
 import PlusSvg from '../../../assets/PlusSvg';
 import { routes } from './types';
 import ChartSvg from '../../../assets/ChartSvg';
+import HistorySvg from '../../../assets/HistorySvg';
+import ClientSvg from '../../../assets/ClientSvg';
 
 interface ITabProps extends ViewProps {
   to: string;
@@ -15,11 +17,13 @@ interface ITabProps extends ViewProps {
 
 const tabs = [
   { to: routes.home, name: <HomeSvg /> },
+  { to: routes.clients, name: <ClientSvg /> },
   {
     to: routes.addBudget,
     name: <PlusSvg />,
   },
   { to: routes.stats, name: <ChartSvg /> },
+  { to: routes.history, name: <HistorySvg /> },
 ];
 
 const Tab: FC<ITabProps> = ({ to, children, ...props }) => {

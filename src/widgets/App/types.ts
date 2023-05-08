@@ -1,7 +1,5 @@
 import { StackAnimationTypes } from 'react-native-screens';
-import ChartSvg from '../../../assets/ChartSvg';
-import PlusSvg from '../../../assets/PlusSvg';
-import HomeSvg from '../../../assets/homeSvg';
+
 import { screens } from '../../screens';
 import { getGreeting } from '../../shared';
 
@@ -9,6 +7,8 @@ export enum routes {
   home = 'Home',
   stats = 'Stats',
   addBudget = 'Add_Budget',
+  history = 'History',
+  clients = 'Clients',
 }
 
 interface IScrenList {
@@ -18,12 +18,13 @@ interface IScrenList {
   animation: StackAnimationTypes;
 }
 
+const animation = 'slide_from_left';
 export const screenList: IScrenList[] = [
   {
     name: routes.home,
     component: screens.Home,
     title: getGreeting(),
-    animation: 'slide_from_left',
+    animation,
   },
   {
     name: routes.addBudget,
@@ -35,6 +36,18 @@ export const screenList: IScrenList[] = [
     name: routes.stats,
     component: screens.Stats,
     title: 'Статистика',
-    animation: 'slide_from_left',
+    animation,
+  },
+  {
+    name: routes.clients,
+    component: screens.Clients,
+    title: 'Клиенты',
+    animation,
+  },
+  {
+    name: routes.history,
+    component: screens.History,
+    title: 'История',
+    animation,
   },
 ];
