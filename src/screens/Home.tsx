@@ -4,21 +4,21 @@ import { StyleSheet, View } from 'react-native';
 import { colors } from '../shared';
 import { Layout } from '../widgets/App';
 import { ProgressChart, useBudget } from '../widgets/Budget';
-import { Text, Card, Gap } from '../UI';
+import { Text, Card, Gap, Flex } from '../UI';
 
 const HomeScreen = ({ navigation }) => {
   const { budget } = useBudget();
 
-  const chartData = useMemo(() => {
-    const inc = budget.reduce(
-      (acc, cur) => (cur.type === 'inc' ? acc + cur.value : acc),
-      0
-    );
-    const dec = budget.reduce(
-      (acc, cur) => (cur.type === 'dec' ? acc + cur.value : acc),
-      0
-    );
+  const inc: number = budget.reduce(
+    (acc, cur) => (cur.type === 'inc' ? acc + cur.value : acc),
+    0
+  );
+  const dec: number = budget.reduce(
+    (acc, cur) => (cur.type === 'dec' ? acc + cur.value : acc),
+    0
+  );
 
+  const chartData = useMemo(() => {
     const total = inc + dec;
 
     const data = {
@@ -35,13 +35,26 @@ const HomeScreen = ({ navigation }) => {
     };
 
     return data;
-  }, [budget]);
+  }, [inc, dec]);
 
   return (
     <Layout>
-      <View style={styles.chartContainer}>
+      <Gap y={5} />
+      <Card style={styles.balance}>
+        <Flex justify='space-evenly'>
+          <Text style={styles.profitText}>Доход: {inc} р.</Text>
+          <Text style={styles.lossText}>Расходы: {dec} р.</Text>
+        </Flex>
+        <Gap y={10} />
+        <Flex justify='center'>
+          <Text style={styles.boldText}>Чистая прибыль: {inc - dec} р.</Text>
+        </Flex>
+      </Card>
+      <Gap y={7} />
+      <Card>
         <ProgressChart data={chartData} />
-      </View>
+      </Card>
+      <Gap y={7} />
       {budget[0] && (
         <Card>
           <Text style={{ textAlign: 'center' }}>Недавняя активнось</Text>
@@ -68,6 +81,22 @@ const styles = StyleSheet.create({
     backgroundColor: colors.darkBlock,
     borderRadius: 20,
     marginVertical: 20,
+  },
+  balance: {
+    width: '100%',
+  },
+  boldText: {
+    fontSize: 20,
+  },
+  profitText: {
+    fontSize: 22,
+    color: colors.green,
+    fontWeight: 'bold',
+  },
+  lossText: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: colors.purple,
   },
 });
 
