@@ -1,17 +1,16 @@
 import React, { FC, memo } from 'react';
-
 import { Path, Svg } from 'react-native-svg';
 
-import { colors, useTheme } from '../src/shared';
+import { useTheme } from '../src/shared';
 
 interface IProps {
   strokeWidth?: number;
   stroke?: string;
 }
 const ChartSvg: FC<IProps> = ({ strokeWidth = 4, stroke = null }) => {
-  const { isDark } = useTheme();
+  const { color } = useTheme();
 
-  const strokeColor = stroke ? stroke : isDark ? colors.white : colors.dark;
+  const strokeColor = stroke || color;
 
   return (
     <Svg width='24' height='24' viewBox='0 0 48 48' fill='none'>

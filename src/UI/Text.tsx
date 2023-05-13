@@ -1,23 +1,14 @@
 import { FC, memo } from 'react';
 import { Text, View, TextProps } from 'react-native';
 
-import { colors, useTheme } from '../shared';
+import { useTheme } from '../shared';
 
 const _Text: FC<TextProps> = ({ style, ...props }) => {
-  const { isDark } = useTheme();
+  const { color } = useTheme();
 
   return (
     <View>
-      <Text
-        {...props}
-        style={[
-          {
-            fontSize: 18,
-            color: isDark ? colors.white : colors.dark,
-          },
-          style,
-        ]}
-      />
+      <Text {...props} style={[{ fontSize: 18, color }, style]} />
     </View>
   );
 };

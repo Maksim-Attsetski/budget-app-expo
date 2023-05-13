@@ -3,7 +3,7 @@ import { StyleSheet, View, ViewProps } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import { Button } from '../../UI';
-import { colors, useTheme } from '../../shared';
+import { useTheme } from '../../shared';
 import { routes } from './types';
 
 import HomeSvg from '../../../assets/homeSvg';
@@ -43,8 +43,8 @@ const Tab: FC<ITabProps> = ({ to, children, ...props }) => {
 };
 
 const BottomTabs: FC = () => {
-  const { isDark } = useTheme();
-  const styles = getStyles(isDark ? colors.darkBlock : colors.whiteBlock);
+  const { backgroundColor } = useTheme();
+  const styles = getStyles(backgroundColor);
 
   return (
     <View style={styles.container}>

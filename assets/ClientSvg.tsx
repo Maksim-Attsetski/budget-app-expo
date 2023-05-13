@@ -1,6 +1,6 @@
 import React, { FC, memo } from 'react';
 import { Circle, Path, Svg } from 'react-native-svg';
-import { colors, useTheme } from '../src/shared';
+import { useTheme } from '../src/shared';
 
 interface IProps {
   stroke?: string;
@@ -8,9 +8,9 @@ interface IProps {
 }
 
 const ClientSvg: FC<IProps> = ({ stroke = null, strokeWidth = 4 }) => {
-  const { isDark } = useTheme();
+  const { color } = useTheme();
 
-  const strokeColor = stroke ? stroke : isDark ? colors.white : colors.dark;
+  const strokeColor = stroke || color;
 
   return (
     <Svg width='24' height='24' viewBox='0 0 48 48' fill='none'>

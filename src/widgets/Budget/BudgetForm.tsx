@@ -1,7 +1,7 @@
-import React, { FC, memo, useEffect, useState } from 'react';
+import React, { FC, memo, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
-import { Layout } from '../../widgets/App';
-import { Button, Gap, Input, Select, Text } from '../../UI';
+
+import { Button, Gap, Input, Select } from '../../UI';
 import { colors } from '../../shared';
 import { IBudget, TBudgetType } from './types';
 import { useBudget } from './useBudget';

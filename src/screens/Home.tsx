@@ -1,12 +1,12 @@
 import { useMemo, memo } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { colors } from '../shared';
 import { Layout } from '../widgets/App';
 import { ProgressChart, useBudget } from '../widgets/Budget';
 import { Text, Card, Gap, Flex } from '../UI';
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = () => {
   const { budget } = useBudget();
 
   const inc: number = budget.reduce(

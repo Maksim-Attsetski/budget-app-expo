@@ -1,7 +1,7 @@
 import React, { Dispatch, FC, SetStateAction, memo } from 'react';
 import { TextInput, View, TextInputProps, StyleSheet } from 'react-native';
 
-import { TColors, colors, useTheme } from '../shared';
+import { useTheme } from '../shared';
 
 interface IProps extends TextInputProps {
   setValue: Dispatch<SetStateAction<string>>;
@@ -9,10 +9,7 @@ interface IProps extends TextInputProps {
 }
 
 const Input: FC<IProps> = ({ setValue, style, disabled, ...props }) => {
-  const { isDark } = useTheme();
-
-  const backgroundColor = isDark ? colors.darkBlock : colors.whiteBlock;
-  const color = isDark ? colors.white : colors.darkBlock;
+  const { backgroundColor, color } = useTheme();
 
   return (
     <View>

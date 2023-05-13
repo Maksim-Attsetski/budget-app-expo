@@ -1,15 +1,15 @@
 import React, { FC, memo } from 'react';
 import Svg, { Path } from 'react-native-svg';
-import { colors, useTheme } from '../src/shared';
+import { useTheme } from '../src/shared';
 
 interface IProps {
   stroke?: string;
 }
 
 const HomeSvg: FC<IProps> = ({ stroke = null }) => {
-  const { isDark } = useTheme();
+  const { color } = useTheme();
 
-  const strokeColor = stroke ? stroke : isDark ? colors.white : colors.dark;
+  const strokeColor = stroke || color;
 
   return (
     <Svg width='24' height='24' viewBox='0 0 48 48' fill='none'>

@@ -3,7 +3,7 @@ import { View, StyleSheet, Animated } from 'react-native';
 
 import Text from './Text';
 import Button from './Button';
-import { colors, getTiming, useTheme } from '../shared';
+import { getTiming, useTheme } from '../shared';
 
 interface IOption {
   name: string;
@@ -22,8 +22,8 @@ const paddingHorizontal = 12;
 const Select: FC<IProps> = ({ options, onChange, value, title }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const { isDark } = useTheme();
-  const styles = getStyles(isDark ? colors.darkBlock : colors.whiteBlock);
+  const { backgroundColor } = useTheme();
+  const styles = getStyles(backgroundColor);
 
   const opacity = useRef(new Animated.Value(0)).current;
   const translateY = useRef(new Animated.Value(-20)).current;

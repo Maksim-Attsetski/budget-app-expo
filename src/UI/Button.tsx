@@ -1,11 +1,8 @@
-import React, { FC, memo } from 'react';
-import {
-  StyleSheet,
-  TouchableOpacity,
-  TouchableOpacityProps,
-} from 'react-native';
+import React, { FC } from 'react';
+import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
+
 import Text from './Text';
-import { TColors, colors, useTheme } from '../shared';
+import { useTheme } from '../shared';
 
 interface IProps extends TouchableOpacityProps {
   textColor?: string;
@@ -17,16 +14,14 @@ const Button: FC<IProps> = ({
   disabled = false,
   ...props
 }) => {
-  const { isDark } = useTheme();
+  const { color } = useTheme();
 
   return (
     <TouchableOpacity
       {...props}
       style={[props.style, { opacity: disabled ? 0.6 : 1 }]}
     >
-      <Text style={{ color: textColor || isDark ? colors.white : colors.dark }}>
-        {children}
-      </Text>
+      <Text style={{ color: textColor || color }}>{children}</Text>
     </TouchableOpacity>
   );
 };

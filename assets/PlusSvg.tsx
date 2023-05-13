@@ -1,17 +1,18 @@
 import React, { FC, memo } from 'react';
-import { Path, Svg } from 'react-native-svg';
-import { colors, useTheme } from '../src/shared';
 import { StyleSheet, View } from 'react-native';
+import { Path, Svg } from 'react-native-svg';
+
+import { useTheme } from '../src/shared';
 
 interface IProps {
   stroke?: string;
 }
 
-const PlusSvg: FC<IProps> = ({ stroke = colors.darkBlock }) => {
-  const { isDark } = useTheme();
-  const styles = getStyles(isDark);
+const PlusSvg: FC<IProps> = ({ stroke = null }) => {
+  const { color, backgroundColor } = useTheme();
+  const styles = getStyles(color);
 
-  const strokeColor = stroke ? stroke : isDark ? colors.white : colors.dark;
+  const strokeColor = stroke || backgroundColor;
 
   return (
     <View style={styles.plus}>
@@ -35,12 +36,12 @@ const PlusSvg: FC<IProps> = ({ stroke = colors.darkBlock }) => {
   );
 };
 
-const getStyles = (theme: boolean) =>
+const getStyles = (backgroundColor: string) =>
   StyleSheet.create({
     plus: {
       padding: 10,
       borderRadius: 999,
-      backgroundColor: theme ? colors.whiteBlock : colors.darkBlock,
+      backgroundColor,
     },
   });
 

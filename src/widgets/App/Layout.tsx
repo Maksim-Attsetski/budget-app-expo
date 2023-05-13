@@ -6,7 +6,7 @@ import BottomTabs from './BottomTabs';
 import { colors, useTheme } from '../../shared';
 
 const Layout: FC<PropsWithChildren> = ({ children }) => {
-  const { isDark } = useTheme();
+  const { isDark, color } = useTheme();
   const styles = getStyles(isDark ? colors.dark : colors.white);
 
   return (

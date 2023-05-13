@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useColorScheme } from 'react-native';
 
 import { storage, storageKeys } from '../utils';
+import { colors } from '../constants';
 
 export const useTheme = () => {
   const colorScheme = useColorScheme();
@@ -19,5 +20,8 @@ export const useTheme = () => {
     setIsDark(!isDark);
   };
 
-  return { isDark, onToggleTheme };
+  const backgroundColor = isDark ? colors.darkBlock : colors.whiteBlock;
+  const color = isDark ? colors.white : colors.dark;
+
+  return { isDark, onToggleTheme, backgroundColor, color };
 };
