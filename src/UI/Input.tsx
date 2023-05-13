@@ -1,7 +1,7 @@
 import React, { Dispatch, FC, SetStateAction, memo } from 'react';
 import { TextInput, View, TextInputProps, StyleSheet } from 'react-native';
 
-import { TColors, colors } from '../shared';
+import { TColors, colors, useTheme } from '../shared';
 
 interface IProps extends TextInputProps {
   setValue: Dispatch<SetStateAction<string>>;
@@ -9,31 +9,31 @@ interface IProps extends TextInputProps {
 }
 
 const Input: FC<IProps> = ({ setValue, style, disabled, ...props }) => {
-  const styles = getStyles(colors, props?.multiline);
+  const { isDark } = useTheme();
+
+  const backgroundColor = isDark ? colors.darkBlock : colors.whiteBlock;
+  const color = isDark ? colors.white : colors.darkBlock;
 
   return (
     <View>
       <TextInput
-        style={[styles.input, style]}
+        style={[styles.input, { backgroundColor, color }, style]}
         {...props}
         onChangeText={setValue}
-        cursorColor={colors.white}
-        placeholderTextColor={colors.white}
+        cursorColor={color}
+        placeholderTextColor={color}
       />
     </View>
   );
 };
 
-const getStyles = (color: TColors, multiline?: boolean) =>
-  StyleSheet.create({
-    input: {
-      backgroundColor: colors.darkBlock,
-      paddingHorizontal: 16,
-      paddingVertical: 10,
-      fontSize: 18,
-      borderRadius: 12,
-      color: colors.white,
-    },
-  });
+const styles = StyleSheet.create({
+  input: {
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    fontSize: 18,
+    borderRadius: 12,
+  },
+});
 
 export default memo(Input);

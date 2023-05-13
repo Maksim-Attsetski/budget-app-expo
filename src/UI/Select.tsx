@@ -3,7 +3,7 @@ import { View, StyleSheet, Animated } from 'react-native';
 
 import Text from './Text';
 import Button from './Button';
-import { colors, getTiming } from '../shared';
+import { colors, getTiming, useTheme } from '../shared';
 
 interface IOption {
   name: string;
@@ -21,7 +21,9 @@ const paddingHorizontal = 12;
 
 const Select: FC<IProps> = ({ options, onChange, value, title }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const styles = getStyles(isOpen);
+
+  const { isDark } = useTheme();
+  const styles = getStyles(isDark ? colors.darkBlock : colors.whiteBlock);
 
   const opacity = useRef(new Animated.Value(0)).current;
   const translateY = useRef(new Animated.Value(-20)).current;
@@ -41,11 +43,7 @@ const Select: FC<IProps> = ({ options, onChange, value, title }) => {
     <>
       {title && <Text style={{ marginVertical: 7 }}>{title}</Text>}
       <View style={styles.container}>
-        <Button
-          onPress={onPressOption}
-          style={styles.title}
-          textColor={colors.white}
-        >
+        <Button onPress={onPressOption} style={styles.title}>
           {value}
         </Button>
         <Animated.View
@@ -58,7 +56,6 @@ const Select: FC<IProps> = ({ options, onChange, value, title }) => {
                 onPressOption();
                 onChange(el);
               }}
-              textColor={colors.white}
             >
               {el.name}
             </Button>
@@ -69,18 +66,18 @@ const Select: FC<IProps> = ({ options, onChange, value, title }) => {
   );
 };
 
-const getStyles = (isOpen: boolean) =>
+const getStyles = (backgroundColor: string) =>
   StyleSheet.create({
     container: {
       position: 'relative',
+      zIndex: 1,
       borderRadius: 12,
       paddingHorizontal,
       paddingVertical: 7,
-      backgroundColor: colors.darkBlock,
+      backgroundColor,
     },
     title: {
       zIndex: 3,
-      // color: colors.white,
     },
     options: {
       position: 'absolute',
@@ -90,7 +87,7 @@ const getStyles = (isOpen: boolean) =>
       borderRadius: 12,
       paddingHorizontal,
       paddingVertical: 7,
-      backgroundColor: colors.darkBlock,
+      backgroundColor,
     },
   });
 

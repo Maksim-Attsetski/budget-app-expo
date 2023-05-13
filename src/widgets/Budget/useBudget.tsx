@@ -2,7 +2,7 @@ import { useActions, useTypedSelector } from '../../shared';
 import { IBudget } from './types';
 
 export const useBudget = () => {
-  const { budget } = useTypedSelector((state) => state.budget);
+  const { budget: data } = useTypedSelector((state) => state.budget);
   const { action } = useActions();
 
   const onCreate = (newBudget: IBudget) => {
@@ -15,5 +15,11 @@ export const useBudget = () => {
     action.budgetDeleteAC(id);
   };
 
-  return { budget, onCreate, onUpdate, onDelete };
+  const budget = data
+    .filter((el) => el.comletedAt)
+    .sort((a, b) => b.date - a.date);
+
+  const waitList = data.filter((el) => !el.comletedAt);
+
+  return { budget, waitList, onCreate, onUpdate, onDelete };
 };

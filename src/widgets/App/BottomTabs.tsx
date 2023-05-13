@@ -1,12 +1,13 @@
-import React, { FC, PropsWithChildren, memo } from 'react';
+import React, { FC, memo } from 'react';
 import { StyleSheet, View, ViewProps } from 'react-native';
-
-import { Button, Text } from '../../UI';
 import { useNavigation } from '@react-navigation/native';
-import { colors } from '../../shared';
+
+import { Button } from '../../UI';
+import { colors, useTheme } from '../../shared';
+import { routes } from './types';
+
 import HomeSvg from '../../../assets/homeSvg';
 import PlusSvg from '../../../assets/PlusSvg';
-import { routes } from './types';
 import ChartSvg from '../../../assets/ChartSvg';
 import HistorySvg from '../../../assets/HistorySvg';
 import ClientSvg from '../../../assets/ClientSvg';
@@ -32,7 +33,6 @@ const Tab: FC<ITabProps> = ({ to, children, ...props }) => {
   return (
     <View {...props}>
       <Button
-        textColor={colors.white}
         // @ts-ignore
         onPress={() => navigate(to)}
       >
@@ -43,6 +43,9 @@ const Tab: FC<ITabProps> = ({ to, children, ...props }) => {
 };
 
 const BottomTabs: FC = () => {
+  const { isDark } = useTheme();
+  const styles = getStyles(isDark ? colors.darkBlock : colors.whiteBlock);
+
   return (
     <View style={styles.container}>
       {tabs.map(({ name, to }, inx) => (
@@ -54,21 +57,22 @@ const BottomTabs: FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    paddingVertical: 20,
-    backgroundColor: colors.darkBlock,
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
-  },
-  tab: {
-    marginHorizontal: 20,
-  },
-});
+const getStyles = (backgroundColor: string) =>
+  StyleSheet.create({
+    container: {
+      flexDirection: 'row',
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      right: 0,
+      paddingVertical: 20,
+      backgroundColor,
+      justifyContent: 'space-evenly',
+      alignItems: 'center',
+    },
+    tab: {
+      marginHorizontal: 20,
+    },
+  });
 
 export default memo(BottomTabs);

@@ -21,15 +21,18 @@ const HomeScreen = ({ navigation }) => {
   const chartData = useMemo(() => {
     const total = inc + dec;
 
+    const incValue = (inc / total) * 100;
+    const decValue = (dec / total) * 100;
+
     const data = {
       first: {
         color: colors.green,
-        value: (inc / total) * 100,
+        value: incValue || 0,
         title: 'Доходы',
       },
       second: {
         color: colors.purple,
-        value: (dec / total) * 100,
+        value: decValue || 0,
         title: 'Расходы',
       },
     };
@@ -40,7 +43,7 @@ const HomeScreen = ({ navigation }) => {
   return (
     <Layout>
       <Gap y={5} />
-      <Card style={styles.balance}>
+      <Card>
         <Flex justify='space-evenly'>
           <Text style={styles.profitText}>Доход: {inc} р.</Text>
           <Text style={styles.lossText}>Расходы: {dec} р.</Text>
@@ -81,9 +84,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.darkBlock,
     borderRadius: 20,
     marginVertical: 20,
-  },
-  balance: {
-    width: '100%',
   },
   boldText: {
     fontSize: 20,

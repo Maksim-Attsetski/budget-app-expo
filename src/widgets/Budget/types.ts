@@ -5,5 +5,6 @@ export interface IBudget {
   type: TBudgetType;
   value: number;
   description?: string;
+  comletedAt: number | null;
   date: number;
 }

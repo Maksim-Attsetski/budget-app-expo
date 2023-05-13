@@ -3,7 +3,7 @@ import { Alert, StyleSheet, View } from 'react-native';
 import { Layout } from '../../widgets/App';
 import { Button, Gap, Input, Select, Text } from '../../UI';
 import { colors } from '../../shared';
-import { TBudgetType } from './types';
+import { IBudget, TBudgetType } from './types';
 import { useBudget } from './useBudget';
 
 interface IOption {
@@ -40,11 +40,12 @@ const BudgetForm: FC = () => {
       return;
     }
 
-    const newBudget = {
+    const newBudget: IBudget = {
       id: budget.length + 1,
       type: budgetType.value,
       value: +newPrice,
       description,
+      comletedAt: null,
       date: Date.now(),
     };
 
@@ -62,6 +63,7 @@ const BudgetForm: FC = () => {
         value={newPrice}
         setValue={setNewPrice}
         keyboardType='number-pad'
+        maxLength={5}
       />
       <Gap y={10} />
       <Input
@@ -83,6 +85,7 @@ const BudgetForm: FC = () => {
         style={styles.button}
         disabled={newPrice.length === 0}
         onPress={onPressAddBudget}
+        textColor={colors.white}
       >
         Добавить
       </Button>
@@ -104,6 +107,7 @@ const styles = StyleSheet.create({
     bottom: 100,
     left: 0,
     right: 0,
+    zIndex: 10,
     marginHorizontal: 16,
   },
 });

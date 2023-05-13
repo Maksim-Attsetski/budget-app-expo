@@ -5,16 +5,20 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider } from 'react-redux';
 
 import { screenList } from './types';
-import { colors } from '../../shared';
+import { colors, useTheme } from '../../shared';
 import { reduxStore } from './state';
 
 const Stack = createNativeStackNavigator();
 
 const Navigation: FC = () => {
+  const { isDark } = useTheme();
+  const color = isDark ? colors.white : colors.dark;
+  const backgroundColor = isDark ? colors.darkBlock : colors.whiteBlock;
+
   return (
     <Provider store={reduxStore}>
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{ statusBarColor: colors.darkBlock }}>
+        <Stack.Navigator screenOptions={{ statusBarColor: backgroundColor }}>
           {screenList.map(({ component, name, title, animation }) => (
             <Stack.Screen
               name={name}
@@ -23,8 +27,8 @@ const Navigation: FC = () => {
               options={{
                 title,
                 animation,
-                headerStyle: { backgroundColor: colors.darkBlock },
-                headerTitleStyle: { color: colors.white },
+                headerStyle: { backgroundColor },
+                headerTitleStyle: { color },
               }}
             />
           ))}
