@@ -10,9 +10,7 @@ const History: FC = () => {
 
   return (
     <Layout>
-      <View>
-        <Text>History</Text>
-      </View>
+      <Gap y={10} />
       <ScrollView>
         {budget.map((el) => (
           <Fragment key={el.id}>
@@ -23,7 +21,7 @@ const History: FC = () => {
                   fontSize: 22,
                 }}
               >
-                {el.value}
+                {el.type === 'inc' ? '+' : '-'} {el.value}
               </Text>
               {el.description && (
                 <>
