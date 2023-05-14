@@ -25,9 +25,11 @@
       "intentFilters": [
         {
           "action": "VIEW",
-          "data": [{
-            "scheme": "budgetapp"
-          }],
+          "data": [
+            {
+              "scheme": "budgetapp"
+            }
+          ],
           "category": [
             "BROWSABLE",
             "DEFAULT"
@@ -49,6 +51,7 @@
     },
     "updates": {
       "url": "https://u.expo.dev/a61b36bd-16b9-4006-8290-e61ab62f0f45"
-    }
+    },
+    "owner": "maksimfd"
   }
 }
