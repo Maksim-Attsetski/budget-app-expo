@@ -2,7 +2,7 @@ import React, { FC, memo, useEffect, useRef, useState } from 'react';
 import { View, StyleSheet, Animated } from 'react-native';
 
 import Text from './Text';
-import Button from './Button';
+import { Button } from './Button';
 import { getTiming, useTheme } from '../shared';
 
 interface IOption {

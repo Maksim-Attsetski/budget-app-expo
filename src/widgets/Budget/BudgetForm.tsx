@@ -1,8 +1,7 @@
 import React, { FC, memo, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 
-import { Button, Gap, Input, Select } from '../../UI';
-import { colors } from '../../shared';
+import { AccentButton, Gap, Input, Select } from '../../UI';
 import { IBudget, TBudgetType } from './types';
 import { useBudget } from './useBudget';
 
@@ -81,14 +80,13 @@ const BudgetForm: FC = () => {
           onChange={setBudgetType}
         />
       </View>
-      <Button
-        style={styles.button}
+      <AccentButton
         disabled={newPrice.length === 0}
+        style={styles.button}
         onPress={onPressAddBudget}
-        textColor={colors.white}
       >
         Добавить
-      </Button>
+      </AccentButton>
     </View>
   );
 };
@@ -98,17 +96,11 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   button: {
-    backgroundColor: colors.green,
-    paddingVertical: 20,
-    paddingHorizontal: 26,
-    borderRadius: 16,
-    alignItems: 'center',
     position: 'absolute',
     bottom: 100,
     left: 0,
     right: 0,
     zIndex: 10,
-    marginHorizontal: 16,
   },
 });
 
