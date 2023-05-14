@@ -3,9 +3,9 @@
     "name": "budget-app",
     "slug": "budget-app",
     "version": "1.0.0",
+    "scheme": "budgetapp",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -22,6 +22,18 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [{
+            "scheme": "budgetapp"
+          }],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
+        }
+      ],
       "package": "com.maksimfd.budgetapp"
     },
     "web": {
@@ -31,6 +43,12 @@
       "eas": {
         "projectId": "a61b36bd-16b9-4006-8290-e61ab62f0f45"
       }
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/a61b36bd-16b9-4006-8290-e61ab62f0f45"
     }
   }
 }

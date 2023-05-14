@@ -14,7 +14,7 @@
       }
     },
     "preview3": {
-      "developmentClient": true
+      "distribution": "internal"
     },
     "production": {}
   }  
