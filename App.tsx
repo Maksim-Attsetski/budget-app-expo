@@ -1,12 +1,12 @@
 import React, { memo } from 'react';
-import { StatusBar } from 'react-native';
 
 import { Navigation } from './src/widgets/App';
+import { StatusBar } from 'expo-status-bar';
 
 export default memo(function App() {
   return (
     <>
-      <StatusBar barStyle='light-content' />
+      <StatusBar style='dark' />
       <Navigation />
     </>
   );

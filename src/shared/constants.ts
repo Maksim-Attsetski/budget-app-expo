@@ -1,3 +1,5 @@
+import { Dimensions } from 'react-native';
+
 export const colors = {
   dark: '#333',
   darkBlock: '#454545',
@@ -7,5 +9,9 @@ export const colors = {
   purple: '#5460FE',
   green: '#3A984D',
 };
-
 export type TColors = typeof colors;
+
+export const screen = {
+  height: Dimensions.get('screen').height,
+  width: Dimensions.get('screen').width,
+};

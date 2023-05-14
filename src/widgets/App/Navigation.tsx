@@ -1,12 +1,12 @@
-import React, { FC, memo, useEffect } from 'react';
+import React, { FC, memo } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider } from 'react-redux';
+import * as Linking from 'expo-linking';
+
 import { screenList } from './types';
 import { useTheme } from '../../shared';
 import { reduxStore } from './state';
-
-import * as Linking from 'expo-linking';
 
 const prefix = Linking.createURL('/', { scheme: 'budgetapp' });
 

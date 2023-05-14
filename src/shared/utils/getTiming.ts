@@ -8,13 +8,19 @@ type TGetTiming = (
     | Animated.ValueXY
     | { x: number; y: number }
     | Animated.AnimatedInterpolation<number>,
-  duration?: number
+  duration?: number,
+  useNativeDriver?: boolean
 ) => void;
 
-export const getTiming: TGetTiming = (value, toValue, duration = 300) => {
+export const getTiming: TGetTiming = (
+  value,
+  toValue,
+  duration = 300,
+  useNativeDriver = true
+) => {
   Animated.timing(value, {
     toValue,
     duration,
-    useNativeDriver: true,
+    useNativeDriver,
   }).start();
 };

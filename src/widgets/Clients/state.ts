@@ -6,7 +6,24 @@ interface IState {
 }
 
 const initialState: IState = {
-  clients: [],
+  clients: [
+    {
+      id: '1',
+      contacts: '+375336644491',
+      description: '1 букет (розовый) за 55р',
+      name: 'Maks',
+      lastname: 'Attsetski',
+      status: 'success',
+    },
+    {
+      id: '2',
+      contacts: '+375336644491',
+      description: '3 коробки зефира за 8р',
+      name: 'Maks',
+      lastname: 'Attsetski',
+      status: 'wait',
+    },
+  ],
 };
 
 const clientSlice = createSlice({
