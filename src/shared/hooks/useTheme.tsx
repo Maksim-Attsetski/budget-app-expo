@@ -11,12 +11,14 @@ export const useTheme = () => {
   useEffect(() => {
     (async () => {
       const response = await storage.get(storageKeys.theme);
-      setIsDark(response);
+      if (response) {
+        setIsDark(response === 'dark');
+      }
     })();
   }, []);
 
   const onToggleTheme = async () => {
-    await storage.set(storageKeys.theme, !isDark);
+    await storage.set(storageKeys.theme, isDark ? 'light' : 'dark');
     setIsDark(!isDark);
   };
 

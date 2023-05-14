@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native';
 import { colors } from '../shared';
 import { Layout } from '../widgets/App';
 import { ProgressChart, useBudget } from '../widgets/Budget';
-import { Text, Card, Gap, Flex } from '../UI';
+import { Text, Card, Gap, Flex, Button } from '../UI';
 
 const HomeScreen = () => {
   const { budget } = useBudget();
