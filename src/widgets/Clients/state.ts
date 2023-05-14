@@ -13,6 +13,7 @@ const initialState: IState = {
       description: '1 букет (розовый) за 55р',
       name: 'Maks',
       lastname: 'Attsetski',
+      price: 55,
       status: 'success',
     },
     {
@@ -21,6 +22,7 @@ const initialState: IState = {
       description: '3 коробки зефира за 8р',
       name: 'Maks',
       lastname: 'Attsetski',
+      price: 24,
       status: 'wait',
     },
   ],

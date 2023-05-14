@@ -33,6 +33,7 @@ const Navigation: FC = () => {
                 animation,
                 headerStyle: { backgroundColor },
                 headerTitleStyle: { color },
+                headerShown: title.length > 0,
               }}
             />
           ))}

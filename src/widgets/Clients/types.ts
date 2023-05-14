@@ -5,6 +5,7 @@ export interface IClient {
   name: string;
   lastname: string;
   description: string;
+  price: number;
   status: TClientStatus;
   contacts: string;
 }

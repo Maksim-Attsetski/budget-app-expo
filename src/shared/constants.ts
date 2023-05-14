@@ -8,6 +8,7 @@ export const colors = {
   transparent: 'transparent',
   purple: '#5460FE',
   green: '#3A984D',
+  red: '#cf4343',
 };
 export type TColors = typeof colors;
 

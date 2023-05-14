@@ -39,14 +39,12 @@ const BudgetForm: FC = () => {
       return;
     }
 
-    const newBudget: IBudget = {
-      id: budget.length + 1,
+    const newBudget = {
       type: budgetType.value,
       value: +newPrice,
       description,
       comletedAt: null,
-      date: Date.now(),
-    };
+    } as IBudget;
 
     onCreate(newBudget);
 

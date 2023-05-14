@@ -9,6 +9,7 @@ export enum routes {
   addBudget = 'Add_Budget',
   history = 'History',
   clients = 'Clients',
+  successDeal = 'Success_Deal',
 }
 
 interface IScrenList {
@@ -49,5 +50,11 @@ export const screenList: IScrenList[] = [
     component: screens.History,
     title: 'История',
     animation,
+  },
+  {
+    name: routes.successDeal,
+    component: screens.SuccessDeal,
+    title: '',
+    animation: 'slide_from_bottom',
   },
 ];

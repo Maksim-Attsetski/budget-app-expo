@@ -6,7 +6,11 @@ export const useBudget = () => {
   const { action } = useActions();
 
   const onCreate = (newBudget: IBudget) => {
-    action.budgetCreateAC(newBudget);
+    action.budgetCreateAC({
+      ...newBudget,
+      id: data.length + 1,
+      date: Date.now(),
+    });
   };
   const onUpdate = (newBudget: IBudget) => {
     action.budgetUpdateAC(newBudget);
