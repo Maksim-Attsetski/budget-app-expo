@@ -23,6 +23,8 @@ const AddClientModal: FC = () => {
   const [lastname, setLastname] = useState('');
 
   const onPressAddClient = () => {
+    console.log(modalDefaultProps);
+
     const regExp = /^\+375[0-9]{2}[0-9]{3}[0-9]{2}[0-9]{2}$/im;
 
     const getAlert = (msg: string) => {
@@ -48,11 +50,7 @@ const AddClientModal: FC = () => {
       return getAlert('Некорректная цена');
     }
 
-    console.log('ВСе норм');
-
-    if (modalDefaultProps.contacts) {
-      console.log('update');
-
+    if (modalDefaultProps.lastname.length > 0) {
       onAddOrder(modalDefaultProps.id, {
         dealAt: Date.now(),
         description,
@@ -60,7 +58,6 @@ const AddClientModal: FC = () => {
         status: 'wait',
       } as IClientOrder);
     } else {
-      console.log('add');
       onAddClient({
         contacts, // #TODO дата заказа
         lastname,
@@ -93,8 +90,6 @@ const AddClientModal: FC = () => {
   }, [modalDefaultProps]);
 
   useEffect(() => {
-    console.log('addClientModalvisible', addClientModalvisible);
-
     !addClientModalvisible && resetModalProps();
   }, [addClientModalvisible]);
 

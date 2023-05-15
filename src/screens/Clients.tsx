@@ -1,7 +1,7 @@
 import React, { FC, memo } from 'react';
 import { FlatList } from 'react-native';
 
-import { Button, Gap } from '../UI';
+import { Button, Gap, Text } from '../UI';
 import { Layout } from '../widgets/App';
 import { AddClientModal, ClientItem, useClients } from '../widgets/Clients';
 
@@ -20,6 +20,7 @@ const Clients: FC = () => {
         ItemSeparatorComponent={() => <Gap y={7} />}
         renderItem={({ item }) => <ClientItem item={item} />}
         showsVerticalScrollIndicator={false}
+        ListEmptyComponent={<Text>Ещё нет клиентов</Text>}
       />
       <Gap y={45} />
     </Layout>
