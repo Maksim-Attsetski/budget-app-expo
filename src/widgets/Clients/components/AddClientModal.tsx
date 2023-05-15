@@ -181,16 +181,10 @@ const AddClientModal: FC = () => {
           <Gap y={7} />
           <Card>
             <Flex justify='space-between'>
-              <Button
-                disabled={!!modalDefaultProps?.orders[0]?.dealAt}
-                onPress={() => showMode('date')}
-              >
+              <Button onPress={() => showMode('date')}>
                 {date.toLocaleDateString('ru')}
               </Button>
-              <Button
-                disabled={!!modalDefaultProps?.orders[0]?.dealAt}
-                onPress={() => showMode('time')}
-              >
+              <Button onPress={() => showMode('time')}>
                 {date.toLocaleTimeString('ru')}
               </Button>
             </Flex>
