@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Button, Card, Text } from '../../../UI';
 import { IClient } from '../types';
 import DeleteSvg from '../../../../assets/DeleteSvg';
-import { colors } from '../../../shared';
+import { colors, dateHelper } from '../../../shared';
 import SuccessSvg from '../../../../assets/SuccessSvg';
 import { useClients } from '../useClients';
 import { routes } from '../../App/types';
@@ -15,8 +15,14 @@ interface IProps {
 }
 
 const ClientItem: FC<IProps> = ({ item }) => {
-  const { onDeleteClient } = useClients();
+  const { onDeleteClient, setClientModalVisible } = useClients();
   const { navigate } = useNavigation();
+
+  const onPressRebuy = () => {
+    setClientModalVisible({ ...item });
+  };
+
+  const harOrder = item.orders.some((el) => el.status === 'wait');
 
   return (
     <Card style={styles.container}>
@@ -24,9 +30,8 @@ const ClientItem: FC<IProps> = ({ item }) => {
         <Text style={styles.title}>
           {item.name} {item.lastname}
         </Text>
-        <Text>{item.description}</Text>
-        <Text>{item.status}</Text>
         <Text>Контакты: {item.contacts}</Text>
+        <Text>date: {dateHelper.getBeautifulDate(item.orders[0].dealAt)}</Text>
       </View>
       <View style={styles.buttonsContainer}>
         <Button
@@ -35,12 +40,16 @@ const ClientItem: FC<IProps> = ({ item }) => {
         >
           <DeleteSvg stroke={colors.whiteBlock} />
         </Button>
-        {item.status === 'wait' && (
+        {harOrder ? (
           <Button
             // @ts-ignore
             onPress={() => navigate(routes.successDeal, { client: item })}
             style={[styles.successBtn, styles.btn]}
           >
+            <SuccessSvg stroke={colors.whiteBlock} />
+          </Button>
+        ) : (
+          <Button onPress={onPressRebuy} style={[styles.deleteBtn, styles.btn]}>
             <SuccessSvg stroke={colors.whiteBlock} />
           </Button>
         )}
