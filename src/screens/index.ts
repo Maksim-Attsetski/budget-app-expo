@@ -1,4 +1,5 @@
 import AddBudget from './AddBudget';
+import Client from './Client';
 import Clients from './Clients';
 import History from './History';
 import Home from './Home';
@@ -11,5 +12,6 @@ export const screens = {
   Stats,
   AddBudget,
   Clients,
+  Client,
   History,
 };

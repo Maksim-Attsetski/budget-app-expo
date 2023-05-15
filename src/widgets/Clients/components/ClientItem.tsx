@@ -26,13 +26,14 @@ const ClientItem: FC<IProps> = ({ item }) => {
 
   return (
     <Card style={styles.container}>
-      <View>
+      {/* @ts-ignore */}
+      <Button onPress={() => navigate(routes.client, { client: item })}>
         <Text style={styles.title}>
           {item.name} {item.lastname}
         </Text>
         <Text>Контакты: {item.contacts}</Text>
         <Text>date: {dateHelper.getBeautifulDate(item.orders[0].dealAt)}</Text>
-      </View>
+      </Button>
       <View style={styles.buttonsContainer}>
         <Button
           onPress={() => onDeleteClient(item.id)}

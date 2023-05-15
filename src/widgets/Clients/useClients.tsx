@@ -33,7 +33,7 @@ export const useClients = () => {
     action.deleteClientAC(id);
   };
 
-  const setClientModalVisible = (props?: IClient) => {
+  const setClientModalVisible = (props: IClient = null) => {
     action.setClientsModalVisibleAC(props || defaultClient);
   };
 
@@ -49,7 +49,12 @@ export const useClients = () => {
         { ...data, id: Date.now().toString(), createdAt: Date.now() },
         ...client.orders,
       ] as IClientOrder[];
-      const orders = newOrders.sort((a, b) => a.dealAt - b.dealAt);
+      const orders = newOrders
+        .sort((a, b) => a.dealAt - b.dealAt)
+        .sort(
+          (a, b) =>
+            (b.status === 'wait' ? 1 : 0) - (a.status === 'wait' ? 1 : 0)
+        );
 
       action.updateClientAC({ id: client.id, orders } as IClient);
     }

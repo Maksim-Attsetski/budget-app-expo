@@ -87,14 +87,14 @@ const AddClientModal: FC = () => {
   };
 
   useEffect(() => {
-    if (modalDefaultProps.lastname.length > 0) {
-      setContacts(modalDefaultProps.contacts);
-      setName(modalDefaultProps.name);
-      setLastname(modalDefaultProps.lastname);
-    }
+    setContacts(modalDefaultProps.contacts);
+    setName(modalDefaultProps.name);
+    setLastname(modalDefaultProps.lastname);
   }, [modalDefaultProps]);
 
   useEffect(() => {
+    console.log('addClientModalvisible', addClientModalvisible);
+
     !addClientModalvisible && resetModalProps();
   }, [addClientModalvisible]);
 
