@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import BottomTabs from './BottomTabs';
 import { colors, useTheme } from '../../shared';
+import { Gap } from '../../UI';
 
 const Layout: FC<PropsWithChildren> = ({ children }) => {
   const { isDark } = useTheme();
@@ -12,6 +13,7 @@ const Layout: FC<PropsWithChildren> = ({ children }) => {
   return (
     <SafeAreaView style={styles.container}>
       {children}
+      <Gap y={40} />
       <BottomTabs />
     </SafeAreaView>
   );

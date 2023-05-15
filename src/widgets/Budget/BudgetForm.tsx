@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   },
   button: {
     position: 'absolute',
-    bottom: 100,
+    bottom: 20,
     left: 0,
     right: 0,
     zIndex: 10,
