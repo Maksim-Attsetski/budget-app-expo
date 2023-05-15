@@ -1,10 +1,22 @@
 import React, { FC, memo, useEffect, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 
-import { BottomSheet, Input, Gap, AccentButton } from '../../../UI';
+import {
+  BottomSheet,
+  Input,
+  Gap,
+  AccentButton,
+  Button,
+  Text,
+  Flex,
+  Card,
+} from '../../../UI';
 import { useClients } from '../useClients';
 import { IClient, IClientOrder } from '../types';
-import { useBudget } from '../../Budget';
+import DatePicker, {
+  DateTimePickerAndroid,
+} from '@react-native-community/datetimepicker';
+import { dateHelper } from '../../../shared';
 
 const AddClientModal: FC = () => {
   const {
@@ -21,10 +33,9 @@ const AddClientModal: FC = () => {
   const [price, setPrice] = useState('');
   const [name, setName] = useState('');
   const [lastname, setLastname] = useState('');
+  const [date, setDate] = useState(new Date());
 
   const onPressAddClient = () => {
-    console.log(modalDefaultProps);
-
     const regExp = /^\+375[0-9]{2}[0-9]{3}[0-9]{2}[0-9]{2}$/im;
 
     const getAlert = (msg: string) => {
@@ -52,7 +63,7 @@ const AddClientModal: FC = () => {
 
     if (modalDefaultProps.lastname.length > 0) {
       onAddOrder(modalDefaultProps.id, {
-        dealAt: Date.now(),
+        dealAt: date.getTime(),
         description,
         price: +price,
         status: 'wait',
@@ -66,7 +77,7 @@ const AddClientModal: FC = () => {
           {
             id: Date.now().toString(),
             createdAt: Date.now(),
-            dealAt: Date.now(),
+            dealAt: date.getTime(),
             description,
             price: +price,
             status: 'wait',
@@ -83,10 +94,27 @@ const AddClientModal: FC = () => {
     setContacts(validPhone);
   };
 
+  const onChange = (event, selectedDate: Date) => {
+    if (selectedDate.getTime() > Date.now()) {
+      setDate(selectedDate);
+    }
+  };
+
+  const showMode = (mode: 'time' | 'date') => {
+    DateTimePickerAndroid.open({
+      value: date,
+      onChange,
+      mode,
+      is24Hour: true,
+      minimumDate: new Date(),
+    });
+  };
+
   useEffect(() => {
     setContacts(modalDefaultProps.contacts);
     setName(modalDefaultProps.name);
     setLastname(modalDefaultProps.lastname);
+    setDate(new Date(modalDefaultProps?.orders[0]?.dealAt || new Date()));
   }, [modalDefaultProps]);
 
   useEffect(() => {
@@ -98,18 +126,21 @@ const AddClientModal: FC = () => {
       <BottomSheet
         isOpen={addClientModalvisible}
         setIsOpen={() => setClientModalVisible(modalDefaultProps)}
+        openTo={2.2}
       >
         <View>
           <View style={styles.namesContainer}>
             <Input
               setValue={setName}
               value={name}
+              disabled={modalDefaultProps.name.length > 0}
               placeholder='Имя'
               viewProps={{ style: { flex: 1 } }}
             />
             <Input
               setValue={setLastname}
               value={lastname}
+              disabled={modalDefaultProps.name.length > 0}
               placeholder='Фамилия'
               viewProps={{ style: { flex: 1 } }}
             />
@@ -126,6 +157,7 @@ const AddClientModal: FC = () => {
               value={contacts}
               keyboardType='phone-pad'
               maxLength={13}
+              disabled={modalDefaultProps.name.length > 4}
               viewProps={{ style: { flex: 2.5 } }}
               placeholder='Моб. телефон'
             />
@@ -146,6 +178,23 @@ const AddClientModal: FC = () => {
             placeholder='Описание'
             style={{ maxHeight: 150 }}
           />
+          <Gap y={7} />
+          <Card>
+            <Flex justify='space-between'>
+              <Button
+                disabled={!!modalDefaultProps?.orders[0]?.dealAt}
+                onPress={() => showMode('date')}
+              >
+                {date.toLocaleDateString('ru')}
+              </Button>
+              <Button
+                disabled={!!modalDefaultProps?.orders[0]?.dealAt}
+                onPress={() => showMode('time')}
+              >
+                {date.toLocaleTimeString('ru')}
+              </Button>
+            </Flex>
+          </Card>
           <Gap y={7} />
           <AccentButton onPress={onPressAddClient}>Подтвердить</AccentButton>
         </View>

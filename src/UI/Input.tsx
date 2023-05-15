@@ -27,8 +27,13 @@ const Input: FC<IProps> = ({
   return (
     <View {...viewProps}>
       <TextInput
-        style={[styles.input, { backgroundColor, color }, style]}
+        style={[
+          styles.input,
+          { backgroundColor, color, opacity: disabled ? 0.6 : 1 },
+          style,
+        ]}
         {...props}
+        editable={!disabled}
         onChangeText={setValue}
         cursorColor={color}
         placeholderTextColor={color}

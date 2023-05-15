@@ -23,9 +23,15 @@ import Gap from './Gap';
 interface IProps extends PropsWithChildren {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
+  openTo?: number;
 }
 
-const BottomSheet: FC<IProps> = ({ children, isOpen, setIsOpen }) => {
+const BottomSheet: FC<IProps> = ({
+  children,
+  isOpen,
+  setIsOpen,
+  openTo = 2,
+}) => {
   const { isDark } = useTheme();
   const styles = getStyles(isDark ? colors.dark : colors.white);
 
@@ -35,7 +41,7 @@ const BottomSheet: FC<IProps> = ({ children, isOpen, setIsOpen }) => {
   useEffect(() => {
     !isOpen && Keyboard.dismiss();
 
-    getTiming(top, screen.height / (isOpen ? 2 : 1), 500, false);
+    getTiming(top, screen.height / (isOpen ? openTo : 1), 500, false);
     getTiming(topContainer, screen.height * (isOpen ? 0 : 1), 300, false);
   }, [isOpen]);
 
