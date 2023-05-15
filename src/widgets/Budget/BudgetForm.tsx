@@ -16,7 +16,7 @@ const options: IOption[] = [
 ];
 
 const BudgetForm: FC = () => {
-  const { onCreate, budget } = useBudget();
+  const { onCreate } = useBudget();
 
   const [budgetType, setBudgetType] = useState(options[0]);
   const [newPrice, setNewPrice] = useState<string>('');
@@ -43,7 +43,6 @@ const BudgetForm: FC = () => {
       type: budgetType.value,
       value: +newPrice,
       description,
-      comletedAt: null,
     } as IBudget;
 
     onCreate(newBudget);

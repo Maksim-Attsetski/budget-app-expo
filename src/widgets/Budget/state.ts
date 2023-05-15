@@ -7,23 +7,20 @@ interface IState {
 
 const initialState: IState = {
   budget: [
-    { id: 1, type: 'dec', value: 23, date: 1683537543818, comletedAt: null },
+    { id: 1, type: 'dec', value: 23, date: 1683537543818 },
     {
       id: 2,
       type: 'dec',
       value: 10,
       date: 1683542043818,
-      comletedAt: 1683542043818,
     },
     {
       id: 3,
       type: 'inc',
       value: 15,
       date: 1683547556818,
-      comletedAt: 1683547556818,
     },
-    { id: 4, type: 'inc', value: 30, date: 1683547943818, comletedAt: null },
-    { id: 4, type: 'inc', value: 8, date: 1683536943818, comletedAt: null },
+    { id: 4, type: 'inc', value: 8, date: 1683536943818 },
   ],
 };
 

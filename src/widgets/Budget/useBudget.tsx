@@ -19,11 +19,7 @@ export const useBudget = () => {
     action.budgetDeleteAC(id);
   };
 
-  const budget = data
-    .filter((el) => el.comletedAt)
-    .sort((a, b) => b.date - a.date);
+  const budget = [...data].sort((a, b) => b.date - a.date);
 
-  const waitList = data.filter((el) => !el.comletedAt);
-
-  return { budget, waitList, onCreate, onUpdate, onDelete };
+  return { budget, onCreate, onUpdate, onDelete };
 };
