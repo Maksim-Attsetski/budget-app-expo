@@ -9,6 +9,7 @@ export const colors = {
   purple: '#5460FE',
   green: '#3A984D',
   red: '#cf4343',
+  orange: '#e0a612',
 };
 export type TColors = typeof colors;
 

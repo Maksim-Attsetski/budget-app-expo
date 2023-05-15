@@ -3,56 +3,77 @@ import { FlatList, StyleSheet, View } from 'react-native';
 
 import { IScreen, colors, dateHelper } from '../shared';
 import { Layout } from '../widgets/App';
-import { Card, Gap, Text } from '../UI';
-import { IClient } from '../widgets/Clients';
+import { Button, Card, Flex, Gap, Text } from '../UI';
+import { AddClientModal, IClient, useClients } from '../widgets/Clients';
 
 const Client: FC<IScreen> = ({ route }) => {
   // @ts-ignore
-  const client: IClient | undefined = route.params?.client;
+  const clientId: string | undefined = route.params?.id;
+
+  const { clients } = useClients();
+  const client = clients.find((el) => el.id === clientId);
+
+  const { setClientModalVisible } = useClients();
 
   return (
-    <Layout>
-      {client && (
-        <View>
-          <Text style={styles.title}>
-            {client.name} {client.lastname}
-          </Text>
-          <Text style={styles.contacts}>{client.contacts}</Text>
-          <FlatList
-            data={client.orders}
-            ItemSeparatorComponent={() => <Gap y={7} />}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => (
-              <Card key={item.id}>
-                <View style={styles.summaContainer}>
-                  <Text>Сумма:</Text>
-                  <Text
-                    style={{
-                      color:
-                        item.status === 'success'
-                          ? colors.green
-                          : item.status === 'wait'
-                          ? colors.purple
-                          : colors.red,
-                    }}
-                  >
-                    {item.price}
-                  </Text>
-                </View>
-                {item.description && (
-                  <>
-                    <Text>Описание:</Text>
-                    <Text> {item.description}</Text>
-                  </>
-                )}
-                <Gap y={7} />
-                <Text>{dateHelper.getBeautifulDate(item.dealAt)}</Text>
-              </Card>
-            )}
-          />
-        </View>
-      )}
-    </Layout>
+    <>
+      <AddClientModal />
+      <Layout>
+        {client && (
+          <View>
+            <Text style={styles.title}>
+              {client.name} {client.lastname}
+            </Text>
+            <Text style={styles.contacts}>{client.contacts}</Text>
+            <Gap y={7} />
+            <Flex justify='space-around'>
+              <Button
+                textProps={{ style: { fontSize: 20 } }}
+                onPress={() => setClientModalVisible(client)}
+              >
+                Добавить заказ
+              </Button>
+              <Text style={{ fontSize: 20 }}>Заказы</Text>
+            </Flex>
+            <Gap y={7} />
+            <FlatList
+              scrollEnabled
+              style={{ marginBottom: 100 }}
+              data={client.orders}
+              ItemSeparatorComponent={() => <Gap y={7} />}
+              showsVerticalScrollIndicator={false}
+              renderItem={({ item }) => (
+                <Card key={item.id}>
+                  <View style={styles.summaContainer}>
+                    <Text>Сумма:</Text>
+                    <Text
+                      style={{
+                        color:
+                          item.status === 'success'
+                            ? colors.green
+                            : item.status === 'wait'
+                            ? colors.purple
+                            : colors.red,
+                      }}
+                    >
+                      {item.price}
+                    </Text>
+                  </View>
+                  {item.description && (
+                    <>
+                      <Text>Описание:</Text>
+                      <Text> {item.description}</Text>
+                    </>
+                  )}
+                  <Gap y={7} />
+                  <Text>{dateHelper.getBeautifulDate(item.dealAt)}</Text>
+                </Card>
+              )}
+            />
+          </View>
+        )}
+      </Layout>
+    </>
   );
 };
 

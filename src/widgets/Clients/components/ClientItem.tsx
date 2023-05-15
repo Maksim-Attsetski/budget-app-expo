@@ -2,13 +2,14 @@ import React, { FC, memo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-import { Button, Card, Text } from '../../../UI';
+import { Button, Card, Gap, Text } from '../../../UI';
 import { IClient } from '../types';
 import DeleteSvg from '../../../../assets/DeleteSvg';
 import { colors, dateHelper } from '../../../shared';
 import SuccessSvg from '../../../../assets/SuccessSvg';
 import { useClients } from '../useClients';
 import { routes } from '../../App/types';
+import RebuySvg from '../../../../assets/RebuySvg';
 
 interface IProps {
   item: IClient;
@@ -27,12 +28,20 @@ const ClientItem: FC<IProps> = ({ item }) => {
   return (
     <Card style={styles.container}>
       {/* @ts-ignore */}
-      <Button onPress={() => navigate(routes.client, { client: item })}>
+      <Button onPress={() => navigate(routes.client, { id: item.id })}>
         <Text style={styles.title}>
           {item.name} {item.lastname}
         </Text>
         <Text>Контакты: {item.contacts}</Text>
-        <Text>date: {dateHelper.getBeautifulDate(item.orders[0].dealAt)}</Text>
+        {/* <Gap y={7} /> */}
+        {item.orders[0] && item.orders[0].status === 'wait' ? (
+          <>
+            <Text>Ближайший заказ:</Text>
+            <Text> {dateHelper.getBeautifulDate(item.orders[0].dealAt)}</Text>
+          </>
+        ) : (
+          <Text>Нет активных заказов</Text>
+        )}
       </Button>
       <View style={styles.buttonsContainer}>
         <Button
@@ -50,8 +59,8 @@ const ClientItem: FC<IProps> = ({ item }) => {
             <SuccessSvg stroke={colors.whiteBlock} />
           </Button>
         ) : (
-          <Button onPress={onPressRebuy} style={[styles.deleteBtn, styles.btn]}>
-            <SuccessSvg stroke={colors.whiteBlock} />
+          <Button onPress={onPressRebuy} style={[styles.rebuyBtn, styles.btn]}>
+            <RebuySvg stroke={colors.whiteBlock} />
           </Button>
         )}
       </View>
@@ -71,6 +80,7 @@ const styles = StyleSheet.create({
     gap: 15,
   },
   buttonsContainer: {
+    gap: 8,
     justifyContent: 'space-between',
   },
   btn: {
@@ -82,6 +92,9 @@ const styles = StyleSheet.create({
   },
   deleteBtn: {
     backgroundColor: colors.red,
+  },
+  rebuyBtn: {
+    backgroundColor: colors.orange,
   },
 });
 
