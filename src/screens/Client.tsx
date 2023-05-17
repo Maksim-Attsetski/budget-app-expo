@@ -1,19 +1,17 @@
 import React, { FC, memo } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 
+import { Button, Card, Flex, Gap, Text } from '../UI';
 import { IScreen, colors, dateHelper } from '../shared';
 import { Layout } from '../widgets/App';
-import { Button, Card, Flex, Gap, Text } from '../UI';
-import { AddClientModal, IClient, useClients } from '../widgets/Clients';
+import { AddClientModal, useClients } from '../widgets/Clients';
 
 const Client: FC<IScreen> = ({ route }) => {
   // @ts-ignore
   const clientId: string | undefined = route.params?.id;
 
-  const { clients } = useClients();
+  const { clients, setClientModalVisible } = useClients();
   const client = clients.find((el) => el.id === clientId);
-
-  const { setClientModalVisible } = useClients();
 
   return (
     <>

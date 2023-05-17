@@ -23,4 +23,5 @@ export const storage = new Storage();
 export enum storageKeys {
   theme = '@storage/theme',
   budget = '@storage/budget',
+  clients = '@storage/clients',
 }

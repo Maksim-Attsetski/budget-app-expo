@@ -14,8 +14,6 @@ export const useBudget = () => {
 
   const setBudget = async () => {
     const currentBudget = await storage.get(storageKeys.budget);
-    console.log('currentBudget', typeof currentBudget, currentBudget);
-
     action.setBudgetAC(currentBudget);
   };
 
@@ -40,7 +38,7 @@ export const useBudget = () => {
     await storage.set(storageKeys.budget, currentBudget);
   };
   const onDelete = async (id: number) => {
-    const currentBudget = budget.filter((el) => id === el.id);
+    const currentBudget = budget.filter((el) => id !== el.id);
 
     action.setBudgetAC(currentBudget);
     await storage.set(storageKeys.budget, currentBudget);

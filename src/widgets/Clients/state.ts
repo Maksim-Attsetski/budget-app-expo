@@ -10,40 +10,7 @@ interface IState {
 const initialState: IState = {
   addClientModalvisible: false,
   modalDefaultProps: defaultClient,
-  clients: [
-    {
-      id: '1',
-      contacts: '+375336644491',
-      name: 'Maks',
-      lastname: 'Attsetski',
-      orders: [
-        {
-          id: '1',
-          createdAt: Date.now() - 360000,
-          dealAt: Date.now() + 360000,
-          price: 23,
-          status: 'wait',
-          description: '3 коробки зефира',
-        },
-      ],
-    },
-    {
-      id: '2',
-      contacts: '+375336644491',
-      name: 'Даша',
-      lastname: 'Отцецкая',
-      orders: [
-        {
-          id: '1',
-          description: '2 коробки зефира',
-          price: 40,
-          status: 'success',
-          dealAt: Date.now() + 60000,
-          createdAt: Date.now() - 60000,
-        },
-      ],
-    },
-  ],
+  clients: [],
 };
 
 const clientSlice = createSlice({

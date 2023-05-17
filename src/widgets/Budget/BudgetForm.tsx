@@ -22,7 +22,7 @@ const BudgetForm: FC = () => {
   const [newPrice, setNewPrice] = useState<string>('');
   const [description, setDescription] = useState<string>('');
 
-  const onPressAddBudget = () => {
+  const onPressAddBudget = async () => {
     if (Number.isNaN(+newPrice)) {
       Alert.alert(
         'Не правильно указана цена',
@@ -45,7 +45,7 @@ const BudgetForm: FC = () => {
       description,
     } as IBudget;
 
-    onCreate(newBudget);
+    await onCreate(newBudget);
 
     setBudgetType(options[0]);
     setNewPrice('');

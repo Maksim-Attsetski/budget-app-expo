@@ -30,7 +30,7 @@ const SuccessDeal: FC<IProps> = ({ route, navigation }) => {
     }
   };
 
-  const changeClientStatus = () => {
+  const changeClientStatus = async () => {
     if (client?.id) {
       const priceForDeals = client.orders.reduce((prev, cur) => {
         return cur.status === 'wait' ? prev + cur.price : prev;
@@ -39,9 +39,8 @@ const SuccessDeal: FC<IProps> = ({ route, navigation }) => {
         el.status === 'wait' ? { ...el, status: 'success' } : el
       );
 
-      onUpdateClient({ orders: updatedOrders, id: client.id } as IClient);
-      onCreateDeal({
-        comletedAt: Date.now(),
+      await onUpdateClient({ orders: updatedOrders, id: client.id } as IClient);
+      await onCreateDeal({
         type: 'inc',
         value: priceForDeals,
         description: 'Успешная сделка!',

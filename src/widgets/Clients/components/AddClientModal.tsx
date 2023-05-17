@@ -1,5 +1,6 @@
 import React, { FC, memo, useEffect, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
+import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 
 import {
   BottomSheet,
@@ -7,16 +8,11 @@ import {
   Gap,
   AccentButton,
   Button,
-  Text,
   Flex,
   Card,
 } from '../../../UI';
 import { useClients } from '../useClients';
 import { IClient, IClientOrder } from '../types';
-import DatePicker, {
-  DateTimePickerAndroid,
-} from '@react-native-community/datetimepicker';
-import { dateHelper } from '../../../shared';
 
 const AddClientModal: FC = () => {
   const {
@@ -35,7 +31,7 @@ const AddClientModal: FC = () => {
   const [lastname, setLastname] = useState('');
   const [date, setDate] = useState(new Date());
 
-  const onPressAddClient = () => {
+  const onPressAddClient = async () => {
     const regExp = /^\+375[0-9]{2}[0-9]{3}[0-9]{2}[0-9]{2}$/im;
 
     const getAlert = (msg: string) => {
@@ -62,14 +58,14 @@ const AddClientModal: FC = () => {
     }
 
     if (modalDefaultProps.lastname.length > 0) {
-      onAddOrder(modalDefaultProps.id, {
+      await onAddOrder(modalDefaultProps.id, {
         dealAt: date.getTime(),
         description,
         price: +price,
         status: 'wait',
       } as IClientOrder);
     } else {
-      onAddClient({
+      await onAddClient({
         contacts, // #TODO дата заказа
         lastname,
         name,
@@ -94,7 +90,7 @@ const AddClientModal: FC = () => {
     setContacts(validPhone);
   };
 
-  const onChange = (event, selectedDate: Date) => {
+  const onChange = (_, selectedDate: Date) => {
     if (selectedDate.getTime() > Date.now()) {
       setDate(selectedDate);
     }

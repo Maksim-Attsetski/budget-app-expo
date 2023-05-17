@@ -1,4 +1,9 @@
-import { useActions, useTypedSelector } from '../../shared';
+import {
+  storage,
+  storageKeys,
+  useActions,
+  useTypedSelector,
+} from '../../shared';
 import { IClient, IClientOrder, defaultClient } from './types';
 
 const getNum = ({ orders }: IClient) => {
@@ -15,22 +20,38 @@ export const useClients = () => {
     .sort((a, b) => a.orders[0].dealAt - b.orders[0].dealAt)
     .sort((a, b) => getNum(b) - getNum(a));
 
-  const onGetClients = async () => {};
+  const onGetClients = async () => {
+    const currentClients = await storage.get(storageKeys.clients);
+
+    action.setClientsAC(currentClients);
+  };
 
   const onAddClient = async (data: IClient) => {
     const newClient: IClient = {
       ...data,
       id: Date.now().toString(),
     };
-    action.addClientAC(newClient);
+
+    const currentClients = [newClient, ...clients];
+
+    await storage.set(storageKeys.clients, currentClients);
+    action.setClientsAC(currentClients);
   };
 
   const onUpdateClient = async (data: IClient) => {
-    action.updateClientAC(data);
+    const currentClients = [...clients].map((el) =>
+      el.id === data.id ? { ...el, ...data } : el
+    );
+
+    await storage.set(storageKeys.clients, currentClients);
+    action.setClientsAC(currentClients);
   };
 
   const onDeleteClient = async (id: string) => {
-    action.deleteClientAC(id);
+    const currentClients = clients.filter((el) => el.id !== id);
+
+    await storage.set(storageKeys.clients, currentClients);
+    action.setClientsAC(currentClients);
   };
 
   const setClientModalVisible = (props: IClient = null) => {
@@ -56,7 +77,7 @@ export const useClients = () => {
             (b.status === 'wait' ? 1 : 0) - (a.status === 'wait' ? 1 : 0)
         );
 
-      action.updateClientAC({ id: client.id, orders } as IClient);
+      onUpdateClient({ id: client.id, orders } as IClient);
     }
   };
 
