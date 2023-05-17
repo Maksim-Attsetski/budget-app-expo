@@ -14,7 +14,7 @@ export const useBudget = () => {
 
   const setBudget = async () => {
     const currentBudget = await storage.get(storageKeys.budget);
-    action.setBudgetAC(currentBudget);
+    currentBudget && action.setBudgetAC(currentBudget);
   };
 
   const onCreate = async (info: IBudget) => {

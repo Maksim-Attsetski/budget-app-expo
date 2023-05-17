@@ -23,7 +23,7 @@ export const useClients = () => {
   const onGetClients = async () => {
     const currentClients = await storage.get(storageKeys.clients);
 
-    action.setClientsAC(currentClients);
+    currentClients && action.setClientsAC(currentClients);
   };
 
   const onAddClient = async (data: IClient) => {
