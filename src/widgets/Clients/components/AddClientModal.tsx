@@ -157,7 +157,7 @@ const AddClientModal: FC = () => {
               value={contacts}
               keyboardType='phone-pad'
               maxLength={13}
-              disabled={modalDefaultProps.name.length > 4}
+              disabled={modalDefaultProps.name.length > 0}
               viewProps={{ style: { flex: 2.5 } }}
               placeholder='Моб. телефон'
             />

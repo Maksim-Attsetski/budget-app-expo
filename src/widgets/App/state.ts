@@ -1,17 +1,22 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { combineReducers } from 'redux';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { budgetReducer } from '../Budget';
-import { clientReducer } from '../Clients';
+interface IState {
+  isDark: boolean;
+}
 
-const reducer = combineReducers({
-  budget: budgetReducer,
-  clients: clientReducer,
+const initialState: IState = {
+  isDark: false,
+};
+
+const appSlice = createSlice({
+  name: 'myAppSlice',
+  initialState,
+  reducers: {
+    setThemeAC: (state: IState, action: PayloadAction<boolean>) => {
+      state.isDark = action.payload;
+    },
+  },
 });
 
-export const reduxStore = configureStore({
-  reducer,
-});
-
-export type RootState = ReturnType<typeof reduxStore.getState>;
-export type AppDispatch = typeof reduxStore.dispatch;
+export const appActions = { ...appSlice.actions };
+export const appReducer = appSlice.reducer;

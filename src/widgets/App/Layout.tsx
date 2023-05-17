@@ -6,7 +6,11 @@ import BottomTabs from './BottomTabs';
 import { colors, useTheme } from '../../shared';
 import { Gap } from '../../UI';
 
-const Layout: FC<PropsWithChildren> = ({ children }) => {
+interface IProps extends PropsWithChildren {
+  tabs?: boolean;
+}
+
+const Layout: FC<IProps> = ({ children, tabs = true }) => {
   const { isDark } = useTheme();
   const styles = getStyles(isDark ? colors.dark : colors.white);
 
@@ -14,7 +18,7 @@ const Layout: FC<PropsWithChildren> = ({ children }) => {
     <SafeAreaView style={styles.container}>
       {children}
       <Gap y={40} />
-      <BottomTabs />
+      {tabs && <BottomTabs />}
     </SafeAreaView>
   );
 };

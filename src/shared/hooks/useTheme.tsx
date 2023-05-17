@@ -1,26 +1,24 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useColorScheme } from 'react-native';
 
-import { storage, storageKeys } from '../utils';
 import { colors } from '../constants';
+import { useTypedSelector } from './useRedux';
+import { useActions } from './useActions';
 
-export const useTheme = () => {
+export const useTheme = (isChecker: boolean = false) => {
   const colorScheme = useColorScheme();
-  const [isDark, setIsDark] = useState(colorScheme === 'dark');
+  const { isDark } = useTypedSelector((s) => s.app);
+  const { action } = useActions();
 
-  useEffect(() => {
-    (async () => {
-      const response = await storage.get(storageKeys.theme);
-      if (response) {
-        setIsDark(response === 'dark');
-      }
-    })();
+  const onToggleTheme = useCallback(async () => {
+    action.setThemeAC(!isDark);
   }, []);
 
-  const onToggleTheme = async () => {
-    await storage.set(storageKeys.theme, isDark ? 'light' : 'dark');
-    setIsDark(!isDark);
-  };
+  useEffect(() => {
+    if (isChecker) {
+      action?.setThemeAC(colorScheme === 'dark');
+    }
+  }, [colorScheme, isChecker, action.setThemeAC]);
 
   const backgroundColor = isDark ? colors.darkBlock : colors.whiteBlock;
   const color = isDark ? colors.white : colors.dark;
