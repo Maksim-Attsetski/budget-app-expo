@@ -4,9 +4,7 @@ class Storage {
   async get(key: string): Promise<any> {
     const itemData = await asyncStorage.getItem(key);
 
-    return itemData && typeof itemData !== 'string'
-      ? JSON.parse(itemData)
-      : itemData;
+    return itemData ? JSON.parse(itemData) : itemData;
   }
 
   async set(key: string, value: any): Promise<void> {
@@ -22,6 +20,7 @@ class Storage {
 
 export const storage = new Storage();
 
-export const storageKeys = {
-  theme: '@storage/theme',
-};
+export enum storageKeys {
+  theme = '@storage/theme',
+  budget = '@storage/budget',
+}

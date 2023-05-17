@@ -1,11 +1,11 @@
-import React, { FC, memo } from 'react';
+import React, { FC, memo, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as Linking from 'expo-linking';
 
 import { screenList } from './types';
 import { useTheme } from '../../shared';
-import { StatusBar } from 'react-native';
+import { useBudget } from '../Budget';
 
 const prefix = Linking.createURL('/', { scheme: 'budgetapp' });
 
@@ -13,10 +13,17 @@ const Stack = createNativeStackNavigator();
 
 const Navigation: FC = () => {
   const { color, backgroundColor, isDark } = useTheme(true);
+  const { setBudget } = useBudget();
 
   const linking = {
     prefixes: [prefix],
   };
+
+  useEffect(() => {
+    (async () => {
+      await Promise.all([setBudget()]);
+    })();
+  }, []);
 
   return (
     <>
