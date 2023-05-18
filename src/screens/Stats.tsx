@@ -1,7 +1,7 @@
 import React, { FC, memo } from 'react';
 import { Share, View } from 'react-native';
 
-import { Button, Gap, LineChart, Text } from '../UI';
+import { Button, Gap, LineChart, PieChart, Text } from '../UI';
 import { Layout } from '../widgets/App';
 import { colors, screen } from '../shared';
 import { IBudget, useBudget } from '../widgets/Budget';
@@ -62,6 +62,15 @@ const Stats: FC = () => {
           title='Расходы'
         />
       )}
+      <PieChart
+        // colors={[colors.red, colors.green, colors.purple]}
+        // labels={['A', 'B', 'C']}
+        data={[
+          { value: 60, color: colors.green, label: 'Доходы' },
+          { value: 20, color: colors.red, label: 'Прочее' },
+          { value: 20, color: colors.purple, label: 'Расходы' },
+        ]}
+      />
     </Layout>
   );
 };
