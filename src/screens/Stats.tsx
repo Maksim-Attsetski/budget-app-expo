@@ -1,13 +1,10 @@
 import React, { FC, memo } from 'react';
-import { Share, View } from 'react-native';
+import { Share } from 'react-native';
 
 import { Button, Gap, LineChart, PieChart, Text } from '../UI';
 import { Layout } from '../widgets/App';
 import { colors, screen } from '../shared';
 import { IBudget, useBudget } from '../widgets/Budget';
-
-const data = [50, 30, 40, 95, 85, 91];
-const labels = ['A', 'B', 'C', 'D', 'E', 'F'];
 
 const Stats: FC = () => {
   const { budget } = useBudget();
@@ -26,45 +23,29 @@ const Stats: FC = () => {
     .filter((el) => el.type === 'inc')
     .map((el) => el.value);
 
-  const chartIncLabels: string[] = new Array(chartIncData.length).fill('');
-
-  const chartDecData = (budget as IBudget[])
-    .filter((el) => el.type === 'dec')
-    .map((el) => el.value);
-
-  const chartDecLabels: string[] = new Array(chartDecData.length).fill('');
-
   return (
     <Layout>
       <Text>Stats</Text>
       <Button onPress={onShare}>share</Button>
       <Gap y={10} />
-      {chartIncData.length > 1 && (
-        <LineChart
-          data={chartIncData}
-          labels={chartIncLabels}
-          filled
-          lineColor={colors.green}
-          fillColor={colors.green}
-          width={screen.width - 20}
-          title='Доходы'
-        />
-      )}
-      <Gap y={10} />
-      {chartDecData.length > 1 && (
-        <LineChart
-          data={chartDecData}
-          labels={chartDecLabels}
-          filled
-          lineColor={colors.purple}
-          fillColor={colors.purple}
-          width={screen.width - 20}
-          title='Расходы'
-        />
-      )}
+      <LineChart
+        lines={[
+          {
+            color: colors.green,
+            data: [10, 20, 45, 30, 55],
+            label: 'Доходы',
+          },
+          {
+            color: colors.purple,
+            data: [5, 10, 25, 10, 15],
+            label: 'Расходы',
+          },
+        ]}
+        filled
+        width={screen.width - 20}
+        title='Доходы и расходы'
+      />
       <PieChart
-        // colors={[colors.red, colors.green, colors.purple]}
-        // labels={['A', 'B', 'C']}
         data={[
           { value: 60, color: colors.green, label: 'Доходы' },
           { value: 20, color: colors.red, label: 'Прочее' },
