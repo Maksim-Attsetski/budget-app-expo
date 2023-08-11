@@ -9,6 +9,7 @@ import { useBudget } from '../Budget';
 import { useClients } from '../Clients';
 
 const prefix = Linking.createURL('/', { scheme: 'budgetapp' });
+const linking = { prefixes: [prefix] };
 
 const Stack = createNativeStackNavigator();
 
@@ -16,10 +17,6 @@ const Navigation: FC = () => {
   const { color, backgroundColor, isDark } = useTheme(true);
   const { setBudget } = useBudget();
   const { onGetClients } = useClients();
-
-  const linking = {
-    prefixes: [prefix],
-  };
 
   useEffect(() => {
     (async () => {
