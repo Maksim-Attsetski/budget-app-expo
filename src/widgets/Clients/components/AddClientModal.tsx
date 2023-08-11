@@ -1,11 +1,4 @@
-import React, {
-  FC,
-  memo,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { FC, ReactNode, memo, useEffect, useRef, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import BottomSheet from '@gorhom/bottom-sheet';
@@ -15,7 +8,17 @@ import { useClients } from '../useClients';
 import { IClient } from '../types';
 import { IOrder, useOrders } from '../../Orders';
 
-const AddClientModal: FC = () => {
+interface IProps {
+  client?: IClient;
+  disabledBtn?: boolean;
+  icon?: ReactNode;
+}
+
+const AddClientModal: FC<IProps> = ({
+  client,
+  disabledBtn = false,
+  icon = null,
+}) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   const {
@@ -79,6 +82,7 @@ const AddClientModal: FC = () => {
     }
 
     setClientModalVisible();
+    bottomSheetRef.current?.close();
   };
 
   const onPhoneValidate = (val: string) => {
@@ -110,18 +114,26 @@ const AddClientModal: FC = () => {
   }, [modalDefaultProps]);
 
   useEffect(() => {
-    !addClientModalvisible && resetModalProps();
+    if (addClientModalvisible) {
+      bottomSheetRef?.current?.snapToIndex(1);
+    } else {
+      resetModalProps();
+      bottomSheetRef?.current?.snapToIndex(-1);
+    }
   }, [addClientModalvisible]);
 
   return (
     <>
       <Button
+        style={icon ? {} : styles.button}
+        textProps={{ style: styles.buttonText }}
         onPress={() => {
           bottomSheetRef?.current?.snapToIndex(1);
-          setClientModalVisible();
+          setClientModalVisible(client);
         }}
+        disabled={disabledBtn}
       >
-        Добавить клиента
+        {icon ?? `Добавить ${client ? 'заказ' : 'клиента'}`}
       </Button>
       <BottomSheet
         ref={bottomSheetRef}
@@ -204,6 +216,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 20,
     justifyContent: 'space-between',
+  },
+  button: {
+    paddingVertical: 20,
+    paddingHorizontal: 32,
+    borderRadius: 20,
+    backgroundColor: 'white',
+  },
+  buttonText: {
+    fontSize: 20,
+    textAlign: 'center',
   },
 });
 

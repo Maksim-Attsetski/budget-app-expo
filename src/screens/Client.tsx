@@ -2,7 +2,7 @@ import React, { FC, memo, useCallback, useEffect, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { where } from 'firebase/firestore';
 
-import { Button, Card, Flex, Gap, Text } from '../UI';
+import { Card, Flex, Gap, Text } from '../UI';
 import { IScreen, colors, dateHelper } from '../shared';
 import { Layout } from '../widgets/App';
 import { AddClientModal, IClient, useClients } from '../widgets/Clients';
@@ -12,16 +12,30 @@ const Client: FC<IScreen> = ({ route }) => {
   // @ts-ignore
   const clientId: string = route.params?.id ?? '';
 
-  const { setClientModalVisible, onGetClients } = useClients();
-  const { orders: ordersData } = useOrders();
+  const { onGetClients } = useClients();
+  const { orders: ordersData, onGetOrders } = useOrders();
 
   const [client, setClient] = useState<IClient | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
   const orders = ordersData.filter((el) => el.clientUid === clientId);
 
   const onGetClient = useCallback(async () => {
     if (clientId.length > 0) {
-      const res = await onGetClients([where('uid', '==', clientId)], 10, false);
-      res.count > 0 && setClient(res.result[0]);
+      try {
+        const res = await onGetClients(
+          [where('uid', '==', clientId)],
+          10,
+          false
+        );
+        res.count > 0 && setClient(res.result[0]);
+        await onGetOrders(clientId);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      setLoading(false);
     }
   }, [clientId]);
 
@@ -31,30 +45,25 @@ const Client: FC<IScreen> = ({ route }) => {
 
   return (
     <>
-      <AddClientModal />
       <Layout>
-        <View>
-          <Text>{clientId ?? 'ffff'}</Text>
-        </View>
-        {client && (
+        <Gap y={5} />
+        <AddClientModal disabledBtn={loading} client={client} />
+        {loading ? (
+          <>
+            <Gap y={10} />
+            <Card>
+              <Text>Ищем такого клиента...</Text>
+            </Card>
+          </>
+        ) : client ? (
           <View>
-            <View style={{ flexDirection: 'column' }}>
-              <Text style={styles.title}>
-                {client.name} {client.lastname}
-              </Text>
-            </View>
-            {/* <View style={{ flexDirection: 'column' }}>
-              <Text style={styles.contacts}>{client.contacts}</Text>
-            </View> */}
+            <Text style={styles.title}>
+              {client.name} {client.lastname}
+            </Text>
+            <Text style={styles.contacts}>{client.contacts}</Text>
             <Gap y={7} />
             <Flex justify='space-around'>
-              <Button
-                textProps={{ style: { fontSize: 20 } }}
-                onPress={() => setClientModalVisible(client)}
-              >
-                Добавить заказ
-              </Button>
-              <Text style={{ fontSize: 20 }}>Заказы</Text>
+              <Text style={styles.subTitle}>Заказы</Text>
             </Flex>
             <Gap y={7} />
             <FlatList
@@ -85,8 +94,11 @@ const Client: FC<IScreen> = ({ route }) => {
                   <Text>{dateHelper.getBeautifulDate(item.dealAt)}</Text>
                 </Card>
               )}
+              ListEmptyComponent={<Text>Пока не было заказов</Text>}
             />
           </View>
+        ) : (
+          <Text>Клиент не найден</Text>
         )}
       </Layout>
     </>
@@ -107,6 +119,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
+  },
+  subTitle: {
+    fontSize: 28,
+    fontWeight: 'bold',
   },
 });
 

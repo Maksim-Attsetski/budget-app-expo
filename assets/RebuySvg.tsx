@@ -14,7 +14,7 @@ const RebuySvg: FC<IProps> = ({
 }) => {
   const { color } = useTheme();
 
-  const strokeColor = stroke || color;
+  const strokeColor = stroke ?? color;
 
   return (
     <>

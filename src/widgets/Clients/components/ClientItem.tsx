@@ -31,12 +31,11 @@ const ClientItem: FC<IProps> = ({ item }) => {
   return (
     <Card style={styles.container}>
       {/* @ts-ignore */}
-      <Button onPress={() => navigate(routes.client, { id: item.uid })}>
+      <View onPress={() => navigate(routes.client, { id: item.uid })}>
         <Text style={styles.title}>
           {item.name} {item.lastname}
         </Text>
         <Text>Контакты: {item.contacts}</Text>
-        {/* <Gap y={7} /> */}
         {orders[0] && !orders[0].isDone ? (
           <>
             <Text>Ближайший заказ:</Text>
@@ -45,7 +44,7 @@ const ClientItem: FC<IProps> = ({ item }) => {
         ) : (
           <Text>Нет активных заказов</Text>
         )}
-      </Button>
+      </View>
       <View style={styles.buttonsContainer}>
         <Button
           onPress={() => onDeleteClient(item.uid)}
@@ -62,7 +61,11 @@ const ClientItem: FC<IProps> = ({ item }) => {
             <SuccessSvg stroke={colors.whiteBlock} />
           </Button>
         ) : (
-          <Button onPress={onPressRebuy} style={[styles.rebuyBtn, styles.btn]}>
+          <Button
+            onPress={onPressRebuy}
+            textColor={colors.whiteBlock}
+            style={[styles.rebuyBtn, styles.btn]}
+          >
             <RebuySvg stroke={colors.whiteBlock} />
           </Button>
         )}
@@ -77,7 +80,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   container: {
-    position: 'relative',
     flexDirection: 'row',
     justifyContent: 'space-between',
     gap: 15,

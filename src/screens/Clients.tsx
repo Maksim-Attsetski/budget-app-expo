@@ -6,7 +6,7 @@ import { Layout } from '../widgets/App';
 import { AddClientModal, ClientItem, useClients } from '../widgets/Clients';
 
 const Clients: FC = () => {
-  const { clients, setClientModalVisible, onGetClients } = useClients();
+  const { clients, onGetClients } = useClients();
 
   useEffect(() => {
     onGetClients();
@@ -14,7 +14,6 @@ const Clients: FC = () => {
 
   return (
     <Layout>
-      <Gap y={5} />
       <Gap y={5} />
       <AddClientModal />
       <Gap y={5} />
