@@ -1,12 +1,30 @@
-import React, { FC, memo } from 'react';
+import React, { FC, memo, useEffect } from 'react';
 import { FlatList } from 'react-native';
 
 import { Button, Gap, Text } from '../UI';
 import { Layout } from '../widgets/App';
 import { AddClientModal, ClientItem, useClients } from '../widgets/Clients';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { fbStore } from '../config';
 
 const Clients: FC = () => {
   const { clients, setClientModalVisible } = useClients();
+
+  useEffect(() => {
+    (async () => {
+      const q = query(
+        collection(fbStore, 'price-list'),
+        where('price', '>=', 20)
+      );
+
+      const querySnapshot = await getDocs(q);
+      const result: any[] = [];
+      querySnapshot.forEach((doc) => {
+        result.push(doc.data());
+      });
+      console.log('result => ', result);
+    })();
+  }, []);
 
   return (
     <Layout>
