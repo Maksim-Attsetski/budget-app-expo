@@ -1,7 +1,7 @@
 export type TBudgetType = 'inc' | 'dec';
 
 export interface IBudget {
-  id: number;
+  uid: string;
   type: TBudgetType;
   value: number;
   description?: string;

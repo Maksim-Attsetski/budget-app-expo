@@ -5,6 +5,7 @@ import { useTypedDispatch } from './useRedux';
 import { budgetActions } from '../../widgets/Budget';
 import { clientActions } from '../../widgets/Clients';
 import { appActions } from '../../widgets/App';
+import { orderActions } from '../../widgets/Orders';
 
 export const useActions = () => {
   const dispatch = useTypedDispatch();
@@ -14,6 +15,7 @@ export const useActions = () => {
       ...budgetActions,
       ...clientActions,
       ...appActions,
+      ...orderActions,
     }),
     []
   );

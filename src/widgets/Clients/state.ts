@@ -35,11 +35,11 @@ const clientSlice = createSlice({
     },
     updateClientAC: (state: IState, action: PayloadAction<IClient>) => {
       state.clients = state.clients.map((el) =>
-        el.id === action.payload.id ? { ...el, ...action.payload } : el
+        el.uid === action.payload.uid ? { ...el, ...action.payload } : el
       );
     },
     deleteClientAC: (state: IState, action: PayloadAction<string>) => {
-      state.clients = state.clients.filter((el) => el.id !== action.payload);
+      state.clients = state.clients.filter((el) => el.uid !== action.payload);
     },
   },
 });

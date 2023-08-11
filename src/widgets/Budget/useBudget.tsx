@@ -1,47 +1,37 @@
-import {
-  storage,
-  storageKeys,
-  useActions,
-  useTypedSelector,
-} from '../../shared';
+import { useActions, useTypedSelector } from '../../shared';
+import { useFirestore } from '../../shared';
 import { IBudget } from './types';
 
 export const useBudget = () => {
   const { budget: data } = useTypedSelector((state) => state.budget);
   const { action } = useActions();
+  const fbBudget = useFirestore('zefirka-budget');
 
   const budget = [...data].sort((a, b) => b.date - a.date);
 
-  const setBudget = async () => {
-    const currentBudget = await storage.get(storageKeys.budget);
-    currentBudget && action.setBudgetAC(currentBudget);
+  const setBudget = async (): Promise<void> => {
+    const currentBudget = await fbBudget.getAll([], 10);
+    currentBudget && action.setBudgetAC(currentBudget.result);
   };
 
-  const onCreate = async (info: IBudget) => {
+  const onCreate = async (info: IBudget): Promise<void> => {
     const newBudget = {
       ...info,
-      id: data.length + 1,
       date: Date.now(),
     } as IBudget;
 
-    const currentBudget = [newBudget, ...budget];
-    action.setBudgetAC(currentBudget);
-    await storage.set(storageKeys.budget, currentBudget);
+    const uid = await fbBudget.addWithId(newBudget);
+    action.budgetCreateAC({ ...newBudget, uid });
   };
 
-  const onUpdate = async (newBudget: IBudget) => {
-    const currentBudget = [...budget].map((el) =>
-      newBudget.id ? { ...el, newBudget } : el
-    );
-
-    action.setBudgetAC(currentBudget);
-    await storage.set(storageKeys.budget, currentBudget);
+  const onUpdate = async (newBudget: IBudget): Promise<void> => {
+    await fbBudget.update(newBudget?.uid, newBudget);
+    action.budgetUpdateAC(newBudget);
   };
-  const onDelete = async (id: number) => {
-    const currentBudget = budget.filter((el) => id !== el.id);
 
-    action.setBudgetAC(currentBudget);
-    await storage.set(storageKeys.budget, currentBudget);
+  const onDelete = async (id: string): Promise<void> => {
+    await fbBudget.remove(id);
+    action.budgetDeleteAC(id);
   };
 
   return { budget, setBudget, onCreate, onUpdate, onDelete };

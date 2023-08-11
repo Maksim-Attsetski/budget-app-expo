@@ -20,10 +20,12 @@ const budgetSlice = createSlice({
       state.budget = [action.payload, ...state.budget];
     },
     budgetUpdateAC: (state: IState, action: PayloadAction<IBudget>) => {
-      state.budget = state.budget.map((el) => (el.id ? { ...el, action } : el));
+      state.budget = state.budget.map((el) =>
+        el.uid ? { ...el, action } : el
+      );
     },
-    budgetDeleteAC: (state: IState, action: PayloadAction<number>) => {
-      state.budget = state.budget.filter((el) => el.id !== action.payload);
+    budgetDeleteAC: (state: IState, action: PayloadAction<string>) => {
+      state.budget = state.budget.filter((el) => el.uid !== action.payload);
     },
   },
 });

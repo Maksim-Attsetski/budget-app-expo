@@ -72,7 +72,7 @@ const AddClientModal: FC = () => {
         name,
         orders: [
           {
-            id: Date.now().toString(),
+            uid: Date.now().toString(),
             createdAt: Date.now(),
             dealAt: date.getTime(),
             description,
@@ -131,9 +131,6 @@ const AddClientModal: FC = () => {
   return (
     <>
       <BottomSheet
-        // isOpen={addClientModalvisible}
-        // setIsOpen={() => setClientModalVisible(modalDefaultProps)}
-        // openTo={2.2}
         ref={bottomSheetRef}
         index={1}
         snapPoints={snapPoints}
