@@ -15,11 +15,13 @@ const Layout: FC<IProps> = ({ children, tabs = true }) => {
   const styles = getStyles(isDark ? colors.dark : colors.white);
 
   return (
-    <SafeAreaView style={styles.container}>
-      {children}
-      <Gap y={40} />
-      {tabs && <BottomTabs />}
-    </SafeAreaView>
+    <>
+      <SafeAreaView style={styles.container}>
+        {children}
+        <Gap y={40} />
+        {tabs && <BottomTabs />}
+      </SafeAreaView>
+    </>
   );
 };
 

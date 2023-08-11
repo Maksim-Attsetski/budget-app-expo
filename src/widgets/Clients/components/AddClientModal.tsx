@@ -1,16 +1,17 @@
-import React, { FC, memo, useEffect, useState } from 'react';
+import React, {
+  FC,
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
+import BottomSheet from '@gorhom/bottom-sheet';
 
-import {
-  BottomSheet,
-  Input,
-  Gap,
-  AccentButton,
-  Button,
-  Flex,
-  Card,
-} from '../../../UI';
+import { Input, Gap, AccentButton, Button, Flex, Card } from '../../../UI';
 import { useClients } from '../useClients';
 import { IClient, IClientOrder } from '../types';
 
@@ -34,7 +35,7 @@ const AddClientModal: FC = () => {
   const onPressAddClient = async () => {
     const regExp = /^\+375[0-9]{2}[0-9]{3}[0-9]{2}[0-9]{2}$/im;
 
-    const getAlert = (msg: string) => {
+    const getAlert = (msg: string): void => {
       Alert.alert('Не верно введены данные', msg);
     };
 
@@ -117,12 +118,28 @@ const AddClientModal: FC = () => {
     !addClientModalvisible && resetModalProps();
   }, [addClientModalvisible]);
 
+  const bottomSheetRef = useRef<BottomSheet>(null);
+
+  // variables
+  const snapPoints = useMemo(() => ['75%', '100%'], []);
+
+  // callbacks
+  const handleSheetChanges = useCallback((index: number) => {
+    console.log('handleSheetChanges', index);
+  }, []);
+
   return (
     <>
       <BottomSheet
-        isOpen={addClientModalvisible}
-        setIsOpen={() => setClientModalVisible(modalDefaultProps)}
-        openTo={2.2}
+        // isOpen={addClientModalvisible}
+        // setIsOpen={() => setClientModalVisible(modalDefaultProps)}
+        // openTo={2.2}
+        ref={bottomSheetRef}
+        index={1}
+        snapPoints={snapPoints}
+        onChange={handleSheetChanges}
+        containerStyle={{ zIndex: 2 }}
+        enablePanDownToClose
       >
         <View>
           <View style={styles.namesContainer}>
