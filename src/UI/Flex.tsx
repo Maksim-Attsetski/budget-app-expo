@@ -15,15 +15,18 @@ const Flex: FC<IProps> = ({ justify = 'center', ...props }) => {
   return (
     <View
       {...props}
-      style={[
-        props.style,
-        {
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          gap: 20,
-          justifyContent: justify,
-        },
-      ]}
+      style={
+        props.style
+          ? [
+              {
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                gap: 20,
+                justifyContent: justify,
+              },
+            ]
+          : []
+      }
     >
       {props.children}
     </View>

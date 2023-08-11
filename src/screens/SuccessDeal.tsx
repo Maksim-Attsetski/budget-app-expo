@@ -6,18 +6,21 @@ import { IScreen, colors, useTheme } from '../shared';
 import { IClient, useClients } from '../widgets/Clients';
 import { routes } from '../widgets/App/types';
 import { IBudget, useBudget } from '../widgets/Budget';
+import { IOrder, useOrders } from '../widgets/Orders';
 
 interface IProps extends IScreen {}
 
 const SuccessDeal: FC<IProps> = ({ route, navigation }) => {
   const { isDark } = useTheme();
-  const { onUpdateClient } = useClients();
+  const { orders: ordersData, onUpdateOrder } = useOrders();
   const { onCreate: onCreateDeal } = useBudget();
 
   const styles = getStyles(isDark ? colors.dark : colors.white);
-
   // @ts-ignore
   const client = route.params?.client as IClient | undefined;
+  const orders = client
+    ? ordersData.filter((el) => el.clientUid === client.uid)
+    : [];
 
   const toHome = () => {
     // @ts-ignore
@@ -31,15 +34,16 @@ const SuccessDeal: FC<IProps> = ({ route, navigation }) => {
   };
 
   const changeClientStatus = async () => {
-    if (client?.id) {
-      const priceForDeals = client.orders.reduce((prev, cur) => {
-        return cur.status === 'wait' ? prev + cur.price : prev;
+    if (client?.uid) {
+      const priceForDeals = orders.reduce((prev, cur) => {
+        return !cur.isDone ? prev + cur.price : prev;
       }, 0);
-      const updatedOrders = client.orders.map((el) =>
-        el.status === 'wait' ? { ...el, status: 'success' } : el
-      );
 
-      await onUpdateClient({ orders: updatedOrders, id: client.id } as IClient);
+      orders
+        .filter((el) => !el.isDone)
+        .forEach(async (order) => {
+          await onUpdateOrder({ isDone: true, uid: order?.uid } as IOrder);
+        });
       await onCreateDeal({
         type: 'inc',
         value: priceForDeals,

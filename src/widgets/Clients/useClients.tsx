@@ -1,3 +1,4 @@
+import { QueryFilterConstraint } from 'firebase/firestore';
 import { useActions, useFirestore, useTypedSelector } from '../../shared';
 import { IClient, defaultClient } from './types';
 
@@ -7,10 +8,15 @@ export const useClients = () => {
   const { action } = useActions();
   const fbClient = useFirestore('zefirka-clients');
 
-  const onGetClients = async () => {
-    const curClients = await fbClient.getAll([], 10);
+  const onGetClients = async (
+    whereArr: QueryFilterConstraint[] = [],
+    limitVal: number = 10,
+    save: boolean = true
+  ) => {
+    const curClients = await fbClient.getAll(whereArr, limitVal);
 
-    curClients.count > 0 && action.setClientsAC(curClients.result);
+    curClients.count > 0 && save && action.setClientsAC(curClients.result);
+    return curClients;
   };
 
   const onAddClient = async (data: IClient) => {

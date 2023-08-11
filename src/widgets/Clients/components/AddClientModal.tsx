@@ -3,7 +3,6 @@ import React, {
   memo,
   useCallback,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -13,17 +12,20 @@ import BottomSheet from '@gorhom/bottom-sheet';
 
 import { Input, Gap, AccentButton, Button, Flex, Card } from '../../../UI';
 import { useClients } from '../useClients';
-import { IClient, IClientOrder } from '../types';
+import { IClient } from '../types';
+import { IOrder, useOrders } from '../../Orders';
 
 const AddClientModal: FC = () => {
+  const bottomSheetRef = useRef<BottomSheet>(null);
+
   const {
     addClientModalvisible,
     setClientModalVisible,
     onAddClient,
-    onAddOrder,
     modalDefaultProps,
     resetModalProps,
   } = useClients();
+  const { onAddOrder } = useOrders();
 
   const [contacts, setContacts] = useState('+375');
   const [description, setDescription] = useState('');
@@ -59,27 +61,20 @@ const AddClientModal: FC = () => {
     }
 
     if (modalDefaultProps.lastname.length > 0) {
-      await onAddOrder(modalDefaultProps.id, {
+      await onAddOrder(modalDefaultProps.uid, {
         dealAt: date.getTime(),
         description,
         price: +price,
-        status: 'wait',
-      } as IClientOrder);
+        clientUid: modalDefaultProps.uid,
+        isDone: false,
+        createdAt: Date.now(),
+        uid: '',
+      } as IOrder);
     } else {
       await onAddClient({
         contacts, // #TODO дата заказа
         lastname,
         name,
-        orders: [
-          {
-            uid: Date.now().toString(),
-            createdAt: Date.now(),
-            dealAt: date.getTime(),
-            description,
-            price: +price,
-            status: 'wait',
-          },
-        ],
       } as IClient);
     }
 
@@ -111,30 +106,27 @@ const AddClientModal: FC = () => {
     setContacts(modalDefaultProps.contacts);
     setName(modalDefaultProps.name);
     setLastname(modalDefaultProps.lastname);
-    setDate(new Date(modalDefaultProps?.orders[0]?.dealAt || new Date()));
+    setDate(new Date());
   }, [modalDefaultProps]);
 
   useEffect(() => {
     !addClientModalvisible && resetModalProps();
   }, [addClientModalvisible]);
 
-  const bottomSheetRef = useRef<BottomSheet>(null);
-
-  // variables
-  const snapPoints = useMemo(() => ['75%', '100%'], []);
-
-  // callbacks
-  const handleSheetChanges = useCallback((index: number) => {
-    console.log('handleSheetChanges', index);
-  }, []);
-
   return (
     <>
+      <Button
+        onPress={() => {
+          bottomSheetRef?.current?.snapToIndex(1);
+          setClientModalVisible();
+        }}
+      >
+        Добавить клиента
+      </Button>
       <BottomSheet
         ref={bottomSheetRef}
-        index={1}
-        snapPoints={snapPoints}
-        onChange={handleSheetChanges}
+        index={-1}
+        snapPoints={['75%', '100%']}
         containerStyle={{ zIndex: 2 }}
         enablePanDownToClose
       >

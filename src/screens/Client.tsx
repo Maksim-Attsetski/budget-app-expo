@@ -1,28 +1,51 @@
-import React, { FC, memo } from 'react';
+import React, { FC, memo, useCallback, useEffect, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
+import { where } from 'firebase/firestore';
 
 import { Button, Card, Flex, Gap, Text } from '../UI';
 import { IScreen, colors, dateHelper } from '../shared';
 import { Layout } from '../widgets/App';
-import { AddClientModal, useClients } from '../widgets/Clients';
+import { AddClientModal, IClient, useClients } from '../widgets/Clients';
+import { useOrders } from '../widgets/Orders';
 
 const Client: FC<IScreen> = ({ route }) => {
   // @ts-ignore
-  const clientId: string | undefined = route.params?.id;
+  const clientId: string = route.params?.id ?? '';
 
-  const { clients, setClientModalVisible } = useClients();
-  const client = clients.find((el) => el.id === clientId);
+  const { setClientModalVisible, onGetClients } = useClients();
+  const { orders: ordersData } = useOrders();
+
+  const [client, setClient] = useState<IClient | null>(null);
+  const orders = ordersData.filter((el) => el.clientUid === clientId);
+
+  const onGetClient = useCallback(async () => {
+    if (clientId.length > 0) {
+      const res = await onGetClients([where('uid', '==', clientId)], 10, false);
+      res.count > 0 && setClient(res.result[0]);
+    }
+  }, [clientId]);
+
+  useEffect(() => {
+    onGetClient();
+  }, []);
 
   return (
     <>
       <AddClientModal />
       <Layout>
+        <View>
+          <Text>{clientId ?? 'ffff'}</Text>
+        </View>
         {client && (
           <View>
-            <Text style={styles.title}>
-              {client.name} {client.lastname}
-            </Text>
-            <Text style={styles.contacts}>{client.contacts}</Text>
+            <View style={{ flexDirection: 'column' }}>
+              <Text style={styles.title}>
+                {client.name} {client.lastname}
+              </Text>
+            </View>
+            {/* <View style={{ flexDirection: 'column' }}>
+              <Text style={styles.contacts}>{client.contacts}</Text>
+            </View> */}
             <Gap y={7} />
             <Flex justify='space-around'>
               <Button
@@ -37,21 +60,16 @@ const Client: FC<IScreen> = ({ route }) => {
             <FlatList
               scrollEnabled
               style={{ marginBottom: 100 }}
-              data={client.orders}
+              data={orders}
               ItemSeparatorComponent={() => <Gap y={7} />}
               showsVerticalScrollIndicator={false}
               renderItem={({ item }) => (
-                <Card key={item.id}>
+                <Card key={item.uid}>
                   <View style={styles.summaContainer}>
                     <Text>Сумма:</Text>
                     <Text
                       style={{
-                        color:
-                          item.status === 'success'
-                            ? colors.green
-                            : item.status === 'wait'
-                            ? colors.purple
-                            : colors.red,
+                        color: item.isDone ? colors.green : colors.purple,
                       }}
                     >
                       {item.price}

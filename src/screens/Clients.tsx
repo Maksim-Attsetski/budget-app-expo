@@ -1,35 +1,20 @@
 import React, { FC, memo, useEffect } from 'react';
 import { FlatList } from 'react-native';
 
-import { Button, Gap, Text } from '../UI';
+import { Gap, Text } from '../UI';
 import { Layout } from '../widgets/App';
 import { AddClientModal, ClientItem, useClients } from '../widgets/Clients';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { fbStore } from '../config';
 
 const Clients: FC = () => {
-  const { clients, setClientModalVisible } = useClients();
+  const { clients, setClientModalVisible, onGetClients } = useClients();
 
   useEffect(() => {
-    (async () => {
-      const q = query(
-        collection(fbStore, 'price-list'),
-        where('price', '>=', 20)
-      );
-
-      const querySnapshot = await getDocs(q);
-      const result: any[] = [];
-      querySnapshot.forEach((doc) => {
-        result.push(doc.data());
-      });
-      console.log('result => ', result);
-    })();
+    onGetClients();
   }, []);
 
   return (
     <Layout>
       <Gap y={5} />
-      <Button onPress={() => setClientModalVisible()}>Добавить клиента</Button>
       <Gap y={5} />
       <AddClientModal />
       <Gap y={5} />

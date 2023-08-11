@@ -10,6 +10,7 @@ import SuccessSvg from '../../../../assets/SuccessSvg';
 import { useClients } from '../useClients';
 import { routes } from '../../App/types';
 import RebuySvg from '../../../../assets/RebuySvg';
+import { useOrders } from '../../Orders';
 
 interface IProps {
   item: IClient;
@@ -18,26 +19,28 @@ interface IProps {
 const ClientItem: FC<IProps> = ({ item }) => {
   const { onDeleteClient, setClientModalVisible } = useClients();
   const { navigate } = useNavigation();
+  const { orders: data } = useOrders();
 
   const onPressRebuy = () => {
     setClientModalVisible({ ...item });
   };
 
-  const harOrder = item.orders.some((el) => el.status === 'wait');
+  const orders = data.filter((el) => el.clientUid === item.uid);
+  const harOrder = orders.some((el) => !el.isDone);
 
   return (
     <Card style={styles.container}>
       {/* @ts-ignore */}
-      <Button onPress={() => navigate(routes.client, { id: item.id })}>
+      <Button onPress={() => navigate(routes.client, { id: item.uid })}>
         <Text style={styles.title}>
           {item.name} {item.lastname}
         </Text>
         <Text>Контакты: {item.contacts}</Text>
         {/* <Gap y={7} /> */}
-        {item.orders[0] && item.orders[0].status === 'wait' ? (
+        {orders[0] && !orders[0].isDone ? (
           <>
             <Text>Ближайший заказ:</Text>
-            <Text> {dateHelper.getBeautifulDate(item.orders[0].dealAt)}</Text>
+            <Text> {dateHelper.getBeautifulDate(orders[0].dealAt)}</Text>
           </>
         ) : (
           <Text>Нет активных заказов</Text>
@@ -45,7 +48,7 @@ const ClientItem: FC<IProps> = ({ item }) => {
       </Button>
       <View style={styles.buttonsContainer}>
         <Button
-          onPress={() => onDeleteClient(item.id)}
+          onPress={() => onDeleteClient(item.uid)}
           style={[styles.deleteBtn, styles.btn]}
         >
           <DeleteSvg stroke={colors.whiteBlock} />

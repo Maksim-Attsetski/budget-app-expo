@@ -7,10 +7,12 @@ import { ProgressChart, useBudget } from '../widgets/Budget';
 import { Text, Card, Gap, Flex, Button } from '../UI';
 import { useClients } from '../widgets/Clients';
 import { routes } from '../widgets/App/types';
+import { useOrders } from '../widgets/Orders';
 
 const HomeScreen: FC<IScreen> = ({ navigation }) => {
   const { budget } = useBudget();
   const { clients } = useClients();
+  const { orders } = useOrders();
 
   const inc: number = budget.reduce(
     (acc, cur) => (cur.type === 'inc' ? acc + cur.value : acc),
@@ -43,7 +45,7 @@ const HomeScreen: FC<IScreen> = ({ navigation }) => {
     return data;
   }, [inc, dec]);
 
-  const nearestOrder = clients[0]?.orders[0] || null;
+  const nearestOrder = orders[0] || null;
 
   const onPressOrder = () => {
     // @ts-ignore
