@@ -21,7 +21,12 @@ const Client: FC<IScreen> = ({ route }) => {
   const { navigate } = useNavigation();
 
   const { onGetClients, setClientModalVisible, clientLoading } = useClients();
-  const { orders: ordersData, onGetOrders, orderLoading } = useOrders();
+  const {
+    orders: ordersData,
+    onGetOrders,
+    orderLoading,
+    onDeleteOrder,
+  } = useOrders();
 
   const [client, setClient] = useState<IClient | null>(null);
   const orders = ordersData.filter((el) => el.clientUid === clientId);
@@ -101,7 +106,7 @@ const Client: FC<IScreen> = ({ route }) => {
                 <Text>{dateHelper.getBeautifulDate(item.dealAt)}</Text>
                 <View style={styles.buttonsContainer}>
                   <Button
-                    onPress={() => {}}
+                    onPress={() => onDeleteOrder(item.uid)}
                     style={[styles.deleteBtn, styles.btn]}
                   >
                     <DeleteSvg stroke={colors.whiteBlock} />
