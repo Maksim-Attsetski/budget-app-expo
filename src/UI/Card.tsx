@@ -18,7 +18,9 @@ const Card: FC<IProps> = (props) => {
     <View {...props} style={[styles.card, { backgroundColor }, props.style]}>
       {props.loading ? (
         <View style={styles.loading}>
-          <Text style={styles.loadingText}>{props.loadingText ?? ''}</Text>
+          {props.loadingText?.length > 0 && (
+            <Text style={styles.loadingText}>{props.loadingText}</Text>
+          )}
           {Array.from(Array(props.rows ?? 3)).map((_, inx) => (
             <View style={styles.loadingItem} key={inx} />
           ))}

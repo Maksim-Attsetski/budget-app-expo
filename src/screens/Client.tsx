@@ -1,16 +1,24 @@
 import React, { FC, memo, useCallback, useEffect, useState } from 'react';
-import { FlatList, ScrollView, StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { where } from 'firebase/firestore';
+import { useNavigation } from '@react-navigation/native';
 
-import { Card, Flex, Gap, Text } from '../UI';
+import { Card, Flex, Gap, Text, Button } from '../UI';
 import { IScreen, colors, dateHelper } from '../shared';
 import { Layout } from '../widgets/App';
 import { AddClientModal, IClient, useClients } from '../widgets/Clients';
 import { useOrders } from '../widgets/Orders';
+import RebuySvg from '../../assets/RebuySvg';
+import SuccessSvg from '../../assets/SuccessSvg';
+import { routes } from '../widgets/App/types';
+import DeleteSvg from '../../assets/DeleteSvg';
+
+const mKey = 'one_client_modal';
 
 const Client: FC<IScreen> = ({ route }) => {
   // @ts-ignore
   const clientId: string = route.params?.id ?? '';
+  const { navigate } = useNavigation();
 
   const { onGetClients, setClientModalVisible, clientLoading } = useClients();
   const { orders: ordersData, onGetOrders, orderLoading } = useOrders();
@@ -37,11 +45,7 @@ const Client: FC<IScreen> = ({ route }) => {
   return (
     <Layout>
       <Gap y={5} />
-      <AddClientModal
-        mKey='one_client_modal'
-        disabledBtn={clientLoading}
-        client={client}
-      />
+      <AddClientModal mKey={mKey} disabledBtn={clientLoading} client={client} />
       {clientLoading ? (
         <>
           <Gap y={10} />
@@ -95,6 +99,28 @@ const Client: FC<IScreen> = ({ route }) => {
                 )}
                 <Gap y={7} />
                 <Text>{dateHelper.getBeautifulDate(item.dealAt)}</Text>
+                <View style={styles.buttonsContainer}>
+                  <Button
+                    onPress={() => {}}
+                    style={[styles.deleteBtn, styles.btn]}
+                  >
+                    <DeleteSvg stroke={colors.whiteBlock} />
+                  </Button>
+                  {!item.isDone && (
+                    <Button
+                      onPress={() =>
+                        // @ts-ignore
+                        navigate(routes.successDeal, {
+                          client: item,
+                          orderId: item.uid,
+                        })
+                      }
+                      style={[styles.successBtn, styles.btn]}
+                    >
+                      <SuccessSvg stroke={colors.whiteBlock} />
+                    </Button>
+                  )}
+                </View>
               </Card>
             )}
             refreshing={orderLoading}
@@ -127,6 +153,24 @@ const styles = StyleSheet.create({
   subTitle: {
     fontSize: 28,
     fontWeight: 'bold',
+  },
+  buttonsContainer: {
+    gap: 8,
+    flexDirection: 'row',
+    marginTop: 12,
+  },
+  btn: {
+    padding: 10,
+    borderRadius: 100,
+  },
+  successBtn: {
+    backgroundColor: colors.green,
+  },
+  deleteBtn: {
+    backgroundColor: colors.red,
+  },
+  rebuyBtn: {
+    backgroundColor: colors.orange,
   },
 });
 

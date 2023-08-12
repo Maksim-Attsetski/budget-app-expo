@@ -12,15 +12,14 @@ interface IProps extends IScreen {}
 
 const SuccessDeal: FC<IProps> = ({ route, navigation }) => {
   const { isDark } = useTheme();
-  const { orders: ordersData, onUpdateOrder } = useOrders();
+  const { orders, onUpdateOrder } = useOrders();
   const { onCreate: onCreateDeal } = useBudget();
 
   const styles = getStyles(isDark ? colors.dark : colors.white);
   // @ts-ignore
   const client = route.params?.client as IClient | undefined;
-  const orders = client
-    ? ordersData.filter((el) => el.clientUid === client.uid)
-    : [];
+  // @ts-ignore
+  const orderId = route.params?.orderId as string | undefined;
 
   const toHome = () => {
     // @ts-ignore
@@ -34,21 +33,16 @@ const SuccessDeal: FC<IProps> = ({ route, navigation }) => {
   };
 
   const changeClientStatus = async () => {
-    if (client?.uid) {
-      const priceForDeals = orders.reduce((prev, cur) => {
-        return !cur.isDone ? prev + cur.price : prev;
-      }, 0);
-
-      orders
-        .filter((el) => !el.isDone)
-        .forEach(async (order) => {
-          await onUpdateOrder({ isDone: true, uid: order?.uid } as IOrder);
-        });
-      await onCreateDeal({
-        type: 'inc',
-        value: priceForDeals,
-        description: 'Успешная сделка!',
-      } as IBudget);
+    if (client?.uid && orderId) {
+      const curOrder = orders.find((el) => el.uid === orderId);
+      if (curOrder) {
+        await onUpdateOrder({ isDone: true, uid: curOrder?.uid } as IOrder);
+        await onCreateDeal({
+          type: 'inc',
+          value: curOrder.price,
+          description: 'Успешная сделка!',
+        } as IBudget);
+      }
     }
   };
 
