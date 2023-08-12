@@ -24,10 +24,17 @@ interface IProps {
 const ClientItem: FC<IProps> = ({ item }) => {
   const { onDeleteClient, setClientModalVisible } = useClients();
   const { navigate } = useNavigation();
-  const { orders: data } = useOrders();
+  const { orders: data, onDeleteOrder } = useOrders();
 
   const orders = data.filter((el) => el.clientUid === item.uid);
   const harOrder = orders.some((el) => !el.isDone);
+
+  const onClickDelete = async (): Promise<void> => {
+    await onDeleteClient(item.uid);
+    orders.forEach(async (order) => {
+      await onDeleteOrder(order.uid);
+    });
+  };
 
   return (
     <Card style={styles.container}>
@@ -51,10 +58,7 @@ const ClientItem: FC<IProps> = ({ item }) => {
         </>
       </TouchableOpacity>
       <View style={styles.buttonsContainer}>
-        <Button
-          onPress={() => onDeleteClient(item.uid)}
-          style={[styles.deleteBtn, styles.btn]}
-        >
+        <Button onPress={onClickDelete} style={[styles.deleteBtn, styles.btn]}>
           <DeleteSvg stroke={colors.whiteBlock} />
         </Button>
         {harOrder ? (
@@ -67,7 +71,7 @@ const ClientItem: FC<IProps> = ({ item }) => {
           </Button>
         ) : (
           <Button
-            onPress={setClientModalVisible}
+            onPress={() => setClientModalVisible(true)}
             textColor={colors.whiteBlock}
             style={[styles.rebuyBtn, styles.btn]}
           >

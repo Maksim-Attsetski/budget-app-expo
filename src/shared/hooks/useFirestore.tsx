@@ -100,7 +100,7 @@ export const useFirestore = (collectionId: TCollectionId) => {
       const querySnapshot = await getDocs(q);
       const result: any[] = [];
       const allData = await getCountFromServer(
-        collection(fbStore, collectionId)
+        query(collection(fbStore, collectionId), and(...whereArr), limit(999))
       );
 
       querySnapshot.forEach((doc) => {

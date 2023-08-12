@@ -3,7 +3,7 @@ import { useActions, useFirestore, useTypedSelector } from '../../shared';
 import { IClient } from './types';
 
 export const useClients = () => {
-  const { clients, addClientModalvisible } = useTypedSelector((s) => s.clients);
+  const { clients, addClientModalKey } = useTypedSelector((s) => s.clients);
   const { action } = useActions();
   const fbClient = useFirestore('zefirka-clients');
 
@@ -33,8 +33,8 @@ export const useClients = () => {
     action.deleteClientAC(id);
   };
 
-  const setClientModalVisible = () => {
-    action.setClientsModalVisibleAC();
+  const setClientModalVisible = (value?: string) => {
+    action.setClientsModalVisibleAC(value ?? '');
   };
 
   return {
@@ -44,6 +44,6 @@ export const useClients = () => {
     onUpdateClient,
     onDeleteClient,
     setClientModalVisible,
-    addClientModalvisible,
+    addClientModalKey,
   };
 };

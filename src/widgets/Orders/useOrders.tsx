@@ -7,15 +7,22 @@ export const useOrders = () => {
   const { action } = useActions();
   const fbOrder = useFirestore('zefirka-orders');
 
-  const sortedOrders = (orders as IOrder[]).sort((a, b) => a.dealAt - b.dealAt);
+  const sortedOrders = ([...orders] as IOrder[]).sort(
+    (a, b) => a.dealAt - b.dealAt
+  );
 
-  const onGetOrders = async (clientUid: string): Promise<void> => {
+  const onGetOrders = async (clientUid: string | string[]): Promise<void> => {
+    const isArray = Array.isArray(clientUid);
+    const curWhere = isArray
+      ? where('clientUid', 'in', clientUid)
+      : where('clientUid', '==', clientUid);
+
     const curOrders = await fbOrder.getAll(
-      [where('clientUid', '==', clientUid)],
-      10
+      [curWhere],
+      isArray ? 10 * clientUid.length : 10
     );
 
-    curOrders.count > 0 && action.setOrdersAC(curOrders);
+    curOrders?.count > 0 && action?.setOrdersAC?.(curOrders);
   };
 
   const onAddOrder = async (clientUid: string, data: IOrder): Promise<void> => {

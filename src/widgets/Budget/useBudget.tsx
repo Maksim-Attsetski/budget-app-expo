@@ -1,3 +1,4 @@
+import { QueryFilterConstraint } from 'firebase/firestore';
 import { useActions, useTypedSelector } from '../../shared';
 import { useFirestore } from '../../shared';
 import { IBudget } from './types';
@@ -9,8 +10,11 @@ export const useBudget = () => {
 
   const budget = [...data].sort((a, b) => b.date - a.date);
 
-  const setBudget = async (): Promise<void> => {
-    const currentBudget = await fbBudget.getAll([], 10);
+  const setBudget = async (
+    whereArr: QueryFilterConstraint[] = [],
+    limitVal: number = 10
+  ): Promise<void> => {
+    const currentBudget = await fbBudget.getAll(whereArr, limitVal);
     currentBudget && action.setBudgetAC(currentBudget.result);
   };
 

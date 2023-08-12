@@ -45,7 +45,8 @@ const HomeScreen: FC<IScreen> = ({ navigation }) => {
     return data;
   }, [inc, dec]);
 
-  const nearestOrder = orders[0] || null;
+  const nearestOrder =
+    [...orders].sort((a, b) => b.dealAt - a.dealAt)[0] || null;
 
   const onPressOrder = () => {
     // @ts-ignore

@@ -1,4 +1,4 @@
-import React, { FC, Fragment, memo } from 'react';
+import React, { FC, Fragment, memo, useEffect } from 'react';
 import { ScrollView } from 'react-native';
 
 import { colors, dateHelper } from '../shared';
@@ -7,7 +7,11 @@ import { Layout } from '../widgets/App';
 import { useBudget } from '../widgets/Budget';
 
 const History: FC = () => {
-  const { budget } = useBudget();
+  const { budget, setBudget } = useBudget();
+
+  useEffect(() => {
+    setBudget();
+  }, []);
 
   return (
     <Layout>
@@ -24,7 +28,7 @@ const History: FC = () => {
                     fontSize: 22,
                   }}
                 >
-                  {el.type === 'inc' ? '+' : '-'} {el.value}
+                  {el.type === 'inc' ? '+' : '-'} {el.value} р.
                 </Text>
                 {el.description && (
                   <>

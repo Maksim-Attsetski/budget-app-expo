@@ -9,19 +9,21 @@ import { IClient } from '../types';
 import { IOrder, useOrders } from '../../Orders';
 
 interface IProps {
+  mKey: string;
   client?: IClient;
   disabledBtn?: boolean;
   icon?: ReactNode;
 }
 
 const AddClientModal: FC<IProps> = ({
+  mKey,
   client,
   disabledBtn = false,
   icon = null,
 }) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
 
-  const { addClientModalvisible, setClientModalVisible, onAddClient } =
+  const { addClientModalKey, setClientModalVisible, onAddClient } =
     useClients();
   const { onAddOrder } = useOrders();
 
@@ -76,7 +78,7 @@ const AddClientModal: FC<IProps> = ({
       } as IClient);
     }
 
-    setClientModalVisible();
+    setClientModalVisible('');
     bottomSheetRef.current?.close();
   };
 
@@ -101,32 +103,27 @@ const AddClientModal: FC<IProps> = ({
     });
   };
 
-  // useEffect(() => {
-  // }, [client?]);
-
   useEffect(() => {
-    if (addClientModalvisible) {
+    if (addClientModalKey.length > 0 && mKey === addClientModalKey) {
       bottomSheetRef?.current?.snapToIndex(1);
       setContacts(client?.contacts);
       setName(client?.name);
       setLastname(client?.lastname);
-      setDate(new Date());
     } else {
       setContacts('+375');
       setName('');
       setLastname('');
-      setDate(new Date());
-      // resetModalProps();
       bottomSheetRef?.current?.snapToIndex(-1);
     }
-  }, [addClientModalvisible]);
+    setDate(new Date());
+  }, [addClientModalKey]);
 
   return (
     <>
       <Button
         style={icon ? {} : styles.button}
         textProps={{ style: styles.buttonText }}
-        onPress={setClientModalVisible}
+        onPress={() => setClientModalVisible(mKey)}
         disabled={disabledBtn}
       >
         {icon ?? `Добавить ${client ? 'заказ' : 'клиента'}`}

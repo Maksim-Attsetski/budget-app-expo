@@ -12,7 +12,7 @@ const Client: FC<IScreen> = ({ route }) => {
   // @ts-ignore
   const clientId: string = route.params?.id ?? '';
 
-  const { onGetClients } = useClients();
+  const { onGetClients, setClientModalVisible } = useClients();
   const { orders: ordersData, onGetOrders } = useOrders();
 
   const [client, setClient] = useState<IClient | null>(null);
@@ -41,13 +41,21 @@ const Client: FC<IScreen> = ({ route }) => {
 
   useEffect(() => {
     onGetClient();
+
+    return () => {
+      setClientModalVisible('');
+    };
   }, []);
 
   return (
     <>
       <Layout>
         <Gap y={5} />
-        <AddClientModal disabledBtn={loading} client={client} />
+        <AddClientModal
+          mKey='one_client_modal'
+          disabledBtn={loading}
+          client={client}
+        />
         {loading ? (
           <>
             <Gap y={10} />
@@ -68,6 +76,7 @@ const Client: FC<IScreen> = ({ route }) => {
             <Gap y={7} />
             <FlatList
               scrollEnabled
+              scrollsToTop
               style={{ marginBottom: 100 }}
               data={orders}
               ItemSeparatorComponent={() => <Gap y={7} />}
