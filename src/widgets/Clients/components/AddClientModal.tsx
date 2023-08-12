@@ -21,13 +21,8 @@ const AddClientModal: FC<IProps> = ({
 }) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
 
-  const {
-    addClientModalvisible,
-    setClientModalVisible,
-    onAddClient,
-    modalDefaultProps,
-    resetModalProps,
-  } = useClients();
+  const { addClientModalvisible, setClientModalVisible, onAddClient } =
+    useClients();
   const { onAddOrder } = useOrders();
 
   const [contacts, setContacts] = useState('+375');
@@ -63,12 +58,12 @@ const AddClientModal: FC<IProps> = ({
       return getAlert('Некорректная цена');
     }
 
-    if (modalDefaultProps.lastname.length > 0) {
-      await onAddOrder(modalDefaultProps.uid, {
+    if (client?.lastname.length > 0) {
+      await onAddOrder(client?.uid, {
         dealAt: date.getTime(),
         description,
         price: +price,
-        clientUid: modalDefaultProps.uid,
+        clientUid: client?.uid,
         isDone: false,
         createdAt: Date.now(),
         uid: '',
@@ -106,18 +101,22 @@ const AddClientModal: FC<IProps> = ({
     });
   };
 
-  useEffect(() => {
-    setContacts(modalDefaultProps.contacts);
-    setName(modalDefaultProps.name);
-    setLastname(modalDefaultProps.lastname);
-    setDate(new Date());
-  }, [modalDefaultProps]);
+  // useEffect(() => {
+  // }, [client?]);
 
   useEffect(() => {
     if (addClientModalvisible) {
       bottomSheetRef?.current?.snapToIndex(1);
+      setContacts(client?.contacts);
+      setName(client?.name);
+      setLastname(client?.lastname);
+      setDate(new Date());
     } else {
-      resetModalProps();
+      setContacts('+375');
+      setName('');
+      setLastname('');
+      setDate(new Date());
+      // resetModalProps();
       bottomSheetRef?.current?.snapToIndex(-1);
     }
   }, [addClientModalvisible]);
@@ -127,10 +126,7 @@ const AddClientModal: FC<IProps> = ({
       <Button
         style={icon ? {} : styles.button}
         textProps={{ style: styles.buttonText }}
-        onPress={() => {
-          bottomSheetRef?.current?.snapToIndex(1);
-          setClientModalVisible(client);
-        }}
+        onPress={setClientModalVisible}
         disabled={disabledBtn}
       >
         {icon ?? `Добавить ${client ? 'заказ' : 'клиента'}`}
@@ -147,14 +143,14 @@ const AddClientModal: FC<IProps> = ({
             <Input
               setValue={setName}
               value={name}
-              disabled={modalDefaultProps.name.length > 0}
+              disabled={client?.name.length > 0}
               placeholder='Имя'
               viewProps={{ style: { flex: 1 } }}
             />
             <Input
               setValue={setLastname}
               value={lastname}
-              disabled={modalDefaultProps.name.length > 0}
+              disabled={client?.name.length > 0}
               placeholder='Фамилия'
               viewProps={{ style: { flex: 1 } }}
             />
@@ -171,7 +167,7 @@ const AddClientModal: FC<IProps> = ({
               value={contacts}
               keyboardType='phone-pad'
               maxLength={13}
-              disabled={modalDefaultProps.name.length > 0}
+              disabled={client?.name.length > 0}
               viewProps={{ style: { flex: 2.5 } }}
               placeholder='Моб. телефон'
             />

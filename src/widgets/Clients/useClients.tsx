@@ -1,10 +1,9 @@
 import { QueryFilterConstraint } from 'firebase/firestore';
 import { useActions, useFirestore, useTypedSelector } from '../../shared';
-import { IClient, defaultClient } from './types';
+import { IClient } from './types';
 
 export const useClients = () => {
-  const { clients, addClientModalvisible, modalDefaultProps } =
-    useTypedSelector((s) => s.clients);
+  const { clients, addClientModalvisible } = useTypedSelector((s) => s.clients);
   const { action } = useActions();
   const fbClient = useFirestore('zefirka-clients');
 
@@ -34,12 +33,8 @@ export const useClients = () => {
     action.deleteClientAC(id);
   };
 
-  const setClientModalVisible = (props: IClient = null) => {
-    action.setClientsModalVisibleAC(props || defaultClient);
-  };
-
-  const resetModalProps = () => {
-    action.setClientsModalPropsAC(defaultClient);
+  const setClientModalVisible = () => {
+    action.setClientsModalVisibleAC();
   };
 
   return {
@@ -50,7 +45,5 @@ export const useClients = () => {
     onDeleteClient,
     setClientModalVisible,
     addClientModalvisible,
-    modalDefaultProps,
-    resetModalProps,
   };
 };

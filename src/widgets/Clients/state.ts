@@ -4,12 +4,10 @@ import { IClient, defaultClient } from './types';
 interface IState {
   clients: IClient[];
   addClientModalvisible: boolean;
-  modalDefaultProps: IClient;
 }
 
 const initialState: IState = {
   addClientModalvisible: false,
-  modalDefaultProps: defaultClient,
   clients: [],
 };
 
@@ -17,15 +15,8 @@ const clientSlice = createSlice({
   name: 'clientSlice',
   initialState,
   reducers: {
-    setClientsModalVisibleAC: (
-      state: IState,
-      action: PayloadAction<IClient>
-    ) => {
+    setClientsModalVisibleAC: (state: IState) => {
       state.addClientModalvisible = !state.addClientModalvisible;
-      state.modalDefaultProps = action.payload;
-    },
-    setClientsModalPropsAC: (state: IState, action: PayloadAction<IClient>) => {
-      state.modalDefaultProps = action.payload;
     },
     setClientsAC: (state: IState, action: PayloadAction<IClient[]>) => {
       state.clients = action.payload;
