@@ -19,15 +19,16 @@ import { colors, dateHelper } from '../../../shared';
 
 interface IProps {
   item: IClient;
+  orderLoading?: boolean;
 }
 
-const ClientItem: FC<IProps> = ({ item }) => {
-  const { onDeleteClient, setClientModalVisible } = useClients();
+const ClientItem: FC<IProps> = ({ item, orderLoading = false }) => {
+  const { onDeleteClient } = useClients();
   const { navigate } = useNavigation();
   const { orders: data, onDeleteOrder } = useOrders();
 
   const orders = data.filter((el) => el.clientUid === item.uid);
-  const harOrder = orders.some((el) => !el.isDone);
+  const harOrder = orders.find((el) => !el.isDone);
 
   const onClickDelete = async (): Promise<void> => {
     await onDeleteClient(item.uid);
@@ -47,10 +48,12 @@ const ClientItem: FC<IProps> = ({ item }) => {
             {item.name} {item.lastname}
           </Text>
           <Text>Контакты: {item.contacts}</Text>
-          {orders[0] && !orders[0].isDone ? (
+          {orderLoading ? (
+            <Text>Ищем заказы...</Text>
+          ) : harOrder ? (
             <>
               <Text>Ближайший заказ:</Text>
-              <Text> {dateHelper.getBeautifulDate(orders[0].dealAt)}</Text>
+              <Text> {dateHelper.getBeautifulDate(harOrder.dealAt)}</Text>
             </>
           ) : (
             <Text>Нет активных заказов</Text>
@@ -61,23 +64,6 @@ const ClientItem: FC<IProps> = ({ item }) => {
         <Button onPress={onClickDelete} style={[styles.deleteBtn, styles.btn]}>
           <DeleteSvg stroke={colors.whiteBlock} />
         </Button>
-        {harOrder ? (
-          <Button
-            // @ts-ignore
-            onPress={() => navigate(routes.successDeal, { client: item })}
-            style={[styles.successBtn, styles.btn]}
-          >
-            <SuccessSvg stroke={colors.whiteBlock} />
-          </Button>
-        ) : (
-          <Button
-            onPress={() => setClientModalVisible(true)}
-            textColor={colors.whiteBlock}
-            style={[styles.rebuyBtn, styles.btn]}
-          >
-            <RebuySvg stroke={colors.whiteBlock} />
-          </Button>
-        )}
       </View>
     </Card>
   );

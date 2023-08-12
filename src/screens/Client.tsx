@@ -1,5 +1,5 @@
 import React, { FC, memo, useCallback, useEffect, useState } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, ScrollView, StyleSheet, View } from 'react-native';
 import { where } from 'firebase/firestore';
 
 import { Card, Flex, Gap, Text } from '../UI';
@@ -12,30 +12,17 @@ const Client: FC<IScreen> = ({ route }) => {
   // @ts-ignore
   const clientId: string = route.params?.id ?? '';
 
-  const { onGetClients, setClientModalVisible } = useClients();
-  const { orders: ordersData, onGetOrders } = useOrders();
+  const { onGetClients, setClientModalVisible, clientLoading } = useClients();
+  const { orders: ordersData, onGetOrders, orderLoading } = useOrders();
 
   const [client, setClient] = useState<IClient | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
   const orders = ordersData.filter((el) => el.clientUid === clientId);
 
   const onGetClient = useCallback(async () => {
     if (clientId.length > 0) {
-      try {
-        const res = await onGetClients(
-          [where('uid', '==', clientId)],
-          10,
-          false
-        );
-        res.count > 0 && setClient(res.result[0]);
-        await onGetOrders(clientId);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    } else {
-      setLoading(false);
+      const res = await onGetClients([where('uid', '==', clientId)], 10, false);
+      res.count > 0 && setClient(res.result[0]);
+      await onGetOrders(clientId);
     }
   }, [clientId]);
 
@@ -48,69 +35,77 @@ const Client: FC<IScreen> = ({ route }) => {
   }, []);
 
   return (
-    <>
-      <Layout>
-        <Gap y={5} />
-        <AddClientModal
-          mKey='one_client_modal'
-          disabledBtn={loading}
-          client={client}
-        />
-        {loading ? (
-          <>
-            <Gap y={10} />
-            <Card>
-              <Text>Ищем такого клиента...</Text>
-            </Card>
-          </>
-        ) : client ? (
-          <View>
-            <Text style={styles.title}>
-              {client.name} {client.lastname}
-            </Text>
-            <Text style={styles.contacts}>{client.contacts}</Text>
-            <Gap y={7} />
-            <Flex justify='space-around'>
-              <Text style={styles.subTitle}>Заказы</Text>
-            </Flex>
-            <Gap y={7} />
-            <FlatList
-              scrollEnabled
-              scrollsToTop
-              style={{ marginBottom: 100 }}
-              data={orders}
-              ItemSeparatorComponent={() => <Gap y={7} />}
-              showsVerticalScrollIndicator={false}
-              renderItem={({ item }) => (
-                <Card key={item.uid}>
-                  <View style={styles.summaContainer}>
-                    <Text>Сумма:</Text>
-                    <Text
-                      style={{
-                        color: item.isDone ? colors.green : colors.purple,
-                      }}
-                    >
-                      {item.price}
-                    </Text>
-                  </View>
-                  {item.description && (
-                    <>
-                      <Text>Описание:</Text>
-                      <Text> {item.description}</Text>
-                    </>
-                  )}
-                  <Gap y={7} />
-                  <Text>{dateHelper.getBeautifulDate(item.dealAt)}</Text>
-                </Card>
-              )}
-              ListEmptyComponent={<Text>Пока не было заказов</Text>}
-            />
-          </View>
-        ) : (
-          <Text>Клиент не найден</Text>
-        )}
-      </Layout>
-    </>
+    <Layout>
+      <Gap y={5} />
+      <AddClientModal
+        mKey='one_client_modal'
+        disabledBtn={clientLoading}
+        client={client}
+      />
+      {clientLoading ? (
+        <>
+          <Gap y={10} />
+          <Card
+            loading
+            style={{ maxHeight: 370 }}
+            rows={5}
+            rowHeight={50}
+            loadingText='Ищем такого клиента...'
+          />
+        </>
+      ) : client ? (
+        <>
+          <FlatList
+            ListHeaderComponent={
+              <>
+                <Text style={styles.title}>
+                  {client.name} {client.lastname}
+                </Text>
+                <Text style={styles.contacts}>{client.contacts}</Text>
+                <Gap y={7} />
+                <Flex justify='space-around'>
+                  <Text style={styles.subTitle}>Заказы</Text>
+                </Flex>
+                <Gap y={7} />
+              </>
+            }
+            scrollEnabled
+            scrollsToTop
+            nestedScrollEnabled
+            data={orders}
+            ItemSeparatorComponent={() => <Gap y={7} />}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => (
+              <Card key={item.uid}>
+                <View style={styles.summaContainer}>
+                  <Text>Сумма:</Text>
+                  <Text
+                    style={{
+                      color: item.isDone ? colors.green : colors.purple,
+                    }}
+                  >
+                    {item.price}
+                  </Text>
+                </View>
+                {item.description && (
+                  <>
+                    <Text>Описание:</Text>
+                    <Text> {item.description}</Text>
+                  </>
+                )}
+                <Gap y={7} />
+                <Text>{dateHelper.getBeautifulDate(item.dealAt)}</Text>
+              </Card>
+            )}
+            refreshing={orderLoading}
+            onRefresh={onGetClient}
+            ListEmptyComponent={<Text>Пока не было заказов</Text>}
+          />
+        </>
+      ) : (
+        <Text>Клиент не найден</Text>
+      )}
+    </Layout>
   );
 };
 
