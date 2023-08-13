@@ -5,6 +5,8 @@ import {
   TextInputProps,
   StyleSheet,
   ViewProps,
+  NativeSyntheticEvent,
+  TextInputFocusEventData,
 } from 'react-native';
 
 import { useTheme } from '../shared';
@@ -13,6 +15,7 @@ interface IProps extends TextInputProps {
   setValue: Dispatch<SetStateAction<string>>;
   disabled?: boolean;
   viewProps?: ViewProps;
+  onFocus?: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
 }
 
 const Input: FC<IProps> = ({
@@ -20,6 +23,7 @@ const Input: FC<IProps> = ({
   setValue,
   style,
   disabled,
+  onFocus = () => {},
   ...props
 }) => {
   const { backgroundColor, color } = useTheme();
@@ -36,6 +40,7 @@ const Input: FC<IProps> = ({
         editable={!disabled}
         onChangeText={setValue}
         cursorColor={color}
+        onFocus={onFocus}
         placeholderTextColor={color}
       />
     </View>

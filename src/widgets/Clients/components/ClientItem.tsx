@@ -1,15 +1,8 @@
 import React, { FC, memo } from 'react';
-import {
-  StyleSheet,
-  TouchableHighlight,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-import RebuySvg from '../../../../assets/RebuySvg';
 import DeleteSvg from '../../../../assets/DeleteSvg';
-import SuccessSvg from '../../../../assets/SuccessSvg';
 import { IClient } from '../types';
 import { routes } from '../../App/types';
 import { useOrders } from '../../Orders';

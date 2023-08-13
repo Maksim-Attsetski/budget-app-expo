@@ -11,6 +11,7 @@ import {
   Flex,
   Card,
   Title,
+  DatePicker,
 } from '../../../UI';
 import { useClients } from '../useClients';
 import { IClient } from '../types';
@@ -93,22 +94,6 @@ const AddClientModal: FC<IProps> = ({
   const onPhoneValidate = (val: string) => {
     const validPhone = '+' + val.replaceAll(/\D/gim, '');
     setContacts(validPhone);
-  };
-
-  const onChange = (_, selectedDate: Date) => {
-    if (selectedDate.getTime() > Date.now()) {
-      setDate(selectedDate);
-    }
-  };
-
-  const showMode = (mode: 'time' | 'date') => {
-    DateTimePickerAndroid.open({
-      value: date,
-      onChange,
-      mode,
-      is24Hour: true,
-      minimumDate: new Date(),
-    });
   };
 
   useEffect(() => {
@@ -195,16 +180,7 @@ const AddClientModal: FC<IProps> = ({
             style={{ maxHeight: 150 }}
           />
           <Gap y={7} />
-          <Card>
-            <Flex justify='space-between'>
-              <Button onPress={() => showMode('date')}>
-                {date.toLocaleDateString('ru')}
-              </Button>
-              <Button onPress={() => showMode('time')}>
-                {date.toLocaleTimeString('ru')}
-              </Button>
-            </Flex>
-          </Card>
+          <DatePicker date={date} setDate={setDate} />
           <Gap y={7} />
           <AccentButton onPress={onPressAddClient}>Подтвердить</AccentButton>
         </View>
