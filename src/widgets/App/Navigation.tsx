@@ -65,6 +65,7 @@ const Navigation: FC = () => {
           screenOptions={{
             statusBarStyle: isDark ? 'light' : 'dark',
             statusBarColor: backgroundColor,
+            headerTintColor: color,
           }}
         >
           {screenList.map(({ component, name, title, animation }) => (
