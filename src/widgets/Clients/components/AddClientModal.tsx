@@ -134,6 +134,7 @@ const AddClientModal: FC<IProps> = ({
         snapPoints={['75%', '100%']}
         containerStyle={{ zIndex: 2 }}
         enablePanDownToClose
+        onClose={() => setClientModalVisible('')}
       >
         <View>
           <View style={styles.namesContainer}>
