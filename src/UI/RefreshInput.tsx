@@ -7,30 +7,34 @@ import Animated, {
   interpolateColor,
   SharedValue,
 } from 'react-native-reanimated';
-import { Dimensions, StyleSheet, View } from 'react-native';
+import {
+  Dimensions,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import { colors, useTheme } from '../shared';
 import Input from './Input';
 import Card from './Card';
+import { Button } from './Button';
 
 const { width } = Dimensions.get('window');
 
-const paddingHorizontal = 12;
+const paddingHorizontal = 16;
 
 interface IProps {
   scrollY: SharedValue<number>;
   inputSize?: number;
   offsetY?: number;
   placeHolder?: string;
-  value?: string;
-  setValue?: Dispatch<SetStateAction<string>>;
+  onFocus?: () => void;
 }
 const RefreshInput: FC<IProps> = ({
   scrollY,
   inputSize = 48,
   offsetY = 170,
   placeHolder = '',
-  value = '',
-  setValue = () => {},
+  onFocus = () => {},
 }) => {
   const { backgroundColor } = useTheme();
   const styles = getStyles(inputSize);
@@ -55,22 +59,33 @@ const RefreshInput: FC<IProps> = ({
     const input = [0, offsetY / 2.2];
     const left = int(input, [0, 0]);
     const opacity = int(input, [1, 0]);
+    const width = int(input, [offsetY, 50]);
 
-    return { left, opacity };
+    return { left, opacity, width };
+  });
+  const textS = useAnimatedStyle(() => {
+    const opacity = interpolate(scrollY.value, [100, 200], [0, 1], {
+      extrapolateRight: Extrapolation.CLAMP,
+    });
+
+    return { opacity };
   });
 
   return (
     <View>
       <Animated.View style={[styles.inputContainer, inputS]}>
-        <Input
-          style={{
-            width: offsetY,
-            backgroundColor,
+        <TouchableWithoutFeedback
+          onPress={(e) => {
+            e.stopPropagation();
+            onFocus();
           }}
-          value={value}
-          setValue={setValue}
-          placeholder={placeHolder}
-        />
+        >
+          <Animated.Text
+            style={[{ width: offsetY, backgroundColor }, textS, styles.input]}
+          >
+            {placeHolder ?? ''}
+          </Animated.Text>
+        </TouchableWithoutFeedback>
         <Animated.View
           style={[
             { backgroundColor: colors.purple },
@@ -92,11 +107,18 @@ const getStyles = (inputSize: number) =>
       height: inputSize,
       justifyContent: 'center',
       alignItems: 'center',
+      borderRadius: 20,
     },
     inputContainer: {
       alignSelf: 'center',
       overflow: 'hidden',
       position: 'relative',
+    },
+    input: {
+      paddingHorizontal,
+      paddingVertical: 12,
+      fontSize: 18,
+      borderRadius: 12,
     },
   });
 

@@ -15,7 +15,7 @@ export interface IButtonProps extends TouchableOpacityProps {
 }
 
 export const Button: FC<IButtonProps> = ({
-  textColor = null,
+  textColor = '',
   children,
   disabled = false,
   textProps,
@@ -30,7 +30,7 @@ export const Button: FC<IButtonProps> = ({
     >
       <Text
         {...props}
-        style={[textProps?.style || {}, { color: textColor || color }]}
+        style={[textProps?.style ?? {}, { color: textColor ?? color }]}
       >
         {children}
       </Text>

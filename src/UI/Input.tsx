@@ -5,8 +5,6 @@ import {
   TextInputProps,
   StyleSheet,
   ViewProps,
-  NativeSyntheticEvent,
-  TextInputFocusEventData,
 } from 'react-native';
 
 import { colors, useTheme } from '../shared';
@@ -14,8 +12,8 @@ import { colors, useTheme } from '../shared';
 interface IProps extends TextInputProps {
   setValue: Dispatch<SetStateAction<string>>;
   disabled?: boolean;
+  inversed?: boolean;
   viewProps?: ViewProps;
-  onFocus?: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
 }
 
 const Input: FC<IProps> = ({
@@ -23,10 +21,10 @@ const Input: FC<IProps> = ({
   setValue,
   style,
   disabled,
-  onFocus = () => {},
+  inversed = false,
   ...props
 }) => {
-  const { color, isDark } = useTheme();
+  const { color, isDark, backgroundColor } = useTheme();
 
   return (
     <View {...viewProps}>
@@ -34,7 +32,11 @@ const Input: FC<IProps> = ({
         style={[
           styles.input,
           {
-            backgroundColor: isDark ? colors.dark : colors.white,
+            backgroundColor: inversed
+              ? backgroundColor
+              : isDark
+              ? colors.dark
+              : colors.white,
             opacity: disabled ? 0.6 : 1,
             color,
           },
@@ -44,7 +46,6 @@ const Input: FC<IProps> = ({
         editable={!disabled}
         onChangeText={setValue}
         cursorColor={color}
-        onFocus={onFocus}
         placeholderTextColor={color}
       />
     </View>

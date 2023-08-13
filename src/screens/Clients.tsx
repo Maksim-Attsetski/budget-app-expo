@@ -1,22 +1,14 @@
-import React, {
-  FC,
-  Fragment,
-  memo,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
-import { Dimensions, FlatList, StyleSheet, View } from 'react-native';
-
-import { Card, Gap, RefreshInput, Text } from '../UI';
-import { Layout } from '../widgets/App';
-import { AddClientModal, ClientItem, useClients } from '../widgets/Clients';
-import { useOrders } from '../widgets/Orders';
+import React, { FC, Fragment, memo, useEffect, useRef, useState } from 'react';
+import { Dimensions, View } from 'react-native';
 import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
 } from 'react-native-reanimated';
+
+import { Card, Gap, Input, RefreshInput } from '../UI';
+import { Layout } from '../widgets/App';
+import { AddClientModal, ClientItem, useClients } from '../widgets/Clients';
+import { useOrders } from '../widgets/Orders';
 
 const { width } = Dimensions.get('window');
 
@@ -28,25 +20,34 @@ const Clients: FC = () => {
     useClients();
   const { onGetOrders, orderLoading } = useOrders();
 
-  const [query, setQuery] = useState<string>('');
   const scrollY = useSharedValue(0);
   const containerRef = useRef<Animated.ScrollView>();
+  const [query, setQuery] = useState<string>('');
+  const [isFocused, setIsFocused] = useState<boolean>(false);
 
   const searchUsers = clients.filter((item) =>
     (item.name + item.lastname).includes(query)
   );
   const isNeedInput = searchUsers.length > 2;
 
-  const scrollHandler = useAnimatedScrollHandler({
-    onScroll: (event) => {
-      scrollY.value = event.contentOffset.y;
+  const onInputFocus = (): void => {
+    setIsFocused(true);
+  };
+  const onInputBlur = (): void => {
+    setIsFocused(false);
+  };
+
+  const scrollHandler = useAnimatedScrollHandler(
+    {
+      onScroll: (event) => {
+        scrollY.value = event.contentOffset.y;
+      },
     },
-  });
+    [setIsFocused]
+  );
 
   const onScrollEnd = (e: any) => {
     const newValue = e.nativeEvent.contentOffset.y;
-    console.log(newValue, offsetY);
-
     if (containerRef.current && newValue < offsetY) {
       if (newValue < inputSize * 1.3) {
         onGetClients();
@@ -77,47 +78,61 @@ const Clients: FC = () => {
 
   return (
     <Layout>
-      <Gap y={5} />
-      <AddClientModal mKey='clients_page_modal' />
-      <Gap y={5} />
-      {isNeedInput && (
+      <>
         <>
-          <RefreshInput
-            placeHolder='Введите имя пользователя'
-            setValue={setQuery}
-            value={query}
-            scrollY={scrollY}
-            inputSize={inputSize}
-            offsetY={width}
-          />
           <Gap y={5} />
+          <AddClientModal mKey='clients_page_modal' />
+          <Gap y={5} />
+          {isNeedInput && !isFocused ? (
+            <RefreshInput
+              placeHolder={
+                query.length > 0 ? query : 'Введите имя пользователя'
+              }
+              scrollY={scrollY}
+              inputSize={inputSize}
+              offsetY={width}
+              onFocus={onInputFocus}
+            />
+          ) : (
+            <Input
+              inversed
+              placeholder='Введите имя пользователя'
+              setValue={setQuery}
+              value={query}
+              onBlur={onInputBlur}
+              autoFocus
+            />
+          )}
+          <Gap y={5} />
+          <Animated.ScrollView
+            onScroll={scrollHandler}
+            onScrollEndDrag={onScrollEnd}
+            // @ts-ignore
+            ref={containerRef}
+          >
+            {isNeedInput && !clientLoading && (
+              <View style={{ width: '100%', height: offsetY }} />
+            )}
+            {clientLoading ? (
+              <>
+                <Card style={{ maxHeight: 130 }} loading />
+                <Gap y={5} />
+                <Card style={{ maxHeight: 130 }} loading />
+              </>
+            ) : (
+              <View onTouchStart={onInputBlur}>
+                {searchUsers.map((item, inx) => (
+                  <Fragment key={inx}>
+                    <Gap y={3} />
+                    <ClientItem orderLoading={orderLoading} item={item} />
+                    <Gap y={3} />
+                  </Fragment>
+                ))}
+              </View>
+            )}
+          </Animated.ScrollView>
         </>
-      )}
-      <Animated.ScrollView
-        onScroll={scrollHandler}
-        onScrollEndDrag={onScrollEnd}
-        // @ts-ignore
-        ref={containerRef}
-      >
-        {isNeedInput && !clientLoading && (
-          <View style={{ width: '100%', height: offsetY }} />
-        )}
-        {clientLoading ? (
-          <>
-            <Card style={{ maxHeight: 130 }} loading />
-            <Gap y={5} />
-            <Card style={{ maxHeight: 130 }} loading />
-          </>
-        ) : (
-          searchUsers.map((item, inx) => (
-            <Fragment key={inx}>
-              <Gap y={3} />
-              <ClientItem orderLoading={orderLoading} item={item} />
-              <Gap y={3} />
-            </Fragment>
-          ))
-        )}
-      </Animated.ScrollView>
+      </>
     </Layout>
   );
 };
