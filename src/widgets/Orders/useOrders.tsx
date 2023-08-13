@@ -35,6 +35,24 @@ export const useOrders = () => {
     }
   };
 
+  const onGetNeareastOrder = async (): Promise<IOrder | undefined> => {
+    try {
+      setLoading(true);
+
+      const curOrders = await fbOrder.get<IOrder>(
+        'isDone',
+        '==',
+        false,
+        'dealAt'
+      );
+      return curOrders[0];
+    } catch (error) {
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const onAddOrder = async (clientUid: string, data: IOrder): Promise<void> => {
     try {
       setLoading(true);
@@ -79,5 +97,6 @@ export const useOrders = () => {
     onAddOrder,
     onUpdateOrder,
     onDeleteOrder,
+    onGetNeareastOrder,
   };
 };

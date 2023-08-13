@@ -27,11 +27,11 @@ const AddClientModal: FC<IProps> = ({
     useClients();
   const { onAddOrder } = useOrders();
 
-  const [contacts, setContacts] = useState('+375');
+  const [contacts, setContacts] = useState(client?.contacts ?? '+375');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
-  const [name, setName] = useState('');
-  const [lastname, setLastname] = useState('');
+  const [name, setName] = useState(client?.name ?? '');
+  const [lastname, setLastname] = useState(client?.lastname ?? '');
   const [date, setDate] = useState(new Date());
 
   const onPressAddClient = async () => {
@@ -105,17 +105,16 @@ const AddClientModal: FC<IProps> = ({
 
   useEffect(() => {
     if (addClientModalKey.length > 0 && mKey === addClientModalKey) {
-      bottomSheetRef?.current?.snapToIndex(1);
-      setContacts(client?.contacts);
-      setName(client?.name);
       setLastname(client?.lastname);
+      setName(client?.name);
+      setContacts(client?.contacts ?? '+375');
+      bottomSheetRef?.current?.snapToIndex(0);
     } else {
-      setContacts('+375');
-      setName('');
-      setLastname('');
       bottomSheetRef?.current?.snapToIndex(-1);
+      setDescription('');
+      setPrice('0');
+      setDate(new Date());
     }
-    setDate(new Date());
   }, [addClientModalKey]);
 
   return (

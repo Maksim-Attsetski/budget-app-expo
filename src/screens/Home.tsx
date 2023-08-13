@@ -5,14 +5,11 @@ import { IScreen, colors } from '../shared';
 import { Layout } from '../widgets/App';
 import { ProgressChart, useBudget } from '../widgets/Budget';
 import { Text, Card, Gap, Flex, Button } from '../UI';
-import { useClients } from '../widgets/Clients';
 import { routes } from '../widgets/App/types';
-import { useOrders } from '../widgets/Orders';
+import { NearestOrder } from '../widgets/Orders';
 
 const HomeScreen: FC<IScreen> = ({ navigation }) => {
   const { budget } = useBudget();
-  const { clients } = useClients();
-  const { orders } = useOrders();
 
   const inc: number = budget.reduce(
     (acc, cur) => (cur.type === 'inc' ? acc + cur.value : acc),
@@ -45,14 +42,6 @@ const HomeScreen: FC<IScreen> = ({ navigation }) => {
     return data;
   }, [inc, dec]);
 
-  const nearestOrder =
-    [...orders].sort((a, b) => b.dealAt - a.dealAt)[0] || null;
-
-  const onPressOrder = () => {
-    // @ts-ignore
-    navigation.navigate(routes.client, { id: clients[0].id });
-  };
-
   const onPressActivity = () => {
     // @ts-ignore
     navigation.navigate(routes.history);
@@ -78,21 +67,7 @@ const HomeScreen: FC<IScreen> = ({ navigation }) => {
         </Card>
         <Gap y={7} />
         <Flex justify='space-between'>
-          {clients.length > 0 && nearestOrder && (
-            <Card style={{ position: 'relative' }}>
-              <Button style={styles.layer} onPress={onPressOrder} />
-              <Text>Ближайший заказ</Text>
-              <Gap y={7} />
-              <Flex>
-                <Text style={{ color: colors.green }}>
-                  +{nearestOrder.price} р.
-                </Text>
-                <Text>
-                  {new Date(nearestOrder.dealAt).toLocaleDateString('ru-RU')}
-                </Text>
-              </Flex>
-            </Card>
-          )}
+          <NearestOrder />
           {budget[0] && (
             <Card style={{ position: 'relative' }}>
               <Button style={styles.layer} onPress={onPressActivity} />

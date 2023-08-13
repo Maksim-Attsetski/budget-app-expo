@@ -24,9 +24,6 @@ interface IVersion {
 
 const Navigation: FC = () => {
   const { color, backgroundColor, isDark } = useTheme(true);
-  const { setBudget } = useBudget();
-  const { onGetClients } = useClients();
-
   const fbVersion = useFirestore('zefirka-version');
 
   const checkVersion = async (): Promise<void> => {
@@ -58,9 +55,7 @@ const Navigation: FC = () => {
   };
 
   useEffect(() => {
-    (async () => {
-      await Promise.all([setBudget(), onGetClients(), checkVersion()]);
-    })();
+    checkVersion();
   }, []);
 
   return (

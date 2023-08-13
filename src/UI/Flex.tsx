@@ -17,7 +17,8 @@ const Flex: FC<IProps> = ({ justify = 'center', ...props }) => {
       {...props}
       style={
         props.style
-          ? [
+          ? []
+          : [
               {
                 flexDirection: 'row',
                 flexWrap: 'wrap',
@@ -25,7 +26,6 @@ const Flex: FC<IProps> = ({ justify = 'center', ...props }) => {
                 justifyContent: justify,
               },
             ]
-          : []
       }
     >
       {props.children}

@@ -15,6 +15,7 @@ import {
   and,
   getCountFromServer,
   addDoc,
+  OrderByDirection,
 } from 'firebase/firestore';
 import { User } from 'firebase/auth';
 
@@ -67,14 +68,15 @@ export const useFirestore = (collectionId: TCollectionId) => {
     divider?: WhereFilterOp,
     value?: any,
     orderByVal?: keyof D,
-    limitVal?: number
+    limitVal?: number,
+    directionStr?: OrderByDirection
   ) {
     const q =
       field && divider
         ? query(
             collection(fbStore, collectionId),
             where(field as string | FieldPath, divider, value),
-            orderBy(orderByVal as string | FieldPath, 'desc'),
+            orderBy(orderByVal as string | FieldPath, directionStr ?? 'asc'),
             limit(limitVal ?? 10)
           )
         : query(collection(fbStore, collectionId));
