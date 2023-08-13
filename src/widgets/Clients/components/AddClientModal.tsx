@@ -16,6 +16,7 @@ import {
 import { useClients } from '../useClients';
 import { IClient } from '../types';
 import { IOrder, useOrders } from '../../Orders';
+import { useTheme } from '../../../shared';
 
 interface IProps {
   mKey: string;
@@ -31,6 +32,7 @@ const AddClientModal: FC<IProps> = ({
   icon = null,
 }) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
+  const { backgroundColor } = useTheme();
 
   const { addClientModalKey, setClientModalVisible, onAddClient } =
     useClients();
@@ -117,7 +119,7 @@ const AddClientModal: FC<IProps> = ({
         onPress={() => setClientModalVisible(mKey)}
         disabled={disabledBtn}
       >
-        <Title size='small'>
+        <Title textColor='dark' size='small'>
           {icon ?? `Добавить ${client ? 'заказ' : 'клиента'}`}
         </Title>
       </Button>
@@ -128,6 +130,8 @@ const AddClientModal: FC<IProps> = ({
         containerStyle={{ zIndex: 2 }}
         enablePanDownToClose
         onClose={() => setClientModalVisible('')}
+        style={{ paddingHorizontal: 12 }}
+        backgroundStyle={{ backgroundColor }}
       >
         <View>
           <View style={styles.namesContainer}>

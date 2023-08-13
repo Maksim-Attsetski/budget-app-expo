@@ -9,7 +9,7 @@ import {
   TextInputFocusEventData,
 } from 'react-native';
 
-import { useTheme } from '../shared';
+import { colors, useTheme } from '../shared';
 
 interface IProps extends TextInputProps {
   setValue: Dispatch<SetStateAction<string>>;
@@ -26,14 +26,18 @@ const Input: FC<IProps> = ({
   onFocus = () => {},
   ...props
 }) => {
-  const { backgroundColor, color } = useTheme();
+  const { color, isDark } = useTheme();
 
   return (
     <View {...viewProps}>
       <TextInput
         style={[
           styles.input,
-          { backgroundColor, color, opacity: disabled ? 0.6 : 1 },
+          {
+            backgroundColor: isDark ? colors.dark : colors.white,
+            opacity: disabled ? 0.6 : 1,
+            color,
+          },
           style,
         ]}
         {...props}

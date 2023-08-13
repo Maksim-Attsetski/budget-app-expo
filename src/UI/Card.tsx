@@ -1,6 +1,6 @@
 import React, { FC, memo } from 'react';
 import { StyleSheet, View, ViewProps } from 'react-native';
-import { useTheme } from '../shared';
+import { colors, useTheme } from '../shared';
 import Text from './Text';
 
 interface IProps extends ViewProps {
@@ -11,8 +11,11 @@ interface IProps extends ViewProps {
 }
 
 const Card: FC<IProps> = (props) => {
-  const { backgroundColor } = useTheme();
-  const styles = getStyles(props.rowHeight);
+  const { backgroundColor, isDark } = useTheme();
+  const styles = getStyles(
+    props.rowHeight,
+    isDark ? colors.dark : colors.white
+  );
 
   return (
     <View {...props} style={[styles.card, { backgroundColor }, props.style]}>
@@ -32,7 +35,7 @@ const Card: FC<IProps> = (props) => {
   );
 };
 
-const getStyles = (height: number = 22) =>
+const getStyles = (height: number = 22, backgroundColor: string) =>
   StyleSheet.create({
     card: {
       borderRadius: 16,
@@ -52,8 +55,9 @@ const getStyles = (height: number = 22) =>
     loadingItem: {
       width: '100%',
       height,
-      backgroundColor:
-        'linear-gradient(90deg, rgba(233,233,233,1) 0%, rgba(208,208,208,1) 35%, rgba(147,147,147,1) 100%',
+      // backgroundColor:
+      // 'linear-gradient(90deg, rgba(233,233,233,1) 0%, rgba(208,208,208,1) 35%, rgba(147,147,147,1) 100%',
+      backgroundColor,
       borderRadius: 12,
       marginVertical: 5,
     },

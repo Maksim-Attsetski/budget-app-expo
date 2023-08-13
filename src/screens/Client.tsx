@@ -42,7 +42,7 @@ const Client: FC<IScreen> = ({ route }) => {
       <AddClientModal mKey={mKey} disabledBtn={clientLoading} client={client} />
       <Gap y={5} />
 
-      {clientLoading ? (
+      {true ? (
         <>
           <Gap y={10} />
           <Card

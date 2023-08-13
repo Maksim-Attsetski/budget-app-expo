@@ -5,7 +5,7 @@ interface IState {
 }
 
 const initialState: IState = {
-  isDark: false,
+  isDark: true,
 };
 
 const appSlice = createSlice({

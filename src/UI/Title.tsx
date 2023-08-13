@@ -2,18 +2,30 @@ import React, { FC, memo } from 'react';
 import { StyleSheet, TextProps, TextStyle } from 'react-native';
 
 import Text from './Text';
+import { colors } from '../shared';
 
 interface IProps extends TextProps {
   size?: 'big' | 'small';
   textAlign?: TextStyle['textAlign'];
+  textColor?: keyof typeof colors;
 }
 
 const Title: FC<IProps> = ({
   size = 'big',
   textAlign = 'center',
+  textColor,
   ...props
 }) => {
-  return <Text {...props} style={[styles[size], { textAlign }, props.style]} />;
+  return (
+    <Text
+      {...props}
+      style={[
+        styles[size],
+        textColor ? { textAlign, color: textColor } : { textAlign },
+        props.style,
+      ]}
+    />
+  );
 };
 
 const styles = StyleSheet.create({
