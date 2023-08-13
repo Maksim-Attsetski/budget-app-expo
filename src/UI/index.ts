@@ -9,8 +9,10 @@ import LineChart from './LineChart';
 import PieChart from './PieChart';
 import Select from './Select';
 import Text from './Text';
+import Title from './Title';
 
 export {
+  Title,
   PieChart,
   LineChart,
   BottomSheet,

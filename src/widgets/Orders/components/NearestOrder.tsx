@@ -2,7 +2,7 @@ import React, { FC, memo, useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-import { Button, Text, Card, Gap, Flex } from '../../../UI';
+import { Button, Text, Card, Gap, Flex, Title } from '../../../UI';
 import { colors } from '../../../shared';
 import { IOrder } from '../types';
 import { useOrders } from '../useOrders';
@@ -39,7 +39,7 @@ const NearestOrder: FC = () => {
       {nearestOrder ? (
         <>
           <Button style={StyleSheet.absoluteFill} onPress={onPressOrder} />
-          <Text>Ближайший заказ</Text>
+          <Title>Ближайший заказ</Title>
           <Gap y={7} />
           {nearestOrder?.description &&
             nearestOrder?.description.length > 0 && (

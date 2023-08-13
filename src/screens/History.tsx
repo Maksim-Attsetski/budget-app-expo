@@ -2,7 +2,7 @@ import React, { FC, Fragment, memo, useEffect } from 'react';
 import { FlatList, ScrollView } from 'react-native';
 
 import { colors, dateHelper } from '../shared';
-import { Card, Gap, Text } from '../UI';
+import { Card, Gap, Text, Title } from '../UI';
 import { Layout } from '../widgets/App';
 import { useBudget } from '../widgets/Budget';
 
@@ -20,11 +20,7 @@ const History: FC = () => {
         <FlatList
           ListHeaderComponent={
             <>
-              <Text
-                style={{ fontSize: 24, textAlign: 'center', fontWeight: '700' }}
-              >
-                Грузим историю...
-              </Text>
+              <Title>Грузим историю...</Title>
               <Gap y={10} />
             </>
           }

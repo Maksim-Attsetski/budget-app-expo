@@ -4,7 +4,7 @@ import { ScrollView, StyleSheet } from 'react-native';
 import { IScreen, colors } from '../shared';
 import { Layout } from '../widgets/App';
 import { ProgressChart, useBudget } from '../widgets/Budget';
-import { Text, Card, Gap, Flex, Button } from '../UI';
+import { Text, Card, Gap, Flex, Button, Title } from '../UI';
 import { routes } from '../widgets/App/types';
 import { NearestOrder } from '../widgets/Orders';
 
@@ -69,21 +69,21 @@ const HomeScreen: FC<IScreen> = ({ navigation }) => {
         <Flex justify='space-between'>
           <NearestOrder />
           {budget[0] && (
-            <Card style={{ position: 'relative' }}>
+            <Card style={{ position: 'relative', width: '100%' }}>
               <Button style={styles.layer} onPress={onPressActivity} />
-
-              <Text style={{ textAlign: 'center' }}>Активность</Text>
+              <Title size='small' textAlign='left'>
+                Последняя активность
+              </Title>
               <Gap y={5} />
-              <Text
+              <Title
+                size='small'
                 style={{
                   color:
                     budget[0].type === 'inc' ? colors.green : colors.purple,
-                  textAlign: 'center',
-                  fontSize: 22,
                 }}
               >
                 {budget[0].type === 'inc' ? '+' : '-'} {budget[0].value} р.
-              </Text>
+              </Title>
             </Card>
           )}
         </Flex>

@@ -3,7 +3,7 @@ import { FlatList, StyleSheet, View } from 'react-native';
 import { where } from 'firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 
-import { Card, Flex, Gap, Text, Button } from '../UI';
+import { Card, Flex, Gap, Text, Button, Title } from '../UI';
 import { IScreen, colors, dateHelper } from '../shared';
 import { Layout } from '../widgets/App';
 import { AddClientModal, IClient, useClients } from '../widgets/Clients';
@@ -70,10 +70,13 @@ const Client: FC<IScreen> = ({ route }) => {
                 <Text style={styles.title}>
                   {client.name} {client.lastname}
                 </Text>
-                <Text style={styles.contacts}>{client.contacts}</Text>
+                <Gap y={7} />
+                <Title size='small' textAlign='left'>
+                  {client.contacts}
+                </Title>
                 <Gap y={7} />
                 <Flex justify='space-around'>
-                  <Text style={styles.subTitle}>Заказы</Text>
+                  <Title>Заказы</Title>
                 </Flex>
                 <Gap y={7} />
               </>
@@ -146,18 +149,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginVertical: 12,
   },
-  contacts: {
-    fontSize: 20,
-    marginVertical: 12,
-  },
   summaContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-  },
-  subTitle: {
-    fontSize: 28,
-    fontWeight: 'bold',
   },
   buttonsContainer: {
     gap: 8,

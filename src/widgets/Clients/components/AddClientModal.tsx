@@ -3,7 +3,15 @@ import { Alert, StyleSheet, View } from 'react-native';
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import BottomSheet from '@gorhom/bottom-sheet';
 
-import { Input, Gap, AccentButton, Button, Flex, Card } from '../../../UI';
+import {
+  Input,
+  Gap,
+  AccentButton,
+  Button,
+  Flex,
+  Card,
+  Title,
+} from '../../../UI';
 import { useClients } from '../useClients';
 import { IClient } from '../types';
 import { IOrder, useOrders } from '../../Orders';
@@ -121,11 +129,12 @@ const AddClientModal: FC<IProps> = ({
     <>
       <Button
         style={icon ? {} : styles.button}
-        textProps={{ style: styles.buttonText }}
         onPress={() => setClientModalVisible(mKey)}
         disabled={disabledBtn}
       >
-        {icon ?? `Добавить ${client ? 'заказ' : 'клиента'}`}
+        <Title size='small'>
+          {icon ?? `Добавить ${client ? 'заказ' : 'клиента'}`}
+        </Title>
       </Button>
       <BottomSheet
         ref={bottomSheetRef}
@@ -215,6 +224,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 20,
     backgroundColor: 'white',
+    alignItems: 'center',
   },
   buttonText: {
     fontSize: 20,
