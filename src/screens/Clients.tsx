@@ -1,4 +1,12 @@
-import React, { FC, Fragment, memo, useEffect, useRef, useState } from 'react';
+import React, {
+  FC,
+  Fragment,
+  memo,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Dimensions, FlatList, StyleSheet, View } from 'react-native';
 
 import { Card, Gap, RefreshInput, Text } from '../UI';
@@ -23,6 +31,11 @@ const Clients: FC = () => {
   const [query, setQuery] = useState<string>('');
   const scrollY = useSharedValue(0);
   const containerRef = useRef<Animated.ScrollView>();
+
+  const searchUsers = clients.filter((item) =>
+    (item.name + item.lastname).includes(query)
+  );
+  const isNeedInput = searchUsers.length > 2;
 
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
@@ -55,17 +68,19 @@ const Clients: FC = () => {
     if (clients && clients?.length > 0) {
       onGetOrders(clients.map((el) => el.uid));
     }
-    if (clients.length > 2) {
-      containerRef.current.scrollTo({ animated: true, x: 0, y: offsetY });
-    }
   }, [clients]);
+
+  useEffect(() => {
+    isNeedInput &&
+      containerRef.current.scrollTo({ animated: true, x: 0, y: offsetY });
+  }, [clients, isNeedInput]);
 
   return (
     <Layout>
       <Gap y={5} />
       <AddClientModal mKey='clients_page_modal' />
       <Gap y={5} />
-      {clients.length > 2 && (
+      {isNeedInput && (
         <>
           <RefreshInput
             placeHolder='Введите имя пользователя'
@@ -79,22 +94,29 @@ const Clients: FC = () => {
         </>
       )}
       <Animated.ScrollView
-        contentOffset={{ y: 0, x: 0 }}
         onScroll={scrollHandler}
         onScrollEndDrag={onScrollEnd}
         // @ts-ignore
         ref={containerRef}
       >
-        {clients.length > 2 && (
+        {isNeedInput && !clientLoading && (
           <View style={{ width: '100%', height: offsetY }} />
         )}
-        {clients.map((item, inx) => (
-          <Fragment key={inx}>
-            <Gap y={3} />
-            <ClientItem orderLoading={orderLoading} item={item} />
-            <Gap y={3} />
-          </Fragment>
-        ))}
+        {clientLoading ? (
+          <>
+            <Card style={{ maxHeight: 130 }} loading />
+            <Gap y={5} />
+            <Card style={{ maxHeight: 130 }} loading />
+          </>
+        ) : (
+          searchUsers.map((item, inx) => (
+            <Fragment key={inx}>
+              <Gap y={3} />
+              <ClientItem orderLoading={orderLoading} item={item} />
+              <Gap y={3} />
+            </Fragment>
+          ))
+        )}
       </Animated.ScrollView>
     </Layout>
   );
