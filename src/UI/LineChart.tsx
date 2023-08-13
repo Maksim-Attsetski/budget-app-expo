@@ -3,6 +3,7 @@ import { View, StyleSheet, Animated } from 'react-native';
 import Svg, { Line, G, Text, Path, Circle } from 'react-native-svg';
 import { colors, useAnimated, useTheme } from '../shared';
 import MText from './Text';
+import Card from './Card';
 
 interface IPoint {
   x: number;
@@ -43,45 +44,45 @@ const LineChart: FC<IProps> = ({
 
   const [popup, setPopup] = useState({ x: 0, y: 0, visible: false, text: '' });
 
-  const maxValues = lines.map((line) => Math.max(...line.data));
-  const minValues = lines.map((line) => Math.min(...line.data));
+  const maxValues = lines?.map((line) => Math.max(...line?.data));
+  const minValues = lines?.map((line) => Math.min(...line?.data));
 
   const maxValue = Math.max(...maxValues) + Math.max(...maxValues) / 5;
   const minValue = Math.min(...minValues) - Math.min(...minValues) / 5;
 
   const chartHeight = height - 2 * margin;
-  const chartWidth = width - 2 * margin;
+  const chartWidth = width - 2 * margin - 16;
 
-  const xInterval = chartWidth / (lines[0].data.length - 1);
+  const xInterval = chartWidth / (lines[0]?.data?.length - 1);
   const yInterval = chartHeight / (maxValue - minValue);
 
-  const points: IPoint[][] = lines.map((line) =>
-    line.data.map((value, index) => ({
+  const points: IPoint[][] = lines?.map((line) =>
+    line?.data?.map((value, index) => ({
       x: index * xInterval + margin,
       y: chartHeight - (value - minValue) * yInterval + margin,
     }))
   );
 
-  const linesElements = points.map((linePoints, lineIndex) =>
-    linePoints.map((point, index) =>
+  const linesElements = points?.map((linePoints, lineIndex) =>
+    linePoints?.map((point, index) =>
       index < linePoints.length - 1 ? (
         <Line
           onPress={(e) => {
             e.stopPropagation();
             setPopup({
-              y: point.y,
-              x: point.x,
+              y: point?.y,
+              x: point?.x,
               visible: true,
-              text: `${lines[lineIndex].data[index]}${
+              text: `${lines[lineIndex]?.data[index]}${
                 lines[lineIndex].label ? '\n' + lines[lineIndex].label : ''
               }`,
             });
           }}
           key={`line${lineIndex}-${index}`}
-          x1={point.x}
-          y1={point.y}
-          x2={linePoints[index + 1].x}
-          y2={linePoints[index + 1].y}
+          x1={point?.x}
+          y1={point?.y}
+          x2={linePoints[index + 1]?.x}
+          y2={linePoints[index + 1]?.y}
           stroke={lines[lineIndex].color}
           strokeWidth={2}
         />
@@ -89,38 +90,38 @@ const LineChart: FC<IProps> = ({
     )
   );
 
-  const circles = points.map((linePoints, inx) =>
-    linePoints.map((point, index) => (
+  const circles = points?.map((linePoints, inx) =>
+    linePoints?.map((point, index) => (
       <Circle
         key={`circle-${index}`}
         onPress={(e) => {
           e.stopPropagation();
           setPopup({
-            y: point.y - margin,
-            x: point.x - margin,
+            y: point?.y - margin,
+            x: point?.x - margin,
             visible: true,
-            text: lines[index].data + '',
+            text: lines[inx]?.data[index] + '',
           });
         }}
         fill={'grey'}
         cx={5}
         cy={5}
         r={4}
-        x={point.x - margin / 4}
-        y={point.y - margin / 4}
+        x={point?.x - margin / 4}
+        y={point?.y - margin / 4}
         stroke={lines[inx].color}
         strokeWidth={2}
       />
     ))
   );
 
-  const areaPaths = lines.map((line, lineIndex) => {
+  const areaPaths = lines?.map((line, lineIndex) => {
     const linePoints = points[lineIndex];
     const path = `
       M ${margin} ${margin + chartHeight}
-      L ${margin} ${linePoints[0].y}
-      ${linePoints.map((point) => `L ${point.x} ${point.y}`).join(' ')}
-      L ${linePoints[linePoints.length - 1].x} ${margin + chartHeight}
+      L ${margin} ${linePoints[0]?.y}
+      ${linePoints?.map((point) => `L ${point?.x} ${point?.y}`).join(' ')}
+      L ${linePoints[linePoints.length - 1]?.x} ${margin + chartHeight}
       Z
     `;
     return (
@@ -133,12 +134,12 @@ const LineChart: FC<IProps> = ({
     );
   });
 
-  const xAxisLabels = points[0].map((point, index) => (
+  const xAxisLabels = points[0]?.map((point, index) => (
     <Text
       key={`x-axis-label-${index}`}
-      x={point.x}
+      x={point?.x}
       y={height - margin + 15}
-      fontSize='10'
+      fontSize='12'
       textAnchor='middle'
       fill={color}
     >
@@ -163,13 +164,13 @@ const LineChart: FC<IProps> = ({
   );
 
   useEffect(() => {
-    if (popup.y > 0 && popup.x > 0) {
-      animateTop(popup.y);
-      animateLeft(popup.x);
+    if (popup?.y > 0 && popup?.x > 0) {
+      animateTop(popup?.y);
+      animateLeft(popup?.x);
     }
-  }, [popup.x]);
+  }, [popup?.x]);
 
-  return (
+  return lines.length > 0 ? (
     <View style={styles.container}>
       {title && <MText style={styles.title}>{title}</MText>}
       <Svg
@@ -201,12 +202,17 @@ const LineChart: FC<IProps> = ({
         <MText style={{ textAlign: 'center' }}>{popup.text}</MText>
       </Animated.View>
     </View>
+  ) : (
+    <Card>
+      <MText>Нет данных</MText>
+    </Card>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     position: 'relative',
+    paddingHorizontal: 8,
   },
   title: {
     fontSize: 22,

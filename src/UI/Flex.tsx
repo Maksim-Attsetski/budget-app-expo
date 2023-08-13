@@ -23,6 +23,7 @@ const Flex: FC<IProps> = ({ justify = 'center', ...props }) => {
                 flexDirection: 'row',
                 flexWrap: 'wrap',
                 gap: 20,
+                alignItems: 'baseline',
                 justifyContent: justify,
               },
             ]

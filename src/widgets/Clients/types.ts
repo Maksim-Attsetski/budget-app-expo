@@ -3,6 +3,7 @@ export interface IClient {
   name: string;
   lastname: string;
   contacts: string;
+  createdAt: number;
 }
 
 export const defaultClient = {
@@ -11,4 +12,5 @@ export const defaultClient = {
   name: '',
   lastname: '',
   orders: [],
+  createdAt: Date.now(),
 } as IClient;

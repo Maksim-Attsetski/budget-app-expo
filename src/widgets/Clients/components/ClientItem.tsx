@@ -41,6 +41,9 @@ const ClientItem: FC<IProps> = ({ item, orderLoading = false }) => {
             {item.name} {item.lastname}
           </Text>
           <Text>Контакты: {item.contacts}</Text>
+          <Text>
+            создано: {new Date(item.createdAt)?.toLocaleDateString('ru')}
+          </Text>
           {orderLoading ? (
             <Text>Ищем заказы...</Text>
           ) : harOrder ? (

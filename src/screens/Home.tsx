@@ -1,5 +1,5 @@
 import { useMemo, memo, FC, useEffect } from 'react';
-import { FlatList, ScrollView, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
 
 import { IScreen, colors } from '../shared';
 import { Layout } from '../widgets/App';

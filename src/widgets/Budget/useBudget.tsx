@@ -11,7 +11,7 @@ export const useBudget = () => {
   const fbBudget = useFirestore('zefirka-budget');
   const [loading, setLoading] = useState<boolean>(false);
 
-  const budget = [...data].sort((a, b) => b.date - a.date);
+  const budget = [...data].sort((a, b) => b.createdAt - a.createdAt);
 
   const setBudget = async (
     whereArr: QueryFilterConstraint[] = [],
@@ -33,7 +33,7 @@ export const useBudget = () => {
       setLoading(true);
       const newBudget = {
         ...info,
-        date: Date.now(),
+        createdAt: Date.now(),
       } as IBudget;
 
       const uid = await fbBudget.addWithId(newBudget);

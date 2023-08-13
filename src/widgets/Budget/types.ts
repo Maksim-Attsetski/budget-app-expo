@@ -5,5 +5,5 @@ export interface IBudget {
   type: TBudgetType;
   value: number;
   description?: string;
-  date: number;
+  createdAt: number;
 }

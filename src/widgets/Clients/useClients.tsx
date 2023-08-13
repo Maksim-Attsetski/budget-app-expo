@@ -31,8 +31,9 @@ export const useClients = () => {
   const onAddClient = async (data: IClient): Promise<string> => {
     try {
       setLoading(true);
-      const uid = await fbClient.addWithId(data);
-      action.addClientAC({ ...data, uid });
+      const newClient = { ...data, createdAt: Date.now() };
+      const uid = await fbClient.addWithId(newClient);
+      action.addClientAC({ ...newClient, uid });
       return uid;
     } catch (error) {
       throw error;

@@ -60,7 +60,7 @@ const History: FC = () => {
                 </>
               )}
               <Gap y={7} />
-              <Text>{dateHelper.getBeautifulDate(item.date, '.')} </Text>
+              <Text>{dateHelper.getBeautifulDate(item.createdAt, '.')} </Text>
             </Card>
           )}
         />
