@@ -24,6 +24,7 @@ export type TCollectionId =
   | 'zefirka-clients'
   | 'zefirka-history'
   | 'zefirka-orders'
+  | 'zefirka-version'
   | 'zefirka-budget';
 
 export const useFirestore = (collectionId: TCollectionId) => {
