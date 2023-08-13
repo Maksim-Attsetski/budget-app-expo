@@ -8,11 +8,13 @@ import Gap from './Gap';
 import Input from './Input';
 import LineChart from './LineChart';
 import PieChart from './PieChart';
+import RefreshInput from './RefreshInput';
 import Select from './Select';
 import Text from './Text';
 import Title from './Title';
 
 export {
+  RefreshInput,
   DatePicker,
   Title,
   PieChart,

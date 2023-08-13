@@ -82,11 +82,20 @@ const AddClientModal: FC<IProps> = ({
         uid: '',
       } as IOrder);
     } else {
-      await onAddClient({
+      const uid = await onAddClient({
         contacts, // #TODO дата заказа
         lastname,
         name,
       } as IClient);
+      await onAddOrder(client?.uid, {
+        dealAt: date.getTime(),
+        description,
+        price: +price,
+        clientUid: uid,
+        isDone: false,
+        createdAt: Date.now(),
+        uid: '',
+      } as IOrder);
     }
 
     setClientModalVisible('');

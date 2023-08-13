@@ -28,11 +28,12 @@ export const useClients = () => {
     }
   };
 
-  const onAddClient = async (data: IClient): Promise<void> => {
+  const onAddClient = async (data: IClient): Promise<string> => {
     try {
       setLoading(true);
       const uid = await fbClient.addWithId(data);
       action.addClientAC({ ...data, uid });
+      return uid;
     } catch (error) {
       throw error;
     } finally {
