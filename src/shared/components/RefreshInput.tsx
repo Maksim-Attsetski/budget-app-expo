@@ -17,6 +17,8 @@ import { colors, useTheme } from '..';
 import Input from '../../UI/Input';
 import Card from '../../UI/Card';
 import { Button } from '../../UI/Button';
+import SearchSvg from '../../../assets/SearchSvg';
+import LoadingSvg from '../../../assets/LoadingSvg';
 
 const { width } = Dimensions.get('window');
 
@@ -31,7 +33,7 @@ interface IProps {
 }
 const RefreshInput: FC<IProps> = ({
   scrollY,
-  inputSize = 48,
+  inputSize = 80,
   offsetY = 170,
   placeHolder = '',
   onFocus = () => {},
@@ -63,6 +65,7 @@ const RefreshInput: FC<IProps> = ({
 
     return { left, opacity, width };
   });
+
   const textS = useAnimatedStyle(() => {
     const opacity = interpolate(scrollY.value, [100, 200], [0, 1], {
       extrapolateRight: Extrapolation.CLAMP,
@@ -71,30 +74,55 @@ const RefreshInput: FC<IProps> = ({
     return { opacity };
   });
 
+  const searchS = useAnimatedStyle(() => {
+    const opacity = interpolate(scrollY.value, [100, 200], [0, 1], {
+      extrapolateRight: Extrapolation.CLAMP,
+    });
+
+    return { opacity };
+  });
+
+  const loadSvgS = useAnimatedStyle(() => {
+    const opacity = interpolate(scrollY.value, [100, 200], [1, 0], {
+      extrapolateRight: Extrapolation.CLAMP,
+    });
+    const rotate = interpolate(scrollY.value, [0, 200], [25, 0], {
+      extrapolateRight: Extrapolation.CLAMP,
+    });
+
+    return { opacity, transform: [{ rotate: rotate + '' }] };
+  });
+
   return (
-    <View>
-      <Animated.View style={[styles.inputContainer, inputS]}>
-        <TouchableWithoutFeedback
-          onPress={(e) => {
-            e.stopPropagation();
-            onFocus();
-          }}
+    <Animated.View style={[styles.inputContainer, inputS]}>
+      {/* <LoadingSvg /> */}
+      <TouchableWithoutFeedback
+        onPress={(e) => {
+          e.stopPropagation();
+          onFocus();
+        }}
+        style={{ position: 'relative' }}
+      >
+        <Animated.Text
+          style={[{ width: offsetY, backgroundColor }, textS, styles.input]}
         >
-          <Animated.Text
-            style={[{ width: offsetY, backgroundColor }, textS, styles.input]}
-          >
-            {placeHolder ?? ''}
-          </Animated.Text>
-        </TouchableWithoutFeedback>
-        <Animated.View
-          style={[
-            { backgroundColor: colors.purple },
-            styles.control,
-            inputLoaderS,
-          ]}
-        />
+          {placeHolder ?? ''}
+        </Animated.Text>
+      </TouchableWithoutFeedback>
+      <Animated.View style={[styles.search, searchS]}>
+        <SearchSvg />
       </Animated.View>
-    </View>
+      <Animated.View style={[styles.search, loadSvgS]}>
+        <LoadingSvg stroke={colors.white} />
+      </Animated.View>
+      <Animated.View
+        style={[
+          { backgroundColor: colors.purple },
+          styles.control,
+          inputLoaderS,
+        ]}
+      />
+    </Animated.View>
   );
 };
 
@@ -113,12 +141,20 @@ const getStyles = (inputSize: number) =>
       alignSelf: 'center',
       overflow: 'hidden',
       position: 'relative',
+      minHeight: inputSize * 0.9,
     },
     input: {
       paddingHorizontal,
       paddingVertical: 12,
       fontSize: 18,
       borderRadius: 12,
+    },
+    search: {
+      position: 'absolute',
+      top: 12,
+      right: 16,
+      width: 20,
+      zIndex: 2,
     },
   });
 
