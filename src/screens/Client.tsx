@@ -1,5 +1,5 @@
 import React, { FC, memo, useCallback, useEffect, useState } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList, Linking, StyleSheet } from 'react-native';
 import { where } from 'firebase/firestore';
 
 import { Card, Flex, Gap, List, Text, Title } from '../UI';
@@ -27,6 +27,16 @@ const Client: FC<IScreen> = ({ route }) => {
     }
   }, [clientId]);
 
+  const onOpenContact = useCallback(async () => {
+    if (client?.contacts) {
+      const canOpen = await Linking.canOpenURL(client?.contacts);
+      if (canOpen) {
+        const url = 'tel:' + client?.contacts;
+        await Linking.openURL(url);
+      }
+    }
+  }, [client?.contacts]);
+
   useEffect(() => {
     onGetClient();
 
@@ -50,7 +60,7 @@ const Client: FC<IScreen> = ({ route }) => {
               {client?.name} {client?.lastname}
             </Text>
             <Gap y={7} />
-            <Title size='small' textAlign='left'>
+            <Title size='small' onPress={onOpenContact} textAlign='left'>
               {client?.contacts}
             </Title>
             <Gap y={7} />
