@@ -1,10 +1,12 @@
 import React, { FC, memo, useEffect, useState } from 'react';
 import { Dimensions, FlatList, StyleSheet, View } from 'react-native';
 import { where } from 'firebase/firestore';
+import { useNavigation } from '@react-navigation/native';
 
-import { Gap, Text } from '../../../UI';
+import { Button, Gap, Text } from '../../../UI';
 import { colors, useFirestore, useTypedSelector } from '../../../shared';
 import { IOrder } from '../types';
+import { routes } from '../../App/types';
 
 const screenWidth = Dimensions.get('screen').width;
 
@@ -28,6 +30,7 @@ const OrderPerWeek: FC = () => {
   const [days, setDays] = useState(daysData);
   const [loading, setLoading] = useState<boolean>(true);
   const { orders: ordersData } = useTypedSelector((s) => s.orders);
+  const { navigate } = useNavigation();
 
   const onCheckOrdersForWeek = async () => {
     setLoading(true);
@@ -38,7 +41,6 @@ const OrderPerWeek: FC = () => {
     const minDay = date.getTime();
     date.setDate(date.getDate() + 7);
     const maxDay = date.getTime();
-
     try {
       const response = await fbOrders.getAll([
         where('dealAt', '>=', minDay),
@@ -73,10 +75,22 @@ const OrderPerWeek: FC = () => {
         showsHorizontalScrollIndicator={false}
         ItemSeparatorComponent={() => <Gap x={padding} />}
         renderItem={({ item }) => (
-          <View style={styles.day}>
+          <Button
+            onPress={() => {
+              const now = new Date();
+              now.setHours(0, 0, 0);
+              const date = new Date(now.getTime());
+              const minDay = date.getTime();
+              date.setDate(now.getDate() + 1);
+              const maxDay = date.getTime();
+              // @ts-ignore
+              navigate(routes.orders, { from: minDay, to: maxDay });
+            }}
+            style={styles.day}
+          >
             <Text style={styles.dayText}>{item.name}</Text>
             <Text style={styles.dayText}>{item.ids.length}</Text>
-          </View>
+          </Button>
         )}
       />
     </View>
@@ -88,6 +102,7 @@ const styles = StyleSheet.create({
     width,
     height,
     backgroundColor: colors.purple,
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 24,
@@ -95,7 +110,9 @@ const styles = StyleSheet.create({
   dayText: {
     color: colors.white,
     fontSize: 20,
+    width,
     fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
 

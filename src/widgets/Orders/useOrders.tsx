@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { where } from 'firebase/firestore';
+import { QueryFilterConstraint, where } from 'firebase/firestore';
 
 import { useActions, useFirestore, useTypedSelector } from '../../shared';
 import { IOrder } from './types';
@@ -28,6 +28,23 @@ export const useOrders = () => {
       );
 
       curOrders?.count > 0 && action?.setOrdersAC?.(curOrders);
+    } catch (error) {
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+  const onGetOrdersByQuery = async (
+    whereArr: QueryFilterConstraint[],
+    limitVal?: number,
+    save: boolean = true
+  ): Promise<{ result: IOrder[]; count: number }> => {
+    try {
+      setLoading(true);
+      const curOrders = await fbOrder.getAll(whereArr, limitVal);
+
+      curOrders?.count > 0 && save && action?.setOrdersAC?.(curOrders);
+      return curOrders;
     } catch (error) {
       throw error;
     } finally {
@@ -98,5 +115,6 @@ export const useOrders = () => {
     onUpdateOrder,
     onDeleteOrder,
     onGetNeareastOrder,
+    onGetOrdersByQuery,
   };
 };

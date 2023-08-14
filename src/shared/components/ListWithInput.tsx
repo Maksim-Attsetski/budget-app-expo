@@ -13,7 +13,7 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 
-import { Card, Gap, Input } from '../../UI';
+import { Card, Empty, Gap, Input } from '../../UI';
 import RefreshInput from './RefreshInput';
 import { QueryFilterConstraint } from 'firebase/firestore';
 
@@ -29,14 +29,8 @@ interface IProps {
   limitForInput?: number;
   inputPlaceholder?: string;
   loading?: boolean;
-  onRefresh?: (
-    whereArr?: QueryFilterConstraint[],
-    limitVal?: number,
-    save?: boolean
-  ) => Promise<{
-    result: any[];
-    count: number;
-  }>;
+  onRefresh?: any;
+  emptyText?: string;
 }
 
 const ListWithInput: FC<IProps> = ({
@@ -47,6 +41,7 @@ const ListWithInput: FC<IProps> = ({
   inputPlaceholder = '',
   onRefresh = () => {},
   loading = false,
+  emptyText = '',
 }) => {
   const scrollY = useSharedValue(0);
   const containerRef = useRef<Animated.ScrollView>();
@@ -112,7 +107,7 @@ const ListWithInput: FC<IProps> = ({
           setValue={setQuery}
           value={query}
           onBlur={onInputBlur}
-          autoFocus
+          autoFocus={isFocused}
         />
       )}
       <Gap y={5} />
@@ -132,13 +127,17 @@ const ListWithInput: FC<IProps> = ({
           </>
         ) : (
           <View onTouchStart={onInputBlur}>
-            {searchData.map((item, inx) => (
-              <Fragment key={inx}>
-                <Gap y={3} />
-                {renderItem(item, inx)}
-                <Gap y={3} />
-              </Fragment>
-            ))}
+            {searchData.length > 0 ? (
+              searchData.map((item, inx) => (
+                <Fragment key={inx}>
+                  <Gap y={3} />
+                  {renderItem(item, inx)}
+                  <Gap y={3} />
+                </Fragment>
+              ))
+            ) : (
+              <Empty>{emptyText}</Empty>
+            )}
           </View>
         )}
       </Animated.ScrollView>

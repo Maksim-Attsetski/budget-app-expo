@@ -5,6 +5,7 @@ import { getGreeting } from '../../shared';
 
 export enum routes {
   home = 'Home',
+  orders = 'Orders',
   stats = 'Stats',
   addBudget = 'Add_Budget',
   history = 'History',
@@ -26,6 +27,12 @@ export const screenList: IScrenList[] = [
     name: routes.home,
     component: screens.Home,
     title: getGreeting(),
+    animation,
+  },
+  {
+    name: routes.orders,
+    component: screens.Orders,
+    title: 'Все заказы',
     animation,
   },
   {
