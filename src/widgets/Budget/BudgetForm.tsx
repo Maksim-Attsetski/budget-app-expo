@@ -1,7 +1,13 @@
 import React, { FC, memo, useState } from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
+import {
+  Alert,
+  StyleSheet,
+  View,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 
-import { AccentButton, Gap, Input, Select } from '../../UI';
+import { AccentButton, Card, Gap, Input, Select } from '../../UI';
 import { IBudget, TBudgetType } from './types';
 import { useBudget } from './useBudget';
 
@@ -26,7 +32,7 @@ const BudgetForm: FC = () => {
     if (Number.isNaN(+newPrice)) {
       Alert.alert(
         'Не правильно указана цена',
-        'Исользуйте точку для деления цифр на нецелые числа'
+        'Используйте точку для деления цифр на нецелые числа'
       );
       return;
     }
@@ -53,22 +59,27 @@ const BudgetForm: FC = () => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      <Input
-        placeholder='Цена'
-        value={newPrice}
-        setValue={setNewPrice}
-        keyboardType='number-pad'
-        maxLength={5}
-      />
-      <Gap y={10} />
-      <Input
-        placeholder='Описание'
-        multiline
-        value={description}
-        setValue={setDescription}
-      />
-      <Gap y={10} />
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
+      <Card>
+        <Input
+          placeholder='Цена'
+          value={newPrice}
+          setValue={setNewPrice}
+          keyboardType='number-pad'
+          maxLength={5}
+        />
+        <Gap y={10} />
+        <Input
+          placeholder='Описание'
+          multiline
+          value={description}
+          setValue={setDescription}
+        />
+      </Card>
+      <Gap y={5} />
       <View style={styles.maxContent}>
         <Select
           title='Вид'
@@ -84,7 +95,7 @@ const BudgetForm: FC = () => {
       >
         Добавить
       </AccentButton>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -93,11 +104,8 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   button: {
-    position: 'absolute',
-    bottom: 20,
-    left: 0,
-    right: 0,
-    zIndex: 10,
+    marginTop: 'auto',
+    marginBottom: 10,
   },
 });
 

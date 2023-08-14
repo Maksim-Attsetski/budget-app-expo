@@ -1,5 +1,5 @@
-import React, { FC, memo, useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, Animated } from 'react-native';
+import React, { FC, Fragment, memo, useEffect, useRef, useState } from 'react';
+import { View, StyleSheet, Animated, Dimensions } from 'react-native';
 
 import Text from './Text';
 import { Button } from './Button';
@@ -17,7 +17,9 @@ interface IProps {
   title?: string;
 }
 
-const paddingHorizontal = 12;
+const paddingHorizontal = 16;
+const optionWidth = Dimensions.get('screen').width - paddingHorizontal * 2;
+const textProps = { style: { fontSize: 20 } };
 
 const Select: FC<IProps> = ({ options, onChange, value, title }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -32,7 +34,7 @@ const Select: FC<IProps> = ({ options, onChange, value, title }) => {
 
   useEffect(() => {
     getTiming(opacity, isOpen ? 1 : 0);
-    getTiming(translateY, isOpen ? 20 : -20, 200);
+    getTiming(translateY, isOpen ? 30 : -20, 200);
   }, [isOpen]);
 
   const onPressOption = () => {
@@ -41,24 +43,36 @@ const Select: FC<IProps> = ({ options, onChange, value, title }) => {
 
   return (
     <>
-      {title && <Text style={{ marginVertical: 7 }}>{title}</Text>}
-      <View style={styles.container}>
-        <Button onPress={onPressOption} style={styles.title}>
+      {title && <Text style={styles.title}>{title}</Text>}
+      <View style={[styles.container, styles.option]}>
+        <Button textProps={textProps} onPress={onPressOption}>
           {value}
         </Button>
         <Animated.View
-          style={[styles.options, { opacity, transform: [{ translateY }] }]}
+          style={[
+            styles.options,
+            styles.option,
+            {
+              opacity,
+              transform: [{ translateY }],
+            },
+          ]}
         >
           {curOptions.map((el, inx) => (
-            <Button
-              key={inx}
-              onPress={() => {
-                onPressOption();
-                onChange(el);
-              }}
-            >
-              {el.name}
-            </Button>
+            <Fragment key={inx}>
+              {inx !== 0 && <View style={styles.divider} />}
+              <Button
+                textProps={textProps}
+                onPress={() => {
+                  if (value !== el.value) {
+                    onPressOption();
+                    isOpen && onChange(el);
+                  }
+                }}
+              >
+                {el.name}
+              </Button>
+            </Fragment>
           ))}
         </Animated.View>
       </View>
@@ -71,23 +85,34 @@ const getStyles = (backgroundColor: string) =>
     container: {
       position: 'relative',
       zIndex: 1,
-      borderRadius: 12,
-      paddingHorizontal,
-      paddingVertical: 7,
-      backgroundColor,
     },
     title: {
       zIndex: 3,
+      fontSize: 22,
+      fontWeight: '600',
+      letterSpacing: 0.5,
+      marginVertical: 7,
     },
     options: {
       position: 'absolute',
       top: '100%',
       left: 0,
       zIndex: 2,
+    },
+    option: {
+      width: optionWidth,
       borderRadius: 12,
       paddingHorizontal,
-      paddingVertical: 7,
+      paddingVertical: 12,
       backgroundColor,
+    },
+    divider: {
+      width: '100%',
+      height: 2,
+      backgroundColor: '#c1c1c1',
+      opacity: 0.4,
+      marginVertical: 10,
+      borderRadius: 12,
     },
   });
 
