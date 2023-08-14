@@ -86,11 +86,11 @@ const RefreshInput: FC<IProps> = ({
     const opacity = interpolate(scrollY.value, [100, 200], [1, 0], {
       extrapolateRight: Extrapolation.CLAMP,
     });
-    const rotate = interpolate(scrollY.value, [0, 200], [25, 0], {
+    const rotate = interpolate(scrollY.value, [0, 200], [720, 0], {
       extrapolateRight: Extrapolation.CLAMP,
     });
 
-    return { opacity, transform: [{ rotate: rotate + '' }] };
+    return { opacity, transform: [{ rotate: rotate + 'deg' }] };
   });
 
   return (

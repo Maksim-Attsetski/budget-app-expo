@@ -21,6 +21,7 @@ import { IOrder } from '../types';
 import { useOrders } from '../useOrders';
 import DealDateModal from './DealDateModal';
 import EditOrderView from './EditOrderView';
+import { routes } from '../../App/types';
 
 interface IProps {
   order: IOrder;
