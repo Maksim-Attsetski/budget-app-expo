@@ -7,7 +7,7 @@ import { IClient } from '../types';
 import { routes } from '../../App/types';
 import { useOrders } from '../../Orders';
 import { useClients } from '../useClients';
-import { Button, Card, Text } from '../../../UI';
+import { Button, Card, Gap, Text, Title } from '../../../UI';
 import { colors, dateHelper } from '../../../shared';
 
 interface IProps {
@@ -37,13 +37,12 @@ const ClientItem: FC<IProps> = ({ item, orderLoading = false }) => {
         onPress={() => navigate(routes.client, { id: item.uid })}
       >
         <>
-          <Text style={styles.title}>
+          <Title textAlign='left'>
             {item.name} {item.lastname}
-          </Text>
+          </Title>
+          <Gap y={3} />
           <Text>Контакты: {item.contacts}</Text>
-          <Text>
-            создано: {new Date(item.createdAt)?.toLocaleDateString('ru')}
-          </Text>
+          <Gap y={3} />
           {orderLoading ? (
             <Text>Ищем заказы...</Text>
           ) : harOrder ? (
@@ -66,10 +65,6 @@ const ClientItem: FC<IProps> = ({ item, orderLoading = false }) => {
 };
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 22,
-    marginBottom: 10,
-  },
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
