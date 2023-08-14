@@ -6,7 +6,7 @@ import { Layout } from '../widgets/App';
 import { ProgressChart, useBudget } from '../widgets/Budget';
 import { Text, Card, Gap, Flex, Button, Title } from '../UI';
 import { routes } from '../widgets/App/types';
-import { NearestOrder } from '../widgets/Orders';
+import { NearestOrder, OrderPerWeek } from '../widgets/Orders';
 
 const HomeScreen: FC<IScreen> = ({ navigation }) => {
   const { budget, setBudget, budgetLoading } = useBudget();
@@ -53,6 +53,7 @@ const HomeScreen: FC<IScreen> = ({ navigation }) => {
 
   return (
     <Layout>
+      <OrderPerWeek />
       <FlatList
         data={[]}
         renderItem={() => <></>}
