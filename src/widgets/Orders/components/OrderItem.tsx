@@ -62,7 +62,7 @@ const OrderItem: FC<IProps> = ({ order }) => {
                   color: !order.isDone ? colors.green : colors.purple,
                 }}
               >
-                {order.price}
+                {order.price > 0 ? order.price : 'Бесплатно'}
               </Title>
             </View>
             {order.description && (

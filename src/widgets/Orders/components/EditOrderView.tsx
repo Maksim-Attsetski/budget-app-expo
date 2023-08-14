@@ -3,6 +3,7 @@ import React, { Dispatch, FC, SetStateAction, memo, useState } from 'react';
 import { AccentButton, Card, DatePicker, Gap, Input, Title } from '../../../UI';
 import { useOrders } from '../useOrders';
 import { IOrder } from '../types';
+import { Alert } from 'react-native';
 
 interface IProps {
   order?: IOrder;
@@ -25,6 +26,13 @@ const EditOrderView: FC<IProps> = ({ setIsEdit, order }) => {
         order.dealAt !== dealAt ||
         order.description !== description ||
         +price !== order.price;
+
+      if (isNaN(+price)) {
+        return Alert.alert(
+          'Введите цену правильно',
+          'Разрешено использовать только цифры от 0 до 9'
+        );
+      }
 
       isNeedUpdate &&
         (await onUpdateOrder({
