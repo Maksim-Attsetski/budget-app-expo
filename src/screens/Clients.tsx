@@ -34,6 +34,7 @@ const Clients: FC = () => {
             inputPlaceholder='Введите имя пользователя'
             loading={clientLoading}
             onRefresh={onGetClients}
+            limitForInput={2}
           />
         </>
       </>

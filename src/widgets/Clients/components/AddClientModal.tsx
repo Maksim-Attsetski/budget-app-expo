@@ -34,9 +34,13 @@ const AddClientModal: FC<IProps> = ({
   const bottomSheetRef = useRef<BottomSheet>(null);
   const { backgroundColor } = useTheme();
 
-  const { addClientModalKey, setClientModalVisible, onAddClient } =
-    useClients();
-  const { onAddOrder } = useOrders();
+  const {
+    clientLoading,
+    addClientModalKey,
+    setClientModalVisible,
+    onAddClient,
+  } = useClients();
+  const { onAddOrder, orderLoading } = useOrders();
 
   const [contacts, setContacts] = useState(client?.contacts ?? '+375');
   const [description, setDescription] = useState('');
@@ -44,58 +48,70 @@ const AddClientModal: FC<IProps> = ({
   const [name, setName] = useState(client?.name ?? '');
   const [lastname, setLastname] = useState(client?.lastname ?? '');
   const [date, setDate] = useState(new Date());
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const curLoading = loading || clientLoading || orderLoading;
 
   const onPressAddClient = async () => {
+    if (curLoading) return;
     const regExp = /^\+375[0-9]{2}[0-9]{3}[0-9]{2}[0-9]{2}$/im;
 
     const getAlert = (msg: string): void => {
       Alert.alert('Не верно введены данные', msg);
     };
 
-    const isPhoneValid = regExp.test(contacts);
-    if (!isPhoneValid) {
-      return getAlert(
-        'Введите корректно номер телефона\nПример: +37529112223344'
-      );
-    }
-    if (name.length < 2) {
-      return getAlert('Слишком короткое имя');
-    }
-    if (lastname.length < 2) {
-      return getAlert('Слишком короткая фамилия');
-    }
-    if (price.length === 0) {
-      return getAlert('Введите цену');
-    }
-    if (Number.isNaN(+price)) {
-      return getAlert('Некорректная цена');
-    }
+    try {
+      setLoading(true);
 
-    if (client?.lastname.length > 0) {
-      await onAddOrder(client?.uid, {
-        dealAt: date.getTime(),
-        description,
-        price: +price,
-        clientUid: client?.uid,
-        isDone: false,
-        createdAt: Date.now(),
-        uid: '',
-      } as IOrder);
-    } else {
-      const uid = await onAddClient({
-        contacts, // #TODO дата заказа
-        lastname,
-        name,
-      } as IClient);
-      await onAddOrder(client?.uid, {
-        dealAt: date.getTime(),
-        description,
-        price: +price,
-        clientUid: uid,
-        isDone: false,
-        createdAt: Date.now(),
-        uid: '',
-      } as IOrder);
+      const isPhoneValid = regExp.test(contacts);
+      if (!isPhoneValid) {
+        return getAlert(
+          'Введите корректно номер телефона\nПример: +37529112223344'
+        );
+      }
+      if (name.length < 2) {
+        return getAlert('Слишком короткое имя');
+      }
+      if (lastname.length < 2) {
+        return getAlert('Слишком короткая фамилия');
+      }
+      if (price.length === 0) {
+        return getAlert('Введите цену');
+      }
+      if (Number.isNaN(+price)) {
+        return getAlert('Некорректная цена');
+      }
+
+      if (client?.lastname.length > 0) {
+        await onAddOrder(client?.uid, {
+          dealAt: date.getTime(),
+          description,
+          price: +price,
+          clientUid: client?.uid,
+          isDone: false,
+          createdAt: Date.now(),
+          uid: '',
+        } as IOrder);
+      } else {
+        const uid = await onAddClient({
+          contacts, // #TODO дата заказа
+          lastname,
+          name,
+        } as IClient);
+        await onAddOrder(client?.uid, {
+          dealAt: date.getTime(),
+          description,
+          price: +price,
+          clientUid: uid,
+          isDone: false,
+          createdAt: Date.now(),
+          uid: '',
+        } as IOrder);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
 
     setClientModalVisible('');
@@ -126,7 +142,7 @@ const AddClientModal: FC<IProps> = ({
       <Button
         style={icon ? {} : styles.button}
         onPress={() => setClientModalVisible(mKey)}
-        disabled={disabledBtn}
+        disabled={disabledBtn || curLoading}
       >
         <Title textColor='dark' size='small'>
           {icon ?? `Добавить ${client ? 'заказ' : 'клиента'}`}
@@ -195,7 +211,9 @@ const AddClientModal: FC<IProps> = ({
           <Gap y={7} />
           <DatePicker date={date} setDate={setDate} />
           <Gap y={7} />
-          <AccentButton onPress={onPressAddClient}>Подтвердить</AccentButton>
+          <AccentButton disabled={curLoading} onPress={onPressAddClient}>
+            Подтвердить
+          </AccentButton>
         </View>
       </BottomSheet>
     </>
