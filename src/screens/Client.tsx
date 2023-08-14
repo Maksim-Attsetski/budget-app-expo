@@ -2,7 +2,7 @@ import React, { FC, memo, useCallback, useEffect, useState } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import { where } from 'firebase/firestore';
 
-import { Card, Flex, Gap, Text, Title } from '../UI';
+import { Card, Flex, Gap, List, Text, Title } from '../UI';
 import { IScreen, colors } from '../shared';
 import { Layout } from '../widgets/App';
 import { AddClientModal, IClient, useClients } from '../widgets/Clients';
@@ -15,7 +15,7 @@ const Client: FC<IScreen> = ({ route }) => {
   const clientId: string = route.params?.id ?? '';
 
   const { onGetClients, setClientModalVisible, clientLoading } = useClients();
-  const { orders: ordersData, onGetOrders, orderLoading } = useOrders();
+  const { orders: ordersData } = useOrders();
 
   const [client, setClient] = useState<IClient | null>(null);
   const orders = ordersData.filter((el) => el.clientUid === clientId);
@@ -24,7 +24,6 @@ const Client: FC<IScreen> = ({ route }) => {
     if (clientId.length > 0) {
       const res = await onGetClients([where('uid', '==', clientId)], 10, false);
       res.count > 0 && setClient(res.result[0]);
-      await onGetOrders(clientId);
     }
   }, [clientId]);
 
@@ -42,52 +41,35 @@ const Client: FC<IScreen> = ({ route }) => {
       <AddClientModal mKey={mKey} disabledBtn={clientLoading} client={client} />
       <Gap y={5} />
 
-      {clientLoading ? (
-        <>
-          <Gap y={10} />
-          <Card
-            loading
-            style={{ maxHeight: 370 }}
-            rows={5}
-            rowHeight={50}
-            loadingText='Ищем такого клиента...'
-          />
-        </>
-      ) : client ? (
-        <>
-          <FlatList
-            ListHeaderComponent={
-              <>
-                <Text style={styles.title}>
-                  {client.name} {client.lastname}
-                </Text>
-                <Gap y={7} />
-                <Title size='small' textAlign='left'>
-                  {client.contacts}
-                </Title>
-                <Gap y={7} />
-                <Flex justify='space-around'>
-                  <Title>Заказы</Title>
-                </Flex>
-                <Gap y={7} />
-              </>
-            }
-            scrollEnabled
-            scrollsToTop
-            nestedScrollEnabled
-            data={orders}
-            ItemSeparatorComponent={() => <Gap y={7} />}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => <OrderItem order={item} />}
-            keyExtractor={(item) => item.uid}
-            refreshing={orderLoading}
-            onRefresh={onGetClient}
-            ListEmptyComponent={<Text>Пока не было заказов</Text>}
-          />
-        </>
-      ) : (
-        <Text>Клиент не найден</Text>
-      )}
+      <List
+        emptyText='Данный клиент еще ничего не заказывал'
+        loadingText='Ищем такого клиента...'
+        ListHeaderComponent={
+          <>
+            <Text style={styles.title}>
+              {client?.name} {client?.lastname}
+            </Text>
+            <Gap y={7} />
+            <Title size='small' textAlign='left'>
+              {client?.contacts}
+            </Title>
+            <Gap y={7} />
+            <Flex justify='space-around'>
+              <Title>Заказы</Title>
+            </Flex>
+            <Gap y={7} />
+          </>
+        }
+        scrollEnabled
+        scrollsToTop
+        data={orders}
+        ItemSeparatorComponent={() => <Gap y={7} />}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item }) => <OrderItem order={item} />}
+        keyExtractor={(item) => item.uid}
+        loading={clientLoading}
+        onRefresh={onGetClient}
+      />
     </Layout>
   );
 };

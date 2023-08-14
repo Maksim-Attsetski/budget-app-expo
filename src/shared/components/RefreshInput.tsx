@@ -13,10 +13,10 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import { colors, useTheme } from '../shared';
-import Input from './Input';
-import Card from './Card';
-import { Button } from './Button';
+import { colors, useTheme } from '..';
+import Input from '../../UI/Input';
+import Card from '../../UI/Card';
+import { Button } from '../../UI/Button';
 
 const { width } = Dimensions.get('window');
 
