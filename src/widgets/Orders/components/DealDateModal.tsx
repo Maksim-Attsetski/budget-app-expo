@@ -27,6 +27,7 @@ const DealDateModal: FC<IProps> = ({
         dealAt: date.getTime(),
         isDone: false,
       } as IOrder);
+      bottomSheetRef.current?.close();
     }
   };
   return (
@@ -42,6 +43,7 @@ const DealDateModal: FC<IProps> = ({
       <Title>Выберите дату</Title>
       <Gap y={7} />
       <DatePicker date={date} setDate={setDate} />
+      <Gap y={7} />
       <AccentButton onPress={onChangeDealDate}>Сохранить</AccentButton>
     </BottomSheet>
   );
