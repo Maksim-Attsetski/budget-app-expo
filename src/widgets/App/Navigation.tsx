@@ -26,6 +26,14 @@ const Navigation: FC = () => {
   const { color, backgroundColor, isDark } = useTheme(true);
   const fbVersion = useFirestore('zefirka-version');
 
+  const onDownloadUpdate = async (url: string, version: number) => {
+    await Linking.openURL(url);
+    await fbVersion.update('WWn0gkmHeG3U2VKJyXEK', {
+      userVersion: version,
+      lastUpdateAt: Date.now(),
+    });
+  };
+
   const checkVersion = async (): Promise<void> => {
     const response = await fbVersion.getAll([]);
     const version = response.result[0] as IVersion;
@@ -42,7 +50,8 @@ const Navigation: FC = () => {
           [
             {
               text: 'Скачать',
-              onPress: () => Linking.openURL(version.lastUpdate),
+              onPress: () =>
+                onDownloadUpdate(version.lastUpdate, version.version),
             },
             { text: 'Напомнить в следующий раз', onPress: () => {} },
           ],
