@@ -27,15 +27,12 @@ const Client: FC<IScreen> = ({ route }) => {
     }
   }, [clientId]);
 
-  const onOpenContact = useCallback(async () => {
+  const onOpenContact = async () => {
     if (client?.contacts) {
-      const canOpen = await Linking.canOpenURL(client?.contacts);
-      if (canOpen) {
-        const url = 'tel:' + client?.contacts;
-        await Linking.openURL(url);
-      }
+      const url = 'tel:' + client?.contacts;
+      await Linking.openURL(url);
     }
-  }, [client?.contacts]);
+  };
 
   useEffect(() => {
     onGetClient();
