@@ -11,9 +11,11 @@ import plus from './svg/PlusSvg';
 import rebuy from './svg/RebuySvg';
 import search from './svg/SearchSvg';
 import success from './svg/SuccessSvg';
+import setting from './svg/SettingSvg';
 
 export const Svg = {
   success,
+  setting,
   search,
   rebuy,
   plus,

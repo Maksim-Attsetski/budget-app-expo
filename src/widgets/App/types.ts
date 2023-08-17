@@ -4,6 +4,7 @@ import { screens } from '../../screens';
 export enum routes {
   home = 'Home',
   orders = 'Orders',
+  setting = 'Setting',
   menu = 'Menu',
   stats = 'Stats',
   addBudget = 'Add_Budget',
@@ -21,7 +22,6 @@ interface ITabList extends IList {
   icon: any;
 }
 interface IScrenList extends IList {
-  title: string;
   animation: StackAnimationTypes;
 }
 
@@ -31,37 +31,36 @@ export const screenList: IScrenList[] = [
   {
     name: routes.orders,
     component: screens.Orders,
-    title: 'Все заказы',
+    animation,
+  },
+  {
+    name: routes.setting,
+    component: screens.Setting,
     animation,
   },
   {
     name: routes.stats,
     component: screens.Stats,
-    title: 'Статистика',
     animation,
   },
   {
     name: routes.clients,
     component: screens.Clients,
-    title: 'Клиенты',
     animation,
   },
   {
     name: routes.client,
     component: screens.Client,
-    title: 'Клиент',
     animation,
   },
   {
     name: routes.history,
     component: screens.History,
-    title: 'История',
     animation,
   },
   {
     name: routes.successDeal,
     component: screens.SuccessDeal,
-    title: '',
     animation: 'slide_from_bottom',
   },
 ];

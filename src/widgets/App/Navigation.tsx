@@ -75,7 +75,6 @@ const Navigation: FC = () => {
             component={BottomTabs}
             options={{
               headerShown: false,
-              header: null,
             }}
           />
           {screenList.map(({ animation, component, name }) => (
@@ -86,7 +85,6 @@ const Navigation: FC = () => {
               options={{
                 headerShown: false,
                 animation,
-                header: null,
               }}
             />
           ))}
