@@ -2,7 +2,7 @@ import React, { FC, memo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Path, Svg } from 'react-native-svg';
 
-import { useTheme } from '../src/shared';
+import { useTheme } from '../../src/shared';
 
 interface IProps {
   stroke?: string;

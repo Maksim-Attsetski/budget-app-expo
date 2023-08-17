@@ -1,24 +1,14 @@
-import React, { Dispatch, FC, SetStateAction, memo } from 'react';
-import { TextInput } from 'react-native-gesture-handler';
+import React, { FC, memo } from 'react';
 import Animated, {
   useAnimatedStyle,
   interpolate,
   Extrapolation,
-  interpolateColor,
   SharedValue,
 } from 'react-native-reanimated';
-import {
-  Dimensions,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import { Dimensions, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+
 import { colors, useTheme } from '..';
-import Input from '../../UI/Input';
-import Card from '../../UI/Card';
-import { Button } from '../../UI/Button';
-import SearchSvg from '../../../assets/SearchSvg';
-import LoadingSvg from '../../../assets/LoadingSvg';
+import { Svg } from '../../../assets';
 
 const { width } = Dimensions.get('window');
 
@@ -95,7 +85,6 @@ const RefreshInput: FC<IProps> = ({
 
   return (
     <Animated.View style={[styles.inputContainer, inputS]}>
-      {/* <LoadingSvg /> */}
       <TouchableWithoutFeedback
         onPress={(e) => {
           e.stopPropagation();
@@ -110,10 +99,10 @@ const RefreshInput: FC<IProps> = ({
         </Animated.Text>
       </TouchableWithoutFeedback>
       <Animated.View style={[styles.search, searchS]}>
-        <SearchSvg />
+        <Svg.search />
       </Animated.View>
       <Animated.View style={[styles.search, loadSvgS]}>
-        <LoadingSvg stroke={colors.white} />
+        <Svg.loading stroke={colors.white} />
       </Animated.View>
       <Animated.View
         style={[

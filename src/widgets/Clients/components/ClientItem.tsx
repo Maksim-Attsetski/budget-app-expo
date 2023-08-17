@@ -2,13 +2,14 @@ import React, { FC, memo } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-import DeleteSvg from '../../../../assets/DeleteSvg';
 import { IClient } from '../types';
+import { Button, Card, Gap, Text, Title } from '../../../UI';
+import { colors, dateHelper } from '../../../shared';
+import { Svg } from '../../../../assets';
+
 import { routes } from '../../App/types';
 import { useOrders } from '../../Orders';
 import { useClients } from '../useClients';
-import { Button, Card, Gap, Text, Title } from '../../../UI';
-import { colors, dateHelper } from '../../../shared';
 
 interface IProps {
   item: IClient;
@@ -57,7 +58,7 @@ const ClientItem: FC<IProps> = ({ item, orderLoading = false }) => {
       </TouchableOpacity>
       <View style={styles.buttonsContainer}>
         <Button onPress={onClickDelete} style={[styles.deleteBtn, styles.btn]}>
-          <DeleteSvg stroke={colors.whiteBlock} />
+          <Svg.remove stroke={colors.whiteBlock} />
         </Button>
       </View>
     </Card>

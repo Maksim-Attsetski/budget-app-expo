@@ -3,19 +3,16 @@ import { FlatList, View } from 'react-native';
 
 import { Gap, Text, Title } from '../UI';
 import { IMenuItem, MenuItem } from '../shared';
+import { Svg } from '../../assets';
 import { Layout } from '../widgets/App';
 import { routes } from '../widgets/App/types';
-import ClientSvg from '../../assets/ClientSvg';
-import ChartSvg from '../../assets/ChartSvg';
-import HistorySvg from '../../assets/HistorySvg';
-import OrderSvg from '../../assets/OrderSvg';
 
 const Menu: FC = () => {
   const menuContent: IMenuItem[] = [
-    { name: 'Клиенты', to: routes.clients, value: '', icon: <ClientSvg /> },
-    { name: 'Заказы', to: routes.orders, value: '', icon: <OrderSvg /> },
-    { name: 'История', to: routes.history, value: '', icon: <HistorySvg /> },
-    { name: 'Статистика', to: routes.stats, value: '', icon: <ChartSvg /> },
+    { name: 'Клиенты', to: routes.clients, value: '', icon: <Svg.client /> },
+    { name: 'Заказы', to: routes.orders, value: '', icon: <Svg.order /> },
+    { name: 'История', to: routes.history, value: '', icon: <Svg.history /> },
+    { name: 'Статистика', to: routes.stats, value: '', icon: <Svg.chart /> },
   ];
 
   return (

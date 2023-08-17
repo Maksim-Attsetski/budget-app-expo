@@ -3,10 +3,6 @@ import { StyleSheet, View } from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import { useNavigation } from '@react-navigation/native';
 
-import DeleteSvg from '../../../../assets/DeleteSvg';
-import SuccessSvg from '../../../../assets/SuccessSvg';
-import EditSvg from '../../../../assets/EditSvg';
-import RebuySvg from '../../../../assets/RebuySvg';
 import {
   Card,
   Gap,
@@ -18,6 +14,8 @@ import {
 } from '../../../UI';
 import { colors, dateHelper } from '../../../shared';
 import { IOrder } from '../types';
+import { Svg } from '../../../../assets';
+
 import { useOrders } from '../useOrders';
 import DealDateModal from './DealDateModal';
 import EditOrderView from './EditOrderView';
@@ -78,7 +76,7 @@ const OrderItem: FC<IProps> = ({ order }) => {
                 onPress={() => onDeleteOrder(order.uid)}
                 style={[styles.deleteBtn, styles.btn]}
               >
-                <DeleteSvg stroke={colors.whiteBlock} />
+                <Svg.remove stroke={colors.whiteBlock} />
               </Button>
               {order?.isDone ? (
                 <>
@@ -86,7 +84,7 @@ const OrderItem: FC<IProps> = ({ order }) => {
                     onPress={onOpenDealDateModal}
                     style={[styles.editBtn, styles.btn]}
                   >
-                    <RebuySvg stroke={colors.whiteBlock} />
+                    <Svg.rebuy stroke={colors.whiteBlock} />
                   </Button>
                 </>
               ) : (
@@ -95,7 +93,7 @@ const OrderItem: FC<IProps> = ({ order }) => {
                     onPress={onOpenEditModal}
                     style={[styles.editBtn, styles.btn]}
                   >
-                    <EditSvg stroke={colors.whiteBlock} />
+                    <Svg.edit stroke={colors.whiteBlock} />
                   </Button>
                   <Button
                     onPress={() =>
@@ -107,7 +105,7 @@ const OrderItem: FC<IProps> = ({ order }) => {
                     }
                     style={[styles.successBtn, styles.btn]}
                   >
-                    <SuccessSvg stroke={colors.whiteBlock} />
+                    <Svg.success stroke={colors.whiteBlock} />
                   </Button>
                 </>
               )}

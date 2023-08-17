@@ -1,6 +1,6 @@
 import React, { FC, memo } from 'react';
 import { Circle, Path, Svg } from 'react-native-svg';
-import { useTheme } from '../src/shared';
+import { useTheme } from '../../src/shared';
 
 interface IProps {
   stroke?: string;

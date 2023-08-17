@@ -5,10 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { colors, useTheme } from '../../shared';
 import { routes } from './types';
 import { screens } from '../../screens';
-
-import HomeSvg from '../../../assets/HomeSvg';
-import PlusSvg from '../../../assets/PlusSvg';
-import MenuSvg from '../../../assets/MenuSvg';
+import { Svg } from '../../../assets';
 
 const TabStack = createBottomTabNavigator();
 
@@ -22,7 +19,7 @@ const BottomTabs: FC = () => {
         component={screens.Home}
         options={{
           tabBarIcon: ({ focused }) => (
-            <HomeSvg stroke={focused ? colors.purple : undefined} />
+            <Svg.home stroke={focused ? colors.purple : undefined} />
           ),
           title: '',
           tabBarLabelStyle: { height: 0 },
@@ -33,7 +30,7 @@ const BottomTabs: FC = () => {
         name={routes.addBudget}
         component={screens.AddBudget}
         options={{
-          tabBarIcon: () => <PlusSvg />,
+          tabBarIcon: () => <Svg.plus />,
           title: '',
           tabBarLabelStyle: { height: 0 },
           tabBarStyle: { height: 60 },
@@ -45,7 +42,7 @@ const BottomTabs: FC = () => {
         key={routes.menu}
         options={{
           tabBarIcon: ({ focused }) => (
-            <MenuSvg stroke={focused ? colors.purple : undefined} />
+            <Svg.menu stroke={focused ? colors.purple : undefined} />
           ),
           title: '',
           tabBarLabelStyle: { height: 0 },

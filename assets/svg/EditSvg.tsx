@@ -1,6 +1,6 @@
 import React, { FC, memo } from 'react';
 import { ClipPath, Defs, G, Path, Rect, Svg } from 'react-native-svg';
-import { useTheme } from '../src/shared';
+import { useTheme } from '../../src/shared';
 
 interface IProps {
   strokeWidth?: number;
