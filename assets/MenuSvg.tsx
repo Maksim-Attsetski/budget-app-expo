@@ -9,7 +9,7 @@ interface IProps {
   fill?: string;
 }
 
-const LoadingSvg: FC<IProps> = ({ strokeWidth = 4, stroke = null }) => {
+const MenuSvg: FC<IProps> = ({ strokeWidth = 4, stroke = null }) => {
   const { color } = useTheme();
 
   const strokeColor = stroke ?? color;
@@ -40,4 +40,4 @@ const LoadingSvg: FC<IProps> = ({ strokeWidth = 4, stroke = null }) => {
   );
 };
 
-export default memo(LoadingSvg);
+export default memo(MenuSvg);

@@ -1,11 +1,9 @@
 import React, { FC, memo, useCallback, useEffect } from 'react';
-import { View } from 'react-native';
+import { where } from 'firebase/firestore';
 
-import { Text } from '../UI';
 import { Layout } from '../widgets/App';
 import { IScreen, ListWithInput } from '../shared';
 import { IOrder, OrderItem, useOrders } from '../widgets/Orders';
-import { where } from 'firebase/firestore';
 
 const minDateDefault = new Date();
 minDateDefault.setDate(1);
@@ -18,7 +16,7 @@ const Orders: FC<IScreen> = ({ route }) => {
   // @ts-ignore
   const from = route.params?.from ?? minDateDefault.getTime();
   // @ts-ignore
-  const to = route.params?.to ?? minDateDefault.getTime();
+  const to = route.params?.to ?? maxDateDefault.getTime();
 
   const onCheckOrders = useCallback(async () => {
     if (from && to) {
