@@ -141,10 +141,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors?.green,
   },
   deleteBtn: {
-    backgroundColor: colors.red,
+    backgroundColor: colors?.red,
   },
   editBtn: {
-    backgroundColor: colors.orange,
+    backgroundColor: colors?.orange,
   },
 });
 

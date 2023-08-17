@@ -105,10 +105,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors?.green,
   },
   deleteBtn: {
-    backgroundColor: colors.red,
+    backgroundColor: colors?.red,
   },
   rebuyBtn: {
-    backgroundColor: colors.orange,
+    backgroundColor: colors?.orange,
   },
 });
 

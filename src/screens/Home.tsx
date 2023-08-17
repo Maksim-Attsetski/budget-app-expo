@@ -118,7 +118,7 @@ const HomeScreen: FC<IScreen> = ({ navigation }) => {
 const styles = StyleSheet.create({
   chartContainer: {
     padding: 20,
-    backgroundColor: colors.darkBlock,
+    backgroundColor: colors?.darkBlock,
     borderRadius: 20,
     marginVertical: 20,
   },

@@ -120,7 +120,7 @@ const getStyles = (backgroundColor: string) =>
       alignItems: 'center',
     },
     cancel: {
-      backgroundColor: colors.red,
+      backgroundColor: colors?.red,
     },
     home: {
       backgroundColor: colors.whiteBlock,
