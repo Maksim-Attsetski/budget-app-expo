@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 20,
     width: '100%',
-    backgroundColor: colors.green,
+    backgroundColor: colors?.green,
     borderRadius: 12,
     alignItems: 'center',
   },

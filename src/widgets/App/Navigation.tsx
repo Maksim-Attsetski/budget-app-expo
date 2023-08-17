@@ -4,10 +4,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as Linking from 'expo-linking';
 import { Alert } from 'react-native';
 
-import { screenList } from './types';
-import { useFirestore, useTheme } from '../../shared';
-import { useBudget } from '../Budget';
-import { useClients } from '../Clients';
+import { routes, screenList } from './types';
+import { useFirestore } from '../../shared';
+
+import BottomTabs from './BottomTabs';
 
 const prefix = Linking.createURL('/', { scheme: 'budgetapp' });
 const linking = { prefixes: [prefix] };
@@ -23,7 +23,6 @@ interface IVersion {
 }
 
 const Navigation: FC = () => {
-  const { color, backgroundColor, isDark } = useTheme(true);
   const fbVersion = useFirestore('zefirka-version');
 
   const onDownloadUpdate = async (url: string, version: number) => {
@@ -70,24 +69,24 @@ const Navigation: FC = () => {
   return (
     <>
       <NavigationContainer linking={linking}>
-        <Stack.Navigator
-          screenOptions={{
-            statusBarStyle: isDark ? 'light' : 'dark',
-            statusBarColor: backgroundColor,
-            headerTintColor: color,
-          }}
-        >
-          {screenList.map(({ component, name, title, animation }) => (
+        <Stack.Navigator>
+          <Stack.Screen
+            name={routes.home}
+            component={BottomTabs}
+            options={{
+              headerShown: false,
+              header: null,
+            }}
+          />
+          {screenList.map(({ animation, component, name }) => (
             <Stack.Screen
               name={name}
               component={component}
               key={name}
               options={{
-                title,
+                headerShown: false,
                 animation,
-                headerStyle: { backgroundColor },
-                headerTitleStyle: { color },
-                headerShown: title.length > 0,
+                header: null,
               }}
             />
           ))}

@@ -59,7 +59,7 @@ const OrderItem: FC<IProps> = ({ order }) => {
               <Title
                 size='small'
                 style={{
-                  color: !order.isDone ? colors.green : colors.purple,
+                  color: !order.isDone ? colors?.green : colors.purple,
                 }}
               >
                 {order.price > 0 ? order.price : 'Бесплатно'}
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
   successBtn: {
-    backgroundColor: colors.green,
+    backgroundColor: colors?.green,
   },
   deleteBtn: {
     backgroundColor: colors.red,

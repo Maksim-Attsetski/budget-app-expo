@@ -50,7 +50,7 @@ const NearestOrder: FC = () => {
               </>
             )}
           <Flex justify='space-between'>
-            <Text style={{ color: colors.green, fontSize: 22 }}>
+            <Text style={{ color: colors?.green, fontSize: 22 }}>
               +{nearestOrder?.price} р.
             </Text>
             <Text>

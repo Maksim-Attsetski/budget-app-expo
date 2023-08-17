@@ -28,7 +28,7 @@ const HomeScreen: FC<IScreen> = ({ navigation }) => {
 
     const data = {
       first: {
-        color: colors.green,
+        color: colors?.green,
         value: incValue || 0,
         title: 'Доходы',
       },
@@ -47,13 +47,13 @@ const HomeScreen: FC<IScreen> = ({ navigation }) => {
     navigation.navigate(routes.history);
   };
 
-  useEffect(() => {
-    setBudget();
-  }, []);
+  // useEffect(() => {
+  //   setBudget();
+  // }, []);
 
   return (
     <Layout>
-      <OrderPerWeek />
+      {/* <OrderPerWeek /> */}
       <FlatList
         data={[]}
         renderItem={() => <></>}
@@ -98,7 +98,9 @@ const HomeScreen: FC<IScreen> = ({ navigation }) => {
                     size='small'
                     style={{
                       color:
-                        budget[0].type === 'inc' ? colors.green : colors.purple,
+                        budget[0].type === 'inc'
+                          ? colors?.green
+                          : colors.purple,
                     }}
                   >
                     {budget[0].type === 'inc' ? '+' : '-'} {budget[0].value} р.
@@ -125,7 +127,7 @@ const styles = StyleSheet.create({
   },
   profitText: {
     fontSize: 22,
-    color: colors.green,
+    color: colors?.green,
     fontWeight: 'bold',
   },
   lossText: {

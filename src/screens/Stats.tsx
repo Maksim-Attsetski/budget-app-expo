@@ -69,7 +69,7 @@ const Stats: FC = () => {
 
     const lines = [
       {
-        color: colors.green,
+        color: colors?.green,
         data: data.map((el) => el.count),
         label: 'В этом месяце',
       },
@@ -131,7 +131,7 @@ const Stats: FC = () => {
     const { dec, inc } = getMonthData();
     const lines = [
       {
-        color: colors.green,
+        color: colors?.green,
         data: inc.sort((a, b) => +a.name - +b.name).map((el) => el.count),
         label: 'Доходы',
       },

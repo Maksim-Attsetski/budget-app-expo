@@ -1,59 +1,58 @@
 import React, { FC, memo } from 'react';
-import { StyleSheet, View, ViewProps } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { StyleSheet } from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { Button } from '../../UI';
-import { useTheme } from '../../shared';
+import { colors, useTheme } from '../../shared';
 import { routes } from './types';
+import { screens } from '../../screens';
 
-import HomeSvg from '../../../assets/homeSvg';
+import HomeSvg from '../../../assets/HomeSvg';
 import PlusSvg from '../../../assets/PlusSvg';
-import ChartSvg from '../../../assets/ChartSvg';
-import HistorySvg from '../../../assets/HistorySvg';
-import ClientSvg from '../../../assets/ClientSvg';
+import MenuSvg from '../../../assets/MenuSvg';
 
-interface ITabProps extends ViewProps {
-  to: string;
-}
-
-const tabs = [
-  { to: routes.home, name: <HomeSvg /> },
-  { to: routes.clients, name: <ClientSvg /> },
-  {
-    to: routes.addBudget,
-    name: <PlusSvg />,
-  },
-  { to: routes.stats, name: <ChartSvg /> },
-  { to: routes.history, name: <HistorySvg /> },
-];
-
-const Tab: FC<ITabProps> = ({ to, children, ...props }) => {
-  const { navigate } = useNavigation();
-
-  return (
-    <View {...props}>
-      <Button
-        // @ts-ignore
-        onPress={() => navigate(to)}
-      >
-        {children}
-      </Button>
-    </View>
-  );
-};
+const TabStack = createBottomTabNavigator();
 
 const BottomTabs: FC = () => {
   const { backgroundColor } = useTheme();
-  const styles = getStyles(backgroundColor);
 
   return (
-    <View style={styles.container}>
-      {tabs.map(({ name, to }, inx) => (
-        <Tab style={styles.tab} key={inx} to={to}>
-          {name}
-        </Tab>
-      ))}
-    </View>
+    <TabStack.Navigator screenOptions={{ headerShown: false }}>
+      <TabStack.Screen
+        name={routes.home}
+        component={screens.Home}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <HomeSvg stroke={focused ? colors.purple : undefined} />
+          ),
+          title: '',
+          tabBarLabelStyle: { height: 0 },
+          tabBarStyle: { height: 60 },
+        }}
+      />
+      <TabStack.Screen
+        name={routes.addBudget}
+        component={screens.AddBudget}
+        options={{
+          tabBarIcon: () => <PlusSvg />,
+          title: '',
+          tabBarLabelStyle: { height: 0 },
+          tabBarStyle: { height: 60 },
+        }}
+      />
+      <TabStack.Screen
+        name={routes.menu}
+        component={screens.Menu}
+        key={routes.menu}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <MenuSvg stroke={focused ? colors.purple : undefined} />
+          ),
+          title: '',
+          tabBarLabelStyle: { height: 0 },
+          tabBarStyle: { height: 60 },
+        }}
+      />
+    </TabStack.Navigator>
   );
 };
 

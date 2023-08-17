@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import BottomTabs from './BottomTabs';
 import { colors, useTheme } from '../../shared';
 import { Gap } from '../../UI';
+import { StatusBar } from 'expo-status-bar';
 
 interface IProps extends PropsWithChildren {
   tabs?: boolean;
@@ -17,9 +18,8 @@ const Layout: FC<IProps> = ({ children, tabs = true }) => {
   return (
     <>
       <SafeAreaView style={styles.container}>
+        <StatusBar animated backgroundColor={colors.white} />
         {children}
-        <Gap y={40} />
-        {tabs && <BottomTabs />}
       </SafeAreaView>
     </>
   );

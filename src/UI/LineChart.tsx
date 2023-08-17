@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
   popup: {
     position: 'absolute',
     borderRadius: 12,
-    borderColor: colors.green,
+    borderColor: colors?.green,
     borderWidth: 1,
     borderStyle: 'solid',
     paddingVertical: 4,

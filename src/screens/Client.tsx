@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
   successBtn: {
-    backgroundColor: colors.green,
+    backgroundColor: colors?.green,
   },
   deleteBtn: {
     backgroundColor: colors.red,
