@@ -102,11 +102,11 @@ const RefreshInput: FC<IProps> = ({
         <Svg.search />
       </Animated.View>
       <Animated.View style={[styles.search, loadSvgS]}>
-        <Svg.loading stroke={colors.white} />
+        <Svg.loading stroke={colors?.white} />
       </Animated.View>
       <Animated.View
         style={[
-          { backgroundColor: colors.purple },
+          { backgroundColor: colors?.purple },
           styles.control,
           inputLoaderS,
         ]}

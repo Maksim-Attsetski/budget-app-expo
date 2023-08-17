@@ -14,12 +14,12 @@ interface IProps extends PropsWithChildren {
 
 const Layout: FC<IProps> = ({ children, header = true, headerProps = {} }) => {
   const { isDark } = useTheme();
-  const styles = getStyles(isDark ? colors.dark : colors.white);
+  const styles = getStyles(isDark ? colors.dark : colors?.white);
 
   return (
     <>
       <SafeAreaView style={StyleSheet.absoluteFill}>
-        <StatusBar animated backgroundColor={colors.white} />
+        <StatusBar animated backgroundColor={colors?.white} />
         {header && <Header {...headerProps} />}
         <View style={styles.container}>{children}</View>
       </SafeAreaView>

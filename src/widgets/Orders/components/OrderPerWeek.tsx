@@ -101,14 +101,14 @@ const styles = StyleSheet.create({
   day: {
     width,
     height,
-    backgroundColor: colors.purple,
+    backgroundColor: colors?.purple,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 24,
   },
   dayText: {
-    color: colors.white,
+    color: colors?.white,
     fontSize: 20,
     width,
     fontWeight: 'bold',

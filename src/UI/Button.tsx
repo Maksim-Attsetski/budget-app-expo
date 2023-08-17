@@ -43,7 +43,7 @@ export const AccentButton: FC<IButtonProps> = ({ style, ...props }) => {
     <Button
       {...props}
       style={[style, styles.accentBtn]}
-      textColor={colors.whiteBlock}
+      textColor={colors?.whiteBlock}
     />
   );
 };

@@ -33,7 +33,7 @@ const HomeScreen: FC<IScreen> = ({ navigation }) => {
         title: 'Доходы',
       },
       second: {
-        color: colors.purple,
+        color: colors?.purple,
         value: decValue || 0,
         title: 'Расходы',
       },
@@ -100,7 +100,7 @@ const HomeScreen: FC<IScreen> = ({ navigation }) => {
                       color:
                         budget[0].type === 'inc'
                           ? colors?.green
-                          : colors.purple,
+                          : colors?.purple,
                     }}
                   >
                     {budget[0].type === 'inc' ? '+' : '-'} {budget[0].value} р.
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   lossText: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: colors.purple,
+    color: colors?.purple,
   },
   layer: {
     position: 'absolute',

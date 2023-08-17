@@ -33,7 +33,7 @@ const BottomSheet: FC<IProps> = ({
   openTo = 2,
 }) => {
   const { isDark } = useTheme();
-  const styles = getStyles(isDark ? colors.dark : colors.white);
+  const styles = getStyles(isDark ? colors.dark : colors?.white);
 
   const top = useRef(new Animated.Value(screen.height)).current;
   const topContainer = useRef(new Animated.Value(0)).current;

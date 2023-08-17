@@ -58,7 +58,7 @@ const PieChart: FC<IProps> = ({ data }) => {
           y={labelY}
           textAnchor='middle'
           fontSize='12'
-          fill={colors.whiteBlock}
+          fill={colors?.whiteBlock}
         >
           {item.label}
         </Text>

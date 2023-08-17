@@ -136,7 +136,7 @@ const Stats: FC = () => {
         label: 'Доходы',
       },
       {
-        color: colors.purple,
+        color: colors?.purple,
         data: dec.sort((a, b) => +a.name - +b.name).map((el) => el.count),
         label: 'Расходы',
       },

@@ -19,7 +19,7 @@ const BottomTabs: FC = () => {
         component={screens.Home}
         options={{
           tabBarIcon: ({ focused }) => (
-            <Svg.home stroke={focused ? colors.purple : undefined} />
+            <Svg.home stroke={focused ? colors?.purple : undefined} />
           ),
           title: '',
           tabBarLabelStyle: { height: 0 },
@@ -42,7 +42,7 @@ const BottomTabs: FC = () => {
         key={routes.menu}
         options={{
           tabBarIcon: ({ focused }) => (
-            <Svg.menu stroke={focused ? colors.purple : undefined} />
+            <Svg.menu stroke={focused ? colors?.purple : undefined} />
           ),
           title: '',
           tabBarLabelStyle: { height: 0 },

@@ -47,7 +47,7 @@ const History: FC = () => {
             <Card key={item.uid}>
               <Text
                 style={{
-                  color: item.type === 'inc' ? colors?.green : colors.purple,
+                  color: item.type === 'inc' ? colors?.green : colors?.purple,
                   fontSize: 22,
                 }}
               >

@@ -36,7 +36,7 @@ const Input: FC<IProps> = ({
               ? backgroundColor
               : isDark
               ? colors.dark
-              : colors.white,
+              : colors?.white,
             opacity: disabled ? 0.6 : 1,
             color,
           },

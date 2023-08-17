@@ -58,7 +58,7 @@ const ClientItem: FC<IProps> = ({ item, orderLoading = false }) => {
       </TouchableOpacity>
       <View style={styles.buttonsContainer}>
         <Button onPress={onClickDelete} style={[styles.deleteBtn, styles.btn]}>
-          <Svg.remove stroke={colors.whiteBlock} />
+          <Svg.remove stroke={colors?.whiteBlock} />
         </Button>
       </View>
     </Card>

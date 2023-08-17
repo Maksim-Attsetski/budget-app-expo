@@ -57,7 +57,7 @@ const OrderItem: FC<IProps> = ({ order }) => {
               <Title
                 size='small'
                 style={{
-                  color: !order.isDone ? colors?.green : colors.purple,
+                  color: !order.isDone ? colors?.green : colors?.purple,
                 }}
               >
                 {order.price > 0 ? order.price : 'Бесплатно'}
@@ -76,7 +76,7 @@ const OrderItem: FC<IProps> = ({ order }) => {
                 onPress={() => onDeleteOrder(order.uid)}
                 style={[styles.deleteBtn, styles.btn]}
               >
-                <Svg.remove stroke={colors.whiteBlock} />
+                <Svg.remove stroke={colors?.whiteBlock} />
               </Button>
               {order?.isDone ? (
                 <>
@@ -84,7 +84,7 @@ const OrderItem: FC<IProps> = ({ order }) => {
                     onPress={onOpenDealDateModal}
                     style={[styles.editBtn, styles.btn]}
                   >
-                    <Svg.rebuy stroke={colors.whiteBlock} />
+                    <Svg.rebuy stroke={colors?.whiteBlock} />
                   </Button>
                 </>
               ) : (
@@ -93,7 +93,7 @@ const OrderItem: FC<IProps> = ({ order }) => {
                     onPress={onOpenEditModal}
                     style={[styles.editBtn, styles.btn]}
                   >
-                    <Svg.edit stroke={colors.whiteBlock} />
+                    <Svg.edit stroke={colors?.whiteBlock} />
                   </Button>
                   <Button
                     onPress={() =>
@@ -105,7 +105,7 @@ const OrderItem: FC<IProps> = ({ order }) => {
                     }
                     style={[styles.successBtn, styles.btn]}
                   >
-                    <Svg.success stroke={colors.whiteBlock} />
+                    <Svg.success stroke={colors?.whiteBlock} />
                   </Button>
                 </>
               )}

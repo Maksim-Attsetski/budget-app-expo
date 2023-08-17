@@ -15,7 +15,7 @@ const SuccessDeal: FC<IProps> = ({ route, navigation }) => {
   const { orders, onUpdateOrder } = useOrders();
   const { onCreate: onCreateDeal } = useBudget();
 
-  const styles = getStyles(isDark ? colors.dark : colors.white);
+  const styles = getStyles(isDark ? colors.dark : colors?.white);
   // @ts-ignore
   const client = route.params?.client as IClient | undefined;
   // @ts-ignore
@@ -64,7 +64,7 @@ const SuccessDeal: FC<IProps> = ({ route, navigation }) => {
             <View style={styles.buttonFlex}>
               <Button
                 style={[styles.button, styles.cancel]}
-                textColor={colors.whiteBlock}
+                textColor={colors?.whiteBlock}
                 onPress={onCancel}
               >
                 Отмена
@@ -123,7 +123,7 @@ const getStyles = (backgroundColor: string) =>
       backgroundColor: colors?.red,
     },
     home: {
-      backgroundColor: colors.whiteBlock,
+      backgroundColor: colors?.whiteBlock,
     },
   });
 

@@ -20,8 +20,8 @@ export const useTheme = (isChecker: boolean = false) => {
     }
   }, [colorScheme, isChecker, action.setThemeAC]);
 
-  const backgroundColor = isDark ? colors?.darkBlock : colors.whiteBlock;
-  const color = isDark ? colors.white : colors.dark;
+  const backgroundColor = isDark ? colors?.darkBlock : colors?.whiteBlock;
+  const color = isDark ? colors?.white : colors.dark;
 
   return { isDark, onToggleTheme, backgroundColor, color };
 };

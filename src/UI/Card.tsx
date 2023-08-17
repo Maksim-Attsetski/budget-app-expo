@@ -14,7 +14,7 @@ const Card: FC<IProps> = (props) => {
   const { backgroundColor, isDark } = useTheme();
   const styles = getStyles(
     props.rowHeight,
-    isDark ? colors.dark : colors.white
+    isDark ? colors.dark : colors?.white
   );
 
   return (

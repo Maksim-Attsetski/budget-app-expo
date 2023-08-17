@@ -33,7 +33,7 @@ const DatePicker: FC<IProps> = ({ date, setDate }) => {
   return (
     <Card
       style={{
-        backgroundColor: isDark ? colors.dark : colors.white,
+        backgroundColor: isDark ? colors.dark : colors?.white,
       }}
     >
       <Flex justify='space-between'>
