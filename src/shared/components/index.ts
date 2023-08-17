@@ -1,5 +1,6 @@
+import Header from './Header';
 import ListWithInput from './ListWithInput';
 import MenuItem from './MenuItem';
 import RefreshInput from './RefreshInput';
 
-export { MenuItem, RefreshInput, ListWithInput };
+export { Header, MenuItem, RefreshInput, ListWithInput };

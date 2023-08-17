@@ -3,6 +3,7 @@ import {
   ParamListBase,
   RouteProp,
 } from '@react-navigation/native';
+import { PropsWithChildren } from 'react';
 
 export interface IScreen {
   route: RouteProp<ParamListBase>;
@@ -14,4 +15,9 @@ export interface IMenuItem {
   value: any;
   to: string;
   icon: any;
+}
+
+export interface IHeaderProps extends PropsWithChildren {
+  left?: boolean;
+  right?: boolean;
 }

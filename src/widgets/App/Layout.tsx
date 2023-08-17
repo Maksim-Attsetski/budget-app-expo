@@ -1,25 +1,27 @@
 import React, { FC, PropsWithChildren, memo } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import BottomTabs from './BottomTabs';
-import { colors, useTheme } from '../../shared';
+import { Header, IHeaderProps, colors, useTheme } from '../../shared';
 import { Gap } from '../../UI';
 import { StatusBar } from 'expo-status-bar';
 
 interface IProps extends PropsWithChildren {
-  tabs?: boolean;
+  header?: boolean;
+  headerProps?: IHeaderProps;
 }
 
-const Layout: FC<IProps> = ({ children, tabs = true }) => {
+const Layout: FC<IProps> = ({ children, header = true, headerProps = {} }) => {
   const { isDark } = useTheme();
   const styles = getStyles(isDark ? colors.dark : colors.white);
 
   return (
     <>
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={StyleSheet.absoluteFill}>
         <StatusBar animated backgroundColor={colors.white} />
-        {children}
+        {header && <Header {...headerProps} />}
+        <View style={styles.container}>{children}</View>
       </SafeAreaView>
     </>
   );

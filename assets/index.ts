@@ -12,8 +12,10 @@ import rebuy from './svg/RebuySvg';
 import search from './svg/SearchSvg';
 import success from './svg/SuccessSvg';
 import setting from './svg/SettingSvg';
+import arrowLeft from './svg/ArrowLeftSvg';
 
 export const Svg = {
+  arrowLeft,
   success,
   setting,
   search,
