@@ -3,7 +3,14 @@ import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import BottomTabs from './BottomTabs';
-import { Header, IHeaderProps, colors, useTheme } from '../../shared';
+import {
+  AppLoading,
+  Header,
+  IHeaderProps,
+  colors,
+  useTheme,
+  useTypedSelector,
+} from '../../shared';
 import { Gap } from '../../UI';
 import { StatusBar } from 'expo-status-bar';
 
@@ -14,6 +21,8 @@ interface IProps extends PropsWithChildren {
 
 const Layout: FC<IProps> = ({ children, header = true, headerProps = {} }) => {
   const { isDark } = useTheme();
+  const { appLoading } = useTypedSelector((s) => s.app);
+
   const styles = getStyles(isDark ? colors.dark : colors?.white);
 
   return (
@@ -21,7 +30,9 @@ const Layout: FC<IProps> = ({ children, header = true, headerProps = {} }) => {
       <SafeAreaView style={StyleSheet.absoluteFill}>
         <StatusBar animated backgroundColor={colors?.white} />
         {header && <Header {...headerProps} />}
-        <View style={styles.container}>{children}</View>
+        <View style={styles.container}>
+          {appLoading ? <AppLoading /> : children}
+        </View>
       </SafeAreaView>
     </>
   );

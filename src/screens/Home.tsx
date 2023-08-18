@@ -47,13 +47,9 @@ const HomeScreen: FC<IScreen> = ({ navigation }) => {
     navigation.navigate(routes.history);
   };
 
-  // useEffect(() => {
-  //   setBudget();
-  // }, []);
-
   return (
     <Layout header={false}>
-      {/* <OrderPerWeek /> */}
+      <OrderPerWeek />
       <FlatList
         data={[]}
         renderItem={() => <></>}

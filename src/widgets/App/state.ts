@@ -2,10 +2,12 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 interface IState {
   isDark: boolean;
+  appLoading: boolean;
 }
 
 const initialState: IState = {
   isDark: false,
+  appLoading: true,
 };
 
 const appSlice = createSlice({
@@ -14,6 +16,9 @@ const appSlice = createSlice({
   reducers: {
     setThemeAC: (state: IState, action: PayloadAction<boolean>) => {
       state.isDark = action.payload;
+    },
+    setAppLoadingAC: (state: IState, action: PayloadAction<boolean>) => {
+      state.appLoading = action.payload;
     },
   },
 });

@@ -62,6 +62,29 @@ class DateHelper {
       minute: 'numeric',
     });
   }
+
+  getMinMaxPerWeek(): { minDay: number; maxDay: number } {
+    const now = new Date();
+    now.setHours(0, 0, 0);
+    const date = new Date(now.getTime());
+    date.setDate(date.getDate() - date.getDay() - 1);
+    const minDay = date.getTime();
+    date.setDate(date.getDate() + 7);
+    const maxDay = date.getTime();
+
+    return { minDay, maxDay };
+  }
+
+  getMinMaxPerDay(): { minDay: number; maxDay: number } {
+    const now = new Date();
+    now.setHours(0, 0, 0);
+    const date = new Date(now.getTime());
+    const minDay = date.getTime();
+    date.setDate(now.getDate() + 1);
+    const maxDay = date.getTime();
+
+    return { minDay, maxDay };
+  }
 }
 
 export const dateHelper = new DateHelper();

@@ -1,12 +1,13 @@
-import React, { FC, memo, useEffect } from 'react';
+import React, { FC, memo, useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as Linking from 'expo-linking';
 import { Alert } from 'react-native';
 
 import { routes, screenList } from './types';
-import { useFirestore } from '../../shared';
-
+import { useActions, useFirestore } from '../../shared';
+import { useClients } from '../Clients';
+import { useBudget } from '../Budget';
 import BottomTabs from './BottomTabs';
 
 const prefix = Linking.createURL('/', { scheme: 'budgetapp' });
@@ -24,6 +25,9 @@ interface IVersion {
 
 const Navigation: FC = () => {
   const fbVersion = useFirestore('zefirka-version');
+  const { onGetClients } = useClients();
+  const { setBudget } = useBudget();
+  const { action } = useActions();
 
   const onDownloadUpdate = async (url: string, version: number) => {
     await Linking.openURL(url);
@@ -62,35 +66,39 @@ const Navigation: FC = () => {
     }
   };
 
+  const onGetAll = async (): Promise<void> => {
+    try {
+      await Promise.all([checkVersion(), onGetClients(), setBudget()]);
+      console.log('get all');
+    } catch (error) {
+      console.log(error);
+    } finally {
+      action.setAppLoadingAC(false);
+    }
+  };
+
   useEffect(() => {
-    checkVersion();
+    onGetAll();
   }, []);
 
   return (
-    <>
-      <NavigationContainer linking={linking}>
-        <Stack.Navigator>
+    <NavigationContainer linking={linking}>
+      <Stack.Navigator>
+        <Stack.Screen
+          name={routes.home}
+          component={BottomTabs}
+          options={{ headerShown: false }}
+        />
+        {screenList.map(({ animation, component, name }) => (
           <Stack.Screen
-            name={routes.home}
-            component={BottomTabs}
-            options={{
-              headerShown: false,
-            }}
+            name={name}
+            component={component}
+            key={name}
+            options={{ headerShown: false, animation }}
           />
-          {screenList.map(({ animation, component, name }) => (
-            <Stack.Screen
-              name={name}
-              component={component}
-              key={name}
-              options={{
-                headerShown: false,
-                animation,
-              }}
-            />
-          ))}
-        </Stack.Navigator>
-      </NavigationContainer>
-    </>
+        ))}
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 

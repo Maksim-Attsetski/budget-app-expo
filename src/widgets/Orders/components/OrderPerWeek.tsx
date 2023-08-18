@@ -4,7 +4,12 @@ import { where } from 'firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 
 import { Button, Gap, Text } from '../../../UI';
-import { colors, useFirestore, useTypedSelector } from '../../../shared';
+import {
+  colors,
+  dateHelper,
+  useFirestore,
+  useTypedSelector,
+} from '../../../shared';
 import { IOrder } from '../types';
 import { routes } from '../../App/types';
 
@@ -32,15 +37,12 @@ const OrderPerWeek: FC = () => {
   const { orders: ordersData } = useTypedSelector((s) => s.orders);
   const { navigate } = useNavigation();
 
+  const styles = getStyles(colors);
+
   const onCheckOrdersForWeek = async () => {
     setLoading(true);
-    const now = new Date();
-    now.setHours(0, 0, 0);
-    const date = new Date(now.getTime());
-    date.setDate(date.getDate() - date.getDay() - 1);
-    const minDay = date.getTime();
-    date.setDate(date.getDate() + 7);
-    const maxDay = date.getTime();
+    const { minDay, maxDay } = dateHelper.getMinMaxPerWeek();
+
     try {
       const response = await fbOrders.getAll([
         where('dealAt', '>=', minDay),
@@ -77,12 +79,7 @@ const OrderPerWeek: FC = () => {
         renderItem={({ item }) => (
           <Button
             onPress={() => {
-              const now = new Date();
-              now.setHours(0, 0, 0);
-              const date = new Date(now.getTime());
-              const minDay = date.getTime();
-              date.setDate(now.getDate() + 1);
-              const maxDay = date.getTime();
+              const { minDay, maxDay } = dateHelper.getMinMaxPerDay();
               // @ts-ignore
               navigate(routes.orders, { from: minDay, to: maxDay });
             }}
@@ -97,23 +94,24 @@ const OrderPerWeek: FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  day: {
-    width,
-    height,
-    backgroundColor: colors?.purple,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 24,
-  },
-  dayText: {
-    color: colors?.white,
-    fontSize: 20,
-    width,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-});
+const getStyles = (_colors: typeof colors) =>
+  StyleSheet.create({
+    day: {
+      width,
+      height,
+      backgroundColor: _colors?.purple,
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: 24,
+    },
+    dayText: {
+      color: _colors?.white,
+      fontSize: 20,
+      width,
+      fontWeight: 'bold',
+      textAlign: 'center',
+    },
+  });
 
 export default memo(OrderPerWeek);
