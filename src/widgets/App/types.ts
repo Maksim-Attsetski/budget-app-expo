@@ -5,6 +5,7 @@ export enum routes {
   home = 'Home',
   orders = 'Orders',
   setting = 'Setting',
+  recipes = 'Recipes',
   menu = 'Menu',
   stats = 'Stats',
   addBudget = 'Add_Budget',
@@ -18,9 +19,7 @@ interface IList {
   name: routes;
   component: any;
 }
-interface ITabList extends IList {
-  icon: any;
-}
+
 interface IScrenList extends IList {
   animation: StackAnimationTypes;
 }
@@ -31,6 +30,11 @@ export const screenList: IScrenList[] = [
   {
     name: routes.orders,
     component: screens.Orders,
+    animation,
+  },
+  {
+    name: routes.recipes,
+    component: screens.Recipes,
     animation,
   },
   {

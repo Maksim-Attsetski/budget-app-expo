@@ -13,8 +13,10 @@ import search from './svg/SearchSvg';
 import success from './svg/SuccessSvg';
 import setting from './svg/SettingSvg';
 import arrowLeft from './svg/ArrowLeftSvg';
+import recipe from './svg/RecipeSvg';
 
 export const Svg = {
+  recipe,
   arrowLeft,
   success,
   setting,

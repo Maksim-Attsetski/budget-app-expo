@@ -15,10 +15,6 @@ const History: FC = () => {
         emptyText='Пустая история'
         loadingText='Подгружаем историю'
         loading={budgetLoading}
-        scrollEnabled
-        ItemSeparatorComponent={() => <Gap y={7} />}
-        showsVerticalScrollIndicator={false}
-        ListEmptyComponent={<Text>История пуста</Text>}
         refreshing={budgetLoading}
         onRefresh={setBudget}
         data={budget}

@@ -38,6 +38,7 @@ const List: FC<IProps> = ({
           ItemSeparatorComponent={() => <Gap y={7} />}
           showsVerticalScrollIndicator={false}
           refreshing={loading}
+          scrollEnabled
           ListEmptyComponent={<Empty>{emptyText}</Empty>}
         />
       )}

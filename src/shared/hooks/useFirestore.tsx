@@ -25,6 +25,7 @@ export type TCollectionId =
   | 'zefirka-clients'
   | 'zefirka-history'
   | 'zefirka-orders'
+  | 'zefirka-recipes'
   | 'zefirka-version'
   | 'zefirka-budget';
 

@@ -11,6 +11,7 @@ const Menu: FC = () => {
   const menuContent: IMenuItem[] = [
     { name: 'Клиенты', to: routes.clients, value: '', icon: <Svg.client /> },
     { name: 'Заказы', to: routes.orders, value: '', icon: <Svg.order /> },
+    { name: 'Рецепты', to: routes.recipes, value: '', icon: <Svg.recipe /> },
     { name: 'История', to: routes.history, value: '', icon: <Svg.history /> },
     { name: 'Статистика', to: routes.stats, value: '', icon: <Svg.chart /> },
     { name: 'Настройки', to: routes.setting, value: '', icon: <Svg.setting /> },

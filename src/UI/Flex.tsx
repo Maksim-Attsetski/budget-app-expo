@@ -1,5 +1,5 @@
 import React, { FC, memo } from 'react';
-import { FlexStyle, View, ViewProps } from 'react-native';
+import { FlexAlignType, FlexStyle, View, ViewProps } from 'react-native';
 
 interface IProps extends ViewProps {
   justify?:
@@ -9,9 +9,14 @@ interface IProps extends ViewProps {
     | 'space-between'
     | 'space-around'
     | 'space-evenly';
+  align?: FlexAlignType;
 }
 
-const Flex: FC<IProps> = ({ justify = 'center', ...props }) => {
+const Flex: FC<IProps> = ({
+  justify = 'center',
+  align = 'baseline',
+  ...props
+}) => {
   return (
     <View
       {...props}
@@ -23,7 +28,7 @@ const Flex: FC<IProps> = ({ justify = 'center', ...props }) => {
                 flexDirection: 'row',
                 flexWrap: 'wrap',
                 gap: 20,
-                alignItems: 'baseline',
+                alignItems: align,
                 justifyContent: justify,
               },
             ]

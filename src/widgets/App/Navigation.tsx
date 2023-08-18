@@ -10,6 +10,7 @@ import { useClients } from '../Clients';
 import { useBudget } from '../Budget';
 import BottomTabs from './BottomTabs';
 import { useOrders } from '../Orders';
+import { useRecipe } from '../Recipes';
 
 const prefix = Linking.createURL('/', { scheme: 'budgetapp' });
 const linking = { prefixes: [prefix] };
@@ -29,6 +30,7 @@ const Navigation: FC = () => {
   const { onGetClients } = useClients();
   const { onGetOrders } = useOrders();
   const { setBudget } = useBudget();
+  const { onGetRecipes } = useRecipe();
   const { action } = useActions();
 
   const onDownloadUpdate = async (url: string, version: number) => {
@@ -72,7 +74,12 @@ const Navigation: FC = () => {
     try {
       action.setAppLoadingAC(true);
 
-      await Promise.all([checkVersion(), onGetClients(), setBudget()]);
+      await Promise.all([
+        checkVersion(),
+        onGetClients(),
+        setBudget(),
+        onGetRecipes(),
+      ]);
       await checkVersion();
       const clients = await onGetClients();
       clients.result?.length > 0 &&

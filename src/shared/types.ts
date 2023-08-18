@@ -10,6 +10,11 @@ export interface IScreen {
   navigation: NavigationProp<ReactNavigation.RootParamList>;
 }
 
+export interface IResponse<T = any[]> {
+  count: number;
+  result: T[];
+}
+
 export interface IMenuItem {
   name: string;
   value: any;

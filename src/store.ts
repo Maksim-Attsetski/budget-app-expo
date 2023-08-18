@@ -5,12 +5,14 @@ import { budgetReducer } from './widgets/Budget';
 import { clientReducer } from './widgets/Clients';
 import { appReducer } from './widgets/App';
 import { orderReducer } from './widgets/Orders';
+import { recipeReducer } from './widgets/Recipes/state';
 
 const reducer = combineReducers({
   app: appReducer,
   budget: budgetReducer,
   clients: clientReducer,
   orders: orderReducer,
+  recipes: recipeReducer,
 });
 
 export const reduxStore = configureStore({
