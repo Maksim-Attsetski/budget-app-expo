@@ -43,7 +43,11 @@ const Client: FC<IScreen> = ({ route }) => {
   }, []);
 
   return (
-    <Layout>
+    <Layout
+      headerProps={{
+        children: client ? client?.name + ' ' + client?.lastname : '',
+      }}
+    >
       <Gap y={5} />
       <AddClientModal mKey={mKey} disabledBtn={clientLoading} client={client} />
       <Gap y={5} />

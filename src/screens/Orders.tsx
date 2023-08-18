@@ -32,7 +32,7 @@ const Orders: FC<IScreen> = ({ route }) => {
   }, []);
 
   return (
-    <Layout>
+    <Layout headerProps={{ children: 'Заказы' }}>
       <ListWithInput
         data={orders}
         renderItem={(item: IOrder) => <OrderItem order={item} />}

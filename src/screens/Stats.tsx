@@ -166,7 +166,7 @@ const Stats: FC = () => {
   }, []);
 
   return (
-    <Layout>
+    <Layout headerProps={{ children: 'Статистика' }}>
       <FlatList
         data={[]}
         renderItem={() => <></>}

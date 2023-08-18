@@ -17,27 +17,23 @@ const Clients: FC = () => {
   }, [clients]);
 
   return (
-    <Layout>
-      <>
-        <>
-          <Gap y={5} />
-          <AddClientModal mKey='clients_page_modal' />
-          <Gap y={5} />
-          <ListWithInput
-            data={clients}
-            renderItem={(item) => (
-              <ClientItem orderLoading={orderLoading} item={item} />
-            )}
-            search={(arr, val) =>
-              arr.filter((item) => (item.name + item.lastname).includes(val))
-            }
-            inputPlaceholder='Введите имя пользователя'
-            loading={clientLoading}
-            onRefresh={onGetClients}
-            limitForInput={2}
-          />
-        </>
-      </>
+    <Layout headerProps={{ children: 'Клиенты' }}>
+      <Gap y={5} />
+      <AddClientModal mKey='clients_page_modal' />
+      <Gap y={5} />
+      <ListWithInput
+        data={clients}
+        renderItem={(item) => (
+          <ClientItem orderLoading={orderLoading} item={item} />
+        )}
+        search={(arr, val) =>
+          arr.filter((item) => (item.name + item.lastname).includes(val))
+        }
+        inputPlaceholder='Введите имя пользователя'
+        loading={clientLoading}
+        onRefresh={onGetClients}
+        limitForInput={2}
+      />
     </Layout>
   );
 };

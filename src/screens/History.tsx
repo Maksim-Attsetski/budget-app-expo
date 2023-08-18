@@ -14,7 +14,7 @@ const History: FC = () => {
   }, []);
 
   return (
-    <Layout>
+    <Layout headerProps={{ children: 'История' }}>
       <Gap y={10} />
       {budgetLoading ? (
         <FlatList

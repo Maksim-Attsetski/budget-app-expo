@@ -17,7 +17,7 @@ const Menu: FC = () => {
   ];
 
   return (
-    <Layout>
+    <Layout header={false}>
       <Title>Меню</Title>
       <Gap y={7} />
       <FlatList

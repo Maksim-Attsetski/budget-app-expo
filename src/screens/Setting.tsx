@@ -5,7 +5,7 @@ import { Layout } from '../widgets/App';
 
 const Setting: FC = () => {
   return (
-    <Layout>
+    <Layout headerProps={{ children: 'Настройки' }}>
       <Text>Настройки</Text>
     </Layout>
   );

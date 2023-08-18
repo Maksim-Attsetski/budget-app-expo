@@ -6,7 +6,7 @@ import { BudgetForm } from '../widgets/Budget';
 
 const AddBudget: FC = () => {
   return (
-    <Layout>
+    <Layout header={false}>
       <Gap y={10} />
       <BudgetForm />
     </Layout>

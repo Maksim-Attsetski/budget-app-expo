@@ -52,7 +52,7 @@ const HomeScreen: FC<IScreen> = ({ navigation }) => {
   // }, []);
 
   return (
-    <Layout>
+    <Layout header={false}>
       {/* <OrderPerWeek /> */}
       <FlatList
         data={[]}
