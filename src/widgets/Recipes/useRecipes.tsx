@@ -18,8 +18,9 @@ export const useRecipe = () => {
     try {
       setLoading(true);
       const curRecipes = await fbRecipes.getAll(whereArr ?? [], limitVal);
+      console.log(...curRecipes.result);
 
-      curRecipes?.count > 0 && save && action?.setOrdersAC?.(curRecipes);
+      curRecipes?.count > 0 && save && action?.setRecipes?.(curRecipes);
       return curRecipes;
     } catch (error) {
       throw error;

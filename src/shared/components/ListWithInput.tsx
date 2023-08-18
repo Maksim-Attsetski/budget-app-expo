@@ -82,10 +82,6 @@ const ListWithInput: FC<IProps> = ({
   };
 
   useEffect(() => {
-    onRefresh();
-  }, []);
-
-  useEffect(() => {
     isNeedInput &&
       containerRef?.current?.scrollTo?.({ animated: true, x: 0, y: offsetY });
   }, [data, isNeedInput, containerRef]);

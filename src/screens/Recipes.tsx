@@ -1,9 +1,9 @@
 import React, { FC, memo } from 'react';
 
-import { colors, dateHelper } from '../shared';
-import { Card, Flex, Gap, List, Text, Title } from '../UI';
+import { ListWithInput } from '../shared';
+import { Card, Flex, Gap, Text, Title } from '../UI';
 import { Layout } from '../widgets/App';
-import { IRecipe, useRecipe } from '../widgets/Recipes';
+import { AddRecipeModal, IRecipe, useRecipe } from '../widgets/Recipes';
 
 const Recipes: FC = () => {
   const { recipes, onGetRecipes, recipeLoading } = useRecipe();
@@ -14,21 +14,28 @@ const Recipes: FC = () => {
 
   return (
     <Layout headerProps={{ children: 'Рецепты' }}>
-      <Gap y={10} />
-      <List
+      <Gap y={5} />
+      <AddRecipeModal />
+      <Gap y={7} />
+      <ListWithInput
+        search={(arr, query) =>
+          arr.length > 0
+            ? (arr as IRecipe[]).filter((el) => el?.name?.includes(query))
+            : []
+        }
+        inputPlaceholder='Поиск по названию'
+        limitForInput={4}
         emptyText='Вы не добавили ни одного рецепта'
-        loadingText='Подгружаем рецепты'
         loading={recipeLoading}
-        refreshing={recipeLoading}
         onRefresh={onRefresh}
         data={recipes}
-        renderItem={({ item }: { item: IRecipe }) => (
-          <Card key={item.uid}>
-            <Title>{item.name}</Title>
+        renderItem={(item) => (
+          <Card key={item?.uid}>
+            <Title>{item?.name || 'Пустое название'}</Title>
             <Gap y={7} />
             <Flex justify='space-between'>
-              <Text>{item.time}</Text>
-              <Text>{item.cost_price}</Text>
+              <Text>{item?.time} сек</Text>
+              <Text>{item?.cost_price} р.</Text>
             </Flex>
           </Card>
         )}
