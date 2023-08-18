@@ -9,6 +9,7 @@ import { useActions, useFirestore } from '../../shared';
 import { useClients } from '../Clients';
 import { useBudget } from '../Budget';
 import BottomTabs from './BottomTabs';
+import { useOrders } from '../Orders';
 
 const prefix = Linking.createURL('/', { scheme: 'budgetapp' });
 const linking = { prefixes: [prefix] };
@@ -26,6 +27,7 @@ interface IVersion {
 const Navigation: FC = () => {
   const fbVersion = useFirestore('zefirka-version');
   const { onGetClients } = useClients();
+  const { onGetOrders } = useOrders();
   const { setBudget } = useBudget();
   const { action } = useActions();
 
@@ -68,7 +70,13 @@ const Navigation: FC = () => {
 
   const onGetAll = async (): Promise<void> => {
     try {
+      action.setAppLoadingAC(true);
+
       await Promise.all([checkVersion(), onGetClients(), setBudget()]);
+      await checkVersion();
+      const clients = await onGetClients();
+      clients.result?.length > 0 &&
+        (await onGetOrders(clients.result?.map((el) => el.uid)));
       console.log('get all');
     } catch (error) {
       console.log(error);

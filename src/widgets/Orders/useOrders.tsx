@@ -14,7 +14,10 @@ export const useOrders = () => {
     (a, b) => a.dealAt - b.dealAt
   );
 
-  const onGetOrders = async (clientUid: string | string[]): Promise<void> => {
+  const onGetOrders = async (
+    clientUid: string | string[],
+    save: boolean = true
+  ): Promise<{ result: IOrder[]; count: number }> => {
     try {
       setLoading(true);
       const isArray = Array.isArray(clientUid);
@@ -27,7 +30,8 @@ export const useOrders = () => {
         isArray ? 10 * clientUid.length : 10
       );
 
-      curOrders?.count > 0 && action?.setOrdersAC?.(curOrders);
+      curOrders?.count > 0 && save && action?.setOrdersAC?.(curOrders);
+      return curOrders;
     } catch (error) {
       throw error;
     } finally {

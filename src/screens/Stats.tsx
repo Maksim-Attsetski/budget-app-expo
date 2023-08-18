@@ -1,32 +1,18 @@
 import React, { FC, memo, useEffect, useState } from 'react';
-import { FlatList, Share } from 'react-native';
+import { FlatList } from 'react-native';
 
-import {
-  Button,
-  Card,
-  Flex,
-  Gap,
-  LineChart,
-  PieChart,
-  Text,
-  Title,
-} from '../UI';
-import { Layout } from '../widgets/App';
+import { Card, Gap, LineChart, Title } from '../UI';
 import { colors, screen, useFirestore } from '../shared';
-import { IBudget, useBudget } from '../widgets/Budget';
+import { Layout } from '../widgets/App';
+import { IBudget } from '../widgets/Budget';
 import { IClient } from '../widgets/Clients';
 
+const defaultData = { lines: [], labels: [] };
 const Stats: FC = () => {
   const fbClients = useFirestore('zefirka-clients');
   const fbBudget = useFirestore('zefirka-budget');
-  const [clientsData, setClientsData] = useState({
-    lines: [],
-    labels: [],
-  });
-  const [budgetData, setBudgetData] = useState({
-    lines: [],
-    labels: [],
-  });
+  const [clientsData, setClientsData] = useState(defaultData);
+  const [budgetData, setBudgetData] = useState(defaultData);
   const [clientCount, setClientCount] = useState<number>(0);
   const [loading, setLoading] = useState(true);
 
@@ -81,6 +67,7 @@ const Stats: FC = () => {
     });
     setClientCount(obj[new Date().getMonth() + 1]);
   };
+
   const getBudgetData = async () => {
     const response = await fbBudget.getAll([], 999);
     const budget = response.result as IBudget[];
@@ -141,6 +128,7 @@ const Stats: FC = () => {
         label: 'Расходы',
       },
     ];
+
     setBudgetData({
       lines,
       labels: [...new Set([...inc, ...dec].map((el) => el.name))].sort(

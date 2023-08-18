@@ -2,8 +2,8 @@ import React, { FC, memo } from 'react';
 import { FlatList, FlatListProps } from 'react-native';
 
 import Gap from './Gap';
-import Card from './Card';
 import Empty from './Empty';
+import Skeleton from './Skeleton';
 
 interface IProps extends FlatListProps<any> {
   emptyText: string;
@@ -26,9 +26,8 @@ const List: FC<IProps> = ({
   return (
     <>
       {loading ? (
-        <Card
-          loading
-          style={{ maxHeight }}
+        <Skeleton
+          maxHeight={maxHeight}
           rows={rows}
           rowHeight={rowHeight}
           loadingText={loadingText}

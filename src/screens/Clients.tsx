@@ -1,20 +1,20 @@
-import React, { FC, memo, useEffect } from 'react';
+import React, { FC, memo } from 'react';
 
 import { Gap } from '../UI';
+import { ListWithInput } from '../shared';
 import { Layout } from '../widgets/App';
 import { AddClientModal, ClientItem, useClients } from '../widgets/Clients';
 import { useOrders } from '../widgets/Orders';
-import { ListWithInput } from '../shared';
 
 const Clients: FC = () => {
   const { clients, onGetClients, clientLoading } = useClients();
-  const { onGetOrders, orderLoading } = useOrders();
+  const { orderLoading, onGetOrders } = useOrders();
 
-  useEffect(() => {
-    if (clients && clients?.length > 0) {
-      onGetOrders(clients.map((el) => el.uid));
-    }
-  }, [clients]);
+  const onRefresh = async (): Promise<void> => {
+    const clients = await onGetClients();
+    clients.result?.length > 0 &&
+      (await onGetOrders(clients.result?.map((el) => el.uid)));
+  };
 
   return (
     <Layout headerProps={{ children: 'Клиенты' }}>
@@ -31,7 +31,7 @@ const Clients: FC = () => {
         }
         inputPlaceholder='Введите имя пользователя'
         loading={clientLoading}
-        onRefresh={onGetClients}
+        onRefresh={onRefresh}
         limitForInput={2}
       />
     </Layout>

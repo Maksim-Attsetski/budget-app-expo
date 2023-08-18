@@ -11,10 +11,12 @@ import LineChart from './LineChart';
 import List from './List';
 import PieChart from './PieChart';
 import Select from './Select';
+import Skeleton from './Skeleton';
 import Text from './Text';
 import Title from './Title';
 
 export {
+  Skeleton,
   List,
   Empty,
   DatePicker,

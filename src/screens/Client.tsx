@@ -2,7 +2,7 @@ import React, { FC, memo, useCallback, useEffect, useState } from 'react';
 import { FlatList, Linking, StyleSheet } from 'react-native';
 import { where } from 'firebase/firestore';
 
-import { Card, Flex, Gap, List, Text, Title } from '../UI';
+import { Card, Empty, Flex, Gap, List, Skeleton, Text, Title } from '../UI';
 import { IScreen, colors } from '../shared';
 import { Layout } from '../widgets/App';
 import { AddClientModal, IClient, useClients } from '../widgets/Clients';
@@ -14,25 +14,57 @@ const Client: FC<IScreen> = ({ route }) => {
   // @ts-ignore
   const clientId: string = route.params?.id ?? '';
 
-  const { onGetClients, setClientModalVisible, clientLoading } = useClients();
-  const { orders: ordersData } = useOrders();
+  const { clients, setClientModalVisible, clientLoading, onGetClients } =
+    useClients();
+  const { orders: ordersData, onGetOrders, orderLoading } = useOrders();
 
   const [client, setClient] = useState<IClient | null>(null);
-  const orders = ordersData.filter((el) => el.clientUid === clientId);
+  const [userOrders, setUserOrders] = useState([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const onGetClient = useCallback(async () => {
+  const onGetClient = useCallback((): void => {
     if (clientId.length > 0) {
-      const res = await onGetClients([where('uid', '==', clientId)], 10, false);
-      res.count > 0 && setClient(res.result[0]);
+      try {
+        setLoading(true);
+
+        const res = clients.find((item) => item.uid === clientId);
+        const orders = ordersData.filter((el) => el.clientUid === clientId);
+        res && setClient(res);
+        setUserOrders(orders);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  }, [clientId, ordersData]);
+
+  const onRefresh = useCallback(async (): Promise<void> => {
+    if (clientId.length > 0) {
+      try {
+        setLoading(true);
+        const res = await onGetClients([where('uid', '==', clientId)]);
+        res.result.length > 0 && setClient(res.result[0]);
+
+        const orderResponse = await onGetOrders(clientId);
+        setUserOrders(orderResponse.result);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
     }
   }, [clientId]);
 
-  const onOpenContact = async () => {
+  const onOpenContact = async (): Promise<void> => {
     if (client?.contacts) {
       const url = 'tel:' + client?.contacts;
       await Linking.openURL(url);
     }
   };
+
+  const allLoading = loading || clientLoading || orderLoading;
+  const userName = client ? client?.name + ' ' + client?.lastname : '';
 
   useEffect(() => {
     onGetClient();
@@ -40,14 +72,10 @@ const Client: FC<IScreen> = ({ route }) => {
     return () => {
       setClientModalVisible('');
     };
-  }, []);
+  }, [clientId]);
 
   return (
-    <Layout
-      headerProps={{
-        children: client ? client?.name + ' ' + client?.lastname : '',
-      }}
-    >
+    <Layout headerProps={{ children: userName }}>
       <Gap y={5} />
       <AddClientModal mKey={mKey} disabledBtn={clientLoading} client={client} />
       <Gap y={5} />
@@ -57,13 +85,17 @@ const Client: FC<IScreen> = ({ route }) => {
         loadingText='Ищем такого клиента...'
         ListHeaderComponent={
           <>
-            <Text style={styles.title}>
-              {client?.name} {client?.lastname}
-            </Text>
-            <Gap y={7} />
-            <Title size='small' onPress={onOpenContact} textAlign='left'>
-              {client?.contacts}
-            </Title>
+            {allLoading ? (
+              <Skeleton rows={3} rowHeight={30} maxHeight={150} />
+            ) : (
+              <>
+                <Text style={styles.title}>{userName}</Text>
+                <Gap y={7} />
+                <Title size='small' onPress={onOpenContact} textAlign='left'>
+                  {client?.contacts}
+                </Title>
+              </>
+            )}
             <Gap y={7} />
             <Flex justify='space-around'>
               <Title>Заказы</Title>
@@ -73,13 +105,13 @@ const Client: FC<IScreen> = ({ route }) => {
         }
         scrollEnabled
         scrollsToTop
-        data={orders}
+        data={userOrders}
         ItemSeparatorComponent={() => <Gap y={7} />}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => <OrderItem order={item} />}
         keyExtractor={(item) => item.uid}
         loading={clientLoading}
-        onRefresh={onGetClient}
+        onRefresh={onRefresh}
       />
     </Layout>
   );
