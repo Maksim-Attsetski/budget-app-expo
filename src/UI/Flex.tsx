@@ -10,29 +10,28 @@ interface IProps extends ViewProps {
     | 'space-around'
     | 'space-evenly';
   align?: FlexAlignType;
+  gap?: number;
 }
 
 const Flex: FC<IProps> = ({
   justify = 'center',
   align = 'baseline',
+  gap = 20,
   ...props
 }) => {
   return (
     <View
       {...props}
-      style={
-        props.style
-          ? []
-          : [
-              {
-                flexDirection: 'row',
-                flexWrap: 'wrap',
-                gap: 20,
-                alignItems: align,
-                justifyContent: justify,
-              },
-            ]
-      }
+      style={[
+        {
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          gap,
+          alignItems: align,
+          justifyContent: justify,
+        },
+        props.style,
+      ]}
     >
       {props.children}
     </View>

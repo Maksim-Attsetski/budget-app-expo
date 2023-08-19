@@ -1,16 +1,23 @@
 import React, { FC, memo } from 'react';
+import { TouchableOpacity } from 'react-native';
 
 import { ListWithInput } from '../shared';
-import { Card, Flex, Gap, Text, Title } from '../UI';
+import { Gap, Text } from '../UI';
 import { Layout } from '../widgets/App';
-import { AddRecipeModal, IRecipe, useRecipe } from '../widgets/Recipes';
+import {
+  AddRecipeModal,
+  IRecipe,
+  RecipeItem,
+  useRecipe,
+} from '../widgets/Recipes';
 
 const Recipes: FC = () => {
-  const { recipes, onGetRecipes, recipeLoading } = useRecipe();
+  const { recipes, onGetRecipes, recipeLoading, trash } = useRecipe();
 
   const onRefresh = async () => {
     await onGetRecipes([]);
   };
+  const itemCountInTrash = trash.reduce((acc, cur) => acc + cur.count, 0);
 
   return (
     <Layout headerProps={{ children: 'Рецепты' }}>
@@ -29,17 +36,20 @@ const Recipes: FC = () => {
         loading={recipeLoading}
         onRefresh={onRefresh}
         data={recipes}
-        renderItem={(item) => (
-          <Card key={item?.uid}>
-            <Title>{item?.name || 'Пустое название'}</Title>
-            <Gap y={7} />
-            <Flex justify='space-between'>
-              <Text>{item?.time} сек</Text>
-              <Text>{item?.cost_price} р.</Text>
-            </Flex>
-          </Card>
-        )}
+        renderItem={(item) => <RecipeItem recipe={item} key={item?.uid} />}
       />
+      <TouchableOpacity
+        style={{
+          marginLeft: 'auto',
+          marginBottom: 20,
+          marginRight: 20,
+          backgroundColor: 'white',
+          padding: 12,
+          borderRadius: 12,
+        }}
+      >
+        <Text>Корзина {itemCountInTrash > 0 ? itemCountInTrash : ''}</Text>
+      </TouchableOpacity>
     </Layout>
   );
 };

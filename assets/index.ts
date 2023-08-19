@@ -14,8 +14,10 @@ import success from './svg/SuccessSvg';
 import setting from './svg/SettingSvg';
 import arrowLeft from './svg/ArrowLeftSvg';
 import recipe from './svg/RecipeSvg';
+import minus from './svg/MinusSvg';
 
 export const Svg = {
+  minus,
   recipe,
   arrowLeft,
   success,

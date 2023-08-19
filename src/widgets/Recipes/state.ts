@@ -1,15 +1,17 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { IRecipe } from './types';
+import { IRecipe, ITrashItem } from './types';
 import { IResponse } from '../../shared';
 
 interface IState {
   recipes: IRecipe[];
   maxCount: number;
+  trash: ITrashItem[];
 }
 
 const initialState: IState = {
   maxCount: 0,
   recipes: [],
+  trash: [],
 };
 
 const recipeSlice = createSlice({
@@ -30,6 +32,25 @@ const recipeSlice = createSlice({
     },
     deleteRecipeAC: (state: IState, action: PayloadAction<string>) => {
       state.recipes = state.recipes.filter((el) => el.uid !== action.payload);
+    },
+    addTrashItemAC: (state: IState, action: PayloadAction<IRecipe>) => {
+      const trashItem = state.trash.find(
+        (el) => el.recipe.uid === action.payload.uid
+      );
+      if (trashItem) {
+        state.trash = state.trash.map((item) =>
+          trashItem.recipe.uid === item.recipe.uid
+            ? { ...item, count: item.count + 1 }
+            : item
+        );
+      } else {
+        state.trash = [...state.trash, { count: 1, recipe: action.payload }];
+      }
+    },
+    deleteTrashItemAC: (state: IState, action: PayloadAction<string>) => {
+      state.trash = state.trash.filter(
+        (item) => item.recipe.uid !== action.payload
+      );
     },
   },
 });

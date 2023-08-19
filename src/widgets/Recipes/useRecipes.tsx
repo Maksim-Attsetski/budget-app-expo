@@ -5,7 +5,7 @@ import { useActions, useFirestore, useTypedSelector } from '../../shared';
 import { IRecipe } from './types';
 
 export const useRecipe = () => {
-  const { maxCount, recipes } = useTypedSelector((s) => s.recipes);
+  const { maxCount, recipes, trash } = useTypedSelector((s) => s.recipes);
   const { action } = useActions();
   const fbRecipes = useFirestore('zefirka-recipes');
   const [loading, setLoading] = useState<boolean>(false);
@@ -18,8 +18,6 @@ export const useRecipe = () => {
     try {
       setLoading(true);
       const curRecipes = await fbRecipes.getAll(whereArr ?? [], limitVal);
-      console.log(...curRecipes.result);
-
       curRecipes?.count > 0 && save && action?.setRecipes?.(curRecipes);
       return curRecipes;
     } catch (error) {
@@ -70,6 +68,9 @@ export const useRecipe = () => {
     maxCount,
     recipes,
     recipeLoading: loading,
+    trash,
+    onAddToTrash: action.addTrashItemAC,
+    onDeleteFromTrash: action.deleteTrashItemAC,
     onGetRecipes,
     onAddRecipe,
     onUpdateRecipe,

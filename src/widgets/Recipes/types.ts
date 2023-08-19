@@ -7,3 +7,8 @@ export interface IRecipe {
   time: number;
   createdAt: number;
 }
+
+export interface ITrashItem {
+  recipe: IRecipe;
+  count: number;
+}
