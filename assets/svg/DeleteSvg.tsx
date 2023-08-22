@@ -5,15 +5,20 @@ import { useTheme } from '../../src/shared';
 interface IProps {
   strokeWidth?: number;
   stroke?: string;
+  size?: number;
 }
-const DeleteSvg: FC<IProps> = ({ strokeWidth = 4, stroke = null }) => {
+const DeleteSvg: FC<IProps> = ({
+  size = 24,
+  strokeWidth = 4,
+  stroke = null,
+}) => {
   const { color } = useTheme();
 
   const strokeColor = stroke || color;
 
   return (
     <>
-      <Svg width='24' height='24' viewBox='0 0 48 48' fill='none'>
+      <Svg width={size} height={size} viewBox='0 0 48 48' fill='none'>
         <Path
           d='M9 10V44H39V10H9Z'
           fill='none'
