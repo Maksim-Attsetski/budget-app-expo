@@ -48,7 +48,6 @@ const Trash: FC<IScreen> = ({ navigation }) => {
                     Готовить: {Math.floor(totalTime / 60)} мин.{' '}
                     {(totalTime % 60).toFixed(0)} сек.
                   </Text>
-                  <Text>Готовить: {totalTime} сек.</Text>
                   <Text>Трудозатраты: {laborCost} р.</Text>
                   <Gap y={5} />
                   <Title size='small' textAlign='left'>
