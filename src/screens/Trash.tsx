@@ -1,15 +1,15 @@
-import React, { FC, memo, useMemo } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { FC, memo } from 'react';
+import { StyleSheet } from 'react-native';
 
 import { Button, Card, Flex, Gap, List, Text, Title } from '../UI';
 import { IScreen } from '../shared';
 import { Layout, routes } from '../widgets/App';
 import { IRecipe, TrashBtns, useRecipe } from '../widgets/Recipes';
-
-const maxNameLength = 17;
+import { useSetting } from '../widgets/Setting';
 
 const Trash: FC<IScreen> = ({ navigation }) => {
   const { recipes, onGetRecipes, recipeLoading } = useRecipe();
+  const { margin, ratePerHour } = useSetting();
   const recipesInTrash = recipes.filter((el) => el.inTrash > 0);
 
   const totalPrice = recipesInTrash.reduce(
@@ -27,10 +27,10 @@ const Trash: FC<IScreen> = ({ navigation }) => {
     0
   );
 
-  const laborCost = totalTime * (15 / 3600);
+  const laborCost = totalTime * (ratePerHour / 3600);
 
   const totalProductCost =
-    laborCost + totalPrice + (laborCost + totalPrice) * 0.4;
+    laborCost + totalPrice + (laborCost + totalPrice) * margin;
 
   return (
     <Layout

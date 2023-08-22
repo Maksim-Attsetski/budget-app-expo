@@ -9,9 +9,7 @@ export const useSetting = () => {
   const fbStore = useFirestore('zefirka-setting');
 
   const onUpdateMargin = async (newMargin: string) => {
-    const curMargin = +newMargin.replaceAll('%', '') / 100;
-    console.log(curMargin);
-
+    const curMargin = Math.round(+newMargin.replaceAll('%', '') / 100);
     if (isNaN(curMargin)) return;
 
     fbStore.update(uid, { margin: curMargin });
