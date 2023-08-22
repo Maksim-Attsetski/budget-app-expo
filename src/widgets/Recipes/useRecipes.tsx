@@ -3,11 +3,14 @@ import { QueryFilterConstraint } from 'firebase/firestore';
 
 import { useActions, useFirestore, useTypedSelector } from '../../shared';
 import { IRecipe } from './types';
+import { useSetting } from '../Setting';
 
 export const useRecipe = () => {
   const { maxCount, recipes } = useTypedSelector((s) => s.recipes);
   const { action } = useActions();
   const fbRecipes = useFirestore('zefirka-recipes');
+  const { margin, ratePerHour } = useSetting();
+
   const [loading, setLoading] = useState<boolean>(false);
 
   const onGetRecipes = async (
@@ -64,10 +67,41 @@ export const useRecipe = () => {
     }
   };
 
+  const recipesInTrash = recipes.filter((el) => el.inTrash > 0);
+
+  const totalPrice = recipesInTrash.reduce(
+    (prev, cur) => prev + cur.cost_price * cur.inTrash,
+    0
+  );
+
+  const totalWeight = recipesInTrash.reduce(
+    (prev, cur) => prev + cur.weight * cur.inTrash,
+    0
+  );
+
+  const totalTime = recipesInTrash.reduce(
+    (prev, cur) => prev + cur.time * cur.inTrash,
+    0
+  );
+
+  const laborCost = totalTime * (ratePerHour / 3600);
+
+  const totalProductCost = +(
+    laborCost +
+    totalPrice +
+    (laborCost + totalPrice) * margin
+  ).toFixed(2);
+
   return {
     maxCount,
     recipes,
     recipeLoading: loading,
+    totalPrice,
+    totalTime,
+    totalWeight,
+    laborCost,
+    totalProductCost,
+    recipesInTrash,
     onGetRecipes,
     onAddRecipe,
     onUpdateRecipe,

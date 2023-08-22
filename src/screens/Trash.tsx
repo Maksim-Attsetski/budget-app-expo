@@ -5,32 +5,18 @@ import { Button, Card, Flex, Gap, List, Text, Title } from '../UI';
 import { IScreen } from '../shared';
 import { Layout, routes } from '../widgets/App';
 import { IRecipe, TrashBtns, useRecipe } from '../widgets/Recipes';
-import { useSetting } from '../widgets/Setting';
 
 const Trash: FC<IScreen> = ({ navigation }) => {
-  const { recipes, onGetRecipes, recipeLoading } = useRecipe();
-  const { margin, ratePerHour } = useSetting();
-  const recipesInTrash = recipes.filter((el) => el.inTrash > 0);
-
-  const totalPrice = recipesInTrash.reduce(
-    (prev, cur) => prev + cur.cost_price * cur.inTrash,
-    0
-  );
-
-  const totalWeight = recipesInTrash.reduce(
-    (prev, cur) => prev + cur.weight * cur.inTrash,
-    0
-  );
-
-  const totalTime = recipesInTrash.reduce(
-    (prev, cur) => prev + cur.time * cur.inTrash,
-    0
-  );
-
-  const laborCost = totalTime * (ratePerHour / 3600);
-
-  const totalProductCost =
-    laborCost + totalPrice + (laborCost + totalPrice) * margin;
+  const {
+    recipesInTrash,
+    laborCost,
+    totalPrice,
+    totalTime,
+    totalWeight,
+    totalProductCost,
+    onGetRecipes,
+    recipeLoading,
+  } = useRecipe();
 
   return (
     <Layout

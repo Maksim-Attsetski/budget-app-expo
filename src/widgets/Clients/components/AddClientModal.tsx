@@ -17,6 +17,7 @@ import { useClients } from '../useClients';
 import { IClient } from '../types';
 import { IOrder, useOrders } from '../../Orders';
 import { useTheme } from '../../../shared';
+import { useRecipe } from '../../Recipes';
 
 interface IProps {
   mKey: string;
@@ -40,6 +41,7 @@ const AddClientModal: FC<IProps> = ({
     setClientModalVisible,
     onAddClient,
   } = useClients();
+  const { totalProductCost, recipesInTrash } = useRecipe();
   const { onAddOrder, orderLoading } = useOrders();
 
   const [contacts, setContacts] = useState(client?.contacts ?? '+375');
@@ -123,6 +125,13 @@ const AddClientModal: FC<IProps> = ({
     setContacts(validPhone);
   };
 
+  const onLoadFromTrash = () => {
+    setPrice(totalProductCost.toString());
+    setDescription(
+      recipesInTrash.map((el) => `${el.name} x ${el.inTrash}`).join('\n')
+    );
+  };
+
   useEffect(() => {
     if (addClientModalKey.length > 0 && mKey === addClientModalKey) {
       setLastname(client?.lastname);
@@ -195,7 +204,7 @@ const AddClientModal: FC<IProps> = ({
               setValue={setPrice}
               value={price}
               keyboardType='numeric'
-              maxLength={4}
+              maxLength={8}
               viewProps={{ style: { flex: 1.5 } }}
               placeholder='Цена'
             />
@@ -210,6 +219,18 @@ const AddClientModal: FC<IProps> = ({
           />
           <Gap y={7} />
           <DatePicker date={date} setDate={setDate} />
+          {totalProductCost && totalProductCost > 0 && (
+            <>
+              <Gap y={7} />
+              <Button
+                style={styles.upload}
+                disabled={curLoading}
+                onPress={onLoadFromTrash}
+              >
+                Загрузить данные из корзины
+              </Button>
+            </>
+          )}
           <Gap y={7} />
           <AccentButton disabled={curLoading} onPress={onPressAddClient}>
             Подтвердить
@@ -231,6 +252,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 20,
     backgroundColor: 'white',
+    alignItems: 'center',
+  },
+  upload: {
+    paddingVertical: 12,
     alignItems: 'center',
   },
   buttonText: {
