@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "budget-app",
-    "slug": "Зефирка отц",
+    "slug": "budget-app",
     "version": "1.0.0",
     "scheme": "budgetapp",
     "orientation": "portrait",
