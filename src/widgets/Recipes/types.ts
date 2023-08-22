@@ -5,10 +5,6 @@ export interface IRecipe {
   cost_price: number;
   weight: number;
   time: number;
+  inTrash: number;
   createdAt: number;
-}
-
-export interface ITrashItem {
-  recipe: IRecipe;
-  count: number;
 }

@@ -1,36 +1,35 @@
-import React, { FC, memo, useState } from 'react';
+import React, { FC, memo, useMemo, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Flex, Text } from '../../../UI';
 import { colors } from '../../../shared';
 import { Svg } from '../../../../assets';
+import { useRecipe } from '../useRecipes';
+import { IRecipe } from '../types';
 
 interface IProps {
-  onPlus: Function;
-  onMinus: Function;
-  count?: number;
   maxCount?: number;
+  recipe: IRecipe;
 }
 
-const TrashBtns: FC<IProps> = ({
-  count = 0,
-  maxCount = 50,
-  onMinus,
-  onPlus,
-}) => {
-  const [counter, setCounter] = useState(count);
+const TrashBtns: FC<IProps> = ({ maxCount = 50, recipe }) => {
+  const { onUpdateRecipe } = useRecipe();
   const styles = getStyles(colors);
 
-  const onPressMinus = (): void => {
-    if (counter > 0) {
-      setCounter((prev) => (prev > 0 ? prev - 1 : prev));
-      onMinus(counter - 1);
+  const onPressMinus = async (): Promise<void> => {
+    if (recipe?.inTrash > 0) {
+      await onUpdateRecipe({
+        inTrash: recipe.inTrash - 1,
+        uid: recipe.uid,
+      } as IRecipe);
     }
   };
 
-  const onPressPlus = (): void => {
-    if (counter < maxCount) {
-      setCounter((prev) => (prev < maxCount ? prev + 1 : prev));
-      onPlus(counter + 1);
+  const onPressPlus = async (): Promise<void> => {
+    if (recipe?.inTrash < maxCount) {
+      await onUpdateRecipe({
+        inTrash: recipe.inTrash + 1,
+        uid: recipe.uid,
+      } as IRecipe);
     }
   };
 
@@ -40,7 +39,7 @@ const TrashBtns: FC<IProps> = ({
         <TouchableOpacity onPress={onPressMinus}>
           <Svg.minus />
         </TouchableOpacity>
-        {counter > 0 && <Text>{counter}</Text>}
+        {recipe?.inTrash > 0 && <Text>{recipe?.inTrash}</Text>}
         <TouchableOpacity onPress={onPressPlus}>
           <Svg.minus isPlus />
         </TouchableOpacity>
@@ -53,7 +52,6 @@ const getStyles = (_colors: typeof colors) =>
   StyleSheet.create({
     view: {
       backgroundColor: _colors?.white,
-      // width: 120,
       paddingVertical: 8,
       paddingHorizontal: 8,
       borderRadius: 20,

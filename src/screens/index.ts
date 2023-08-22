@@ -9,8 +9,10 @@ import Recipes from './Recipes';
 import Setting from './Setting';
 import Stats from './Stats';
 import SuccessDeal from './SuccessDeal';
+import Trash from './Trash';
 
 export const screens = {
+  Trash,
   Recipes,
   Setting,
   Menu,

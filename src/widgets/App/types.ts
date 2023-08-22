@@ -12,6 +12,7 @@ export enum routes {
   history = 'History',
   clients = 'Clients',
   client = 'Client',
+  trash = 'Trash',
   successDeal = 'Success_Deal',
 }
 
@@ -30,6 +31,11 @@ export const screenList: IScrenList[] = [
   {
     name: routes.orders,
     component: screens.Orders,
+    animation,
+  },
+  {
+    name: routes.trash,
+    component: screens.Trash,
     animation,
   },
   {

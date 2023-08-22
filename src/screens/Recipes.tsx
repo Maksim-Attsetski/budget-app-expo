@@ -1,7 +1,7 @@
-import React, { FC, memo } from 'react';
+import React, { FC, memo, useMemo } from 'react';
 import { TouchableOpacity } from 'react-native';
 
-import { ListWithInput } from '../shared';
+import { IScreen, ListWithInput } from '../shared';
 import { Gap, Text } from '../UI';
 import { Layout } from '../widgets/App';
 import {
@@ -10,14 +10,16 @@ import {
   RecipeItem,
   useRecipe,
 } from '../widgets/Recipes';
+import { routes } from '../widgets/App/types';
 
-const Recipes: FC = () => {
-  const { recipes, onGetRecipes, recipeLoading, trash } = useRecipe();
+const Recipes: FC<IScreen> = ({ navigation }) => {
+  const { recipes, onGetRecipes, recipeLoading } = useRecipe();
 
   const onRefresh = async () => {
     await onGetRecipes([]);
   };
-  const itemCountInTrash = trash.reduce((acc, cur) => acc + cur.count, 0);
+
+  const itemCountInTrash = recipes.reduce((acc, cur) => acc + cur.inTrash, 0);
 
   return (
     <Layout headerProps={{ children: 'Рецепты' }}>
@@ -31,7 +33,7 @@ const Recipes: FC = () => {
             : []
         }
         inputPlaceholder='Поиск по названию'
-        limitForInput={4}
+        limitForInput={2}
         emptyText='Вы не добавили ни одного рецепта'
         loading={recipeLoading}
         onRefresh={onRefresh}
@@ -47,6 +49,8 @@ const Recipes: FC = () => {
           padding: 12,
           borderRadius: 12,
         }}
+        // @ts-ignore
+        onPress={() => navigation.navigate(routes.trash)}
       >
         <Text>Корзина {itemCountInTrash > 0 ? itemCountInTrash : ''}</Text>
       </TouchableOpacity>
