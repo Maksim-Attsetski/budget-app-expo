@@ -22,13 +22,13 @@ const Header: FC<IHeaderProps> = ({ children, left = true, right }) => {
     <View style={[{ backgroundColor }, styles.header]}>
       {left ? (
         <TouchableOpacity onPress={() => canGoBack() && goBack()}>
-          {left && <Svg.arrowLeft />}
+          <Svg.arrowLeft />
         </TouchableOpacity>
       ) : (
         <DisabledArrow />
       )}
       <Title size='small'>{children}</Title>
-      <DisabledArrow />
+      {right ? right : <DisabledArrow />}
     </View>
   );
 };

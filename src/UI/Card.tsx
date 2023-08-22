@@ -1,7 +1,8 @@
 import React, { FC, memo } from 'react';
-import { StyleSheet, View, ViewProps } from 'react-native';
+import { StyleSheet, View, ViewProps, SafeAreaView } from 'react-native';
 import { colors, useTheme } from '../shared';
 import Text from './Text';
+import Animated from 'react-native-reanimated';
 
 interface IProps extends ViewProps {
   loading?: boolean;
@@ -29,7 +30,7 @@ const Card: FC<IProps> = (props) => {
           ))}
         </View>
       ) : (
-        props.children
+        props.children && props.children
       )}
     </View>
   );

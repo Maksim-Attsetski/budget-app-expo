@@ -35,10 +35,8 @@ const AddRecipeModal: FC = () => {
     if (isNaN(+weight)) {
       return getError('Вес должен быть числом');
     }
-    if (+weight < 1 || +time < 1 || +costPrice < 1) {
-      return getError(
-        'Заполните поля (вес, время приготовления и себестоимость)'
-      );
+    if (+costPrice === 0) {
+      return getError('Заполните поле себестоимость');
     }
 
     const result = await onGetRecipes([where('name', '==', name)], 10, false);
@@ -47,8 +45,8 @@ const AddRecipeModal: FC = () => {
         description,
         name,
         cost_price: +costPrice.replaceAll(' ', ''),
-        time: +time.replaceAll(' ', ''),
-        weight: +weight.replaceAll(' ', ''),
+        time: +time.replaceAll(' ', '') || 0,
+        weight: +weight.replaceAll(' ', '') || 0,
       } as IRecipe);
       setName('');
       setDescription('');

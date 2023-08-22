@@ -20,7 +20,7 @@ const RecipeItem: FC<IProps> = ({ recipe }) => {
           <Svg.remove size={20} />
         </TouchableOpacity>
       </View>
-      <Title>{recipe?.name || 'Пустое название'}</Title>
+      <Title size='small'>{recipe?.name || 'Пустое название'}</Title>
       <Gap y={7} />
       <Flex justify='space-between' align='center'>
         <Text style={{ opacity: 0.85 }}>{recipe?.time} сек</Text>
