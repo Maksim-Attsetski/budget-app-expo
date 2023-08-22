@@ -34,16 +34,14 @@ const TrashBtns: FC<IProps> = ({ maxCount = 50, recipe }) => {
   };
 
   return (
-    <Flex>
-      <Flex style={styles.view} align='center'>
-        <TouchableOpacity onPress={onPressMinus}>
-          <Svg.minus />
-        </TouchableOpacity>
-        {recipe?.inTrash > 0 && <Text>{recipe?.inTrash}</Text>}
-        <TouchableOpacity onPress={onPressPlus}>
-          <Svg.minus isPlus />
-        </TouchableOpacity>
-      </Flex>
+    <Flex style={styles.view} align='center'>
+      <TouchableOpacity onPress={onPressMinus}>
+        <Svg.minus />
+      </TouchableOpacity>
+      {recipe?.inTrash > 0 && <Text>{recipe?.inTrash}</Text>}
+      <TouchableOpacity onPress={onPressPlus}>
+        <Svg.minus isPlus />
+      </TouchableOpacity>
     </Flex>
   );
 };
