@@ -1,9 +1,9 @@
 import React, { FC, memo, useRef, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 
-import { AccentButton, Button, Gap, Input, Title } from '../../../UI';
-import { useTheme } from '../../../shared';
+import { AccentButton, Button, Flex, Gap, Input, Title } from '../../../UI';
+import { colors, useTheme } from '../../../shared';
 import { useRecipe } from '../useRecipes';
 import { where } from 'firebase/firestore';
 import { IRecipe } from '../types';
@@ -20,16 +20,43 @@ const AddRecipeModal: FC = () => {
   const [time, setTime] = useState('');
   const [weight, setWeight] = useState('');
 
+  const getError = (msg: string) => Alert.alert('Возникла ошибка!', msg);
+
   const onConfirmModal = async (): Promise<void> => {
+    if (name.length < 2) {
+      return getError('Название рецепта должно быть длиннее (2-40 символов)');
+    }
+    if (isNaN(+costPrice)) {
+      return getError('Себестоимость должна быть числом');
+    }
+    if (isNaN(+time)) {
+      return getError('Время приготовления должно быть числом');
+    }
+    if (isNaN(+weight)) {
+      return getError('Вес должен быть числом');
+    }
+    if (+weight < 1 || +time < 1 || +costPrice < 1) {
+      return getError(
+        'Заполните поля (вес, время приготовления и себестоимость)'
+      );
+    }
+
     const result = await onGetRecipes([where('name', '==', name)], 10, false);
     if (result.result.length === 0) {
       await onAddRecipe({
         description,
         name,
-        cost_price: +costPrice,
-        time: +time,
-        weight: +weight,
+        cost_price: +costPrice.replaceAll(' ', ''),
+        time: +time.replaceAll(' ', ''),
+        weight: +weight.replaceAll(' ', ''),
       } as IRecipe);
+      setName('');
+      setDescription('');
+      setCostPrice('');
+      setTime('');
+      setWeight('');
+    } else {
+      return getError('Рецепт с таким именем уже есть');
     }
     bottomSheetRef?.current?.close();
   };
@@ -48,40 +75,57 @@ const AddRecipeModal: FC = () => {
       <BottomSheet
         ref={bottomSheetRef}
         index={-1}
-        snapPoints={['75%', '100%']}
+        snapPoints={['60%', '100%']}
         containerStyle={{ zIndex: 2 }}
         enablePanDownToClose
         style={{ paddingHorizontal: 12 }}
         backgroundStyle={{ backgroundColor }}
       >
         <>
-          <Input value={name} setValue={setName} placeholder='Название' />
+          <Input
+            value={name}
+            maxLength={40}
+            setValue={setName}
+            placeholder='Название'
+          />
           <Gap y={5} />
           <Input
             value={description}
             setValue={setDescription}
             placeholder='Описание'
+            multiline
+            numberOfLines={2}
+            maxLength={400}
           />
           <Gap y={5} />
           <Input
             value={costPrice}
             setValue={setCostPrice}
             placeholder='Себестоимость'
+            keyboardType='number-pad'
+            maxLength={8}
           />
           <Gap y={5} />
-          <Input
-            value={time}
-            setValue={setTime}
-            placeholder='Время приготовления'
-          />
+          <Flex justify='space-between'>
+            <Input
+              value={time}
+              setValue={setTime}
+              placeholder='Время изг. (сек)'
+              keyboardType='number-pad'
+              maxLength={5}
+            />
+            <Input
+              value={weight}
+              setValue={setWeight}
+              placeholder='Кол-во грамм'
+              keyboardType='number-pad'
+              maxLength={5}
+            />
+          </Flex>
           <Gap y={5} />
-          <Input
-            value={weight}
-            setValue={setWeight}
-            placeholder='Кол-во грамм'
-          />
-          <Gap y={5} />
-          <AccentButton onPress={onConfirmModal}>Подтвердить</AccentButton>
+          <AccentButton style={styles.accent_button} onPress={onConfirmModal}>
+            Подтвердить
+          </AccentButton>
         </>
       </BottomSheet>
     </>
@@ -95,6 +139,7 @@ const styles = StyleSheet.create({
     gap: 20,
     justifyContent: 'space-between',
   },
+  accent_button: {},
   button: {
     paddingVertical: 20,
     paddingHorizontal: 32,

@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import {
-  StyleSheet,
   TextProps,
   TouchableOpacity,
   TouchableOpacityProps,
@@ -42,19 +41,19 @@ export const AccentButton: FC<IButtonProps> = ({ style, ...props }) => {
   return (
     <Button
       {...props}
-      style={[style, styles.accentBtn]}
+      style={[
+        style,
+        {
+          paddingHorizontal: 20,
+          paddingVertical: 20,
+          width: '100%',
+          backgroundColor: colors?.green,
+          borderRadius: 12,
+          alignItems: 'center',
+        },
+      ]}
       textColor={colors?.whiteBlock}
+      textProps={{ style: { fontSize: 20 } }}
     />
   );
 };
-
-const styles = StyleSheet.create({
-  accentBtn: {
-    paddingHorizontal: 20,
-    paddingVertical: 20,
-    width: '100%',
-    backgroundColor: colors?.green,
-    borderRadius: 12,
-    alignItems: 'center',
-  },
-});
