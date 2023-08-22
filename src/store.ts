@@ -6,6 +6,7 @@ import { clientReducer } from './widgets/Clients';
 import { appReducer } from './widgets/App';
 import { orderReducer } from './widgets/Orders';
 import { recipeReducer } from './widgets/Recipes/state';
+import { settingReducer } from './widgets/Setting';
 
 const reducer = combineReducers({
   app: appReducer,
@@ -13,6 +14,7 @@ const reducer = combineReducers({
   clients: clientReducer,
   orders: orderReducer,
   recipes: recipeReducer,
+  setting: settingReducer,
 });
 
 export const reduxStore = configureStore({

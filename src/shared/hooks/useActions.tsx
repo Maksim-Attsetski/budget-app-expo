@@ -7,6 +7,7 @@ import { clientActions } from '../../widgets/Clients';
 import { appActions } from '../../widgets/App';
 import { orderActions } from '../../widgets/Orders';
 import { recipeActions } from '../../widgets/Recipes/state';
+import { settingActions } from '../../widgets/Setting';
 
 export const useActions = () => {
   const dispatch = useTypedDispatch();
@@ -18,6 +19,7 @@ export const useActions = () => {
       ...appActions,
       ...orderActions,
       ...recipeActions,
+      ...settingActions,
     }),
     []
   );

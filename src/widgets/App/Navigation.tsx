@@ -11,6 +11,7 @@ import { useBudget } from '../Budget';
 import BottomTabs from './BottomTabs';
 import { useOrders } from '../Orders';
 import { useRecipe } from '../Recipes';
+import { useSetting } from '../Setting';
 
 const prefix = Linking.createURL('/', { scheme: 'budgetapp' });
 const linking = { prefixes: [prefix] };
@@ -28,6 +29,7 @@ interface IVersion {
 const Navigation: FC = () => {
   const fbVersion = useFirestore('zefirka-version');
   const { onGetClients } = useClients();
+  const { onGetSetting } = useSetting();
   const { onGetOrders } = useOrders();
   const { setBudget } = useBudget();
   const { onGetRecipes } = useRecipe();
@@ -79,6 +81,7 @@ const Navigation: FC = () => {
         onGetClients(),
         setBudget(),
         onGetRecipes(),
+        onGetSetting(),
       ]);
       await checkVersion();
       const clients = await onGetClients();

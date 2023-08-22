@@ -1,7 +1,7 @@
 import React, { FC, memo } from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList } from 'react-native';
 
-import { Gap, Text, Title } from '../UI';
+import { Gap, Title } from '../UI';
 import { IMenuItem, MenuItem } from '../shared';
 import { Svg } from '../../assets';
 import { Layout } from '../widgets/App';
