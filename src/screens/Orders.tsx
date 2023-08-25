@@ -28,7 +28,8 @@ const Orders: FC<IScreen> = ({ route }) => {
   }, [from, to]);
 
   useEffect(() => {
-    onCheckOrders();
+    // @ts-ignore
+    route.params?.from && onCheckOrders();
   }, []);
 
   return (
