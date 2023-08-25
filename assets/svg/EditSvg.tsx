@@ -6,11 +6,13 @@ interface IProps {
   strokeWidth?: number;
   stroke?: string;
   fill?: string;
+  size?: number;
 }
 const EditSvg: FC<IProps> = ({
   strokeWidth = 4,
   stroke = null,
   fill = 'none',
+  size = 24,
 }) => {
   const { color } = useTheme();
 
@@ -18,7 +20,7 @@ const EditSvg: FC<IProps> = ({
 
   return (
     <>
-      <Svg width='24' height='24' viewBox='0 0 48 48' fill={fill}>
+      <Svg width={size} height={size} viewBox='0 0 48 48' fill={fill}>
         <G clip-path='url(#icon-34832c752696ccc)'>
           <Path
             d='M30.9995 8.99902L38.9995 16.999'

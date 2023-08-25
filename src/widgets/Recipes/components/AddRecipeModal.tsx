@@ -1,4 +1,4 @@
-import React, { FC, memo, useRef, useState } from 'react';
+import React, { FC, memo, useEffect, useRef, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 
@@ -8,19 +8,32 @@ import { useRecipe } from '../useRecipes';
 import { where } from 'firebase/firestore';
 import { IRecipe } from '../types';
 
-const AddRecipeModal: FC = () => {
+interface IProps {
+  recipe?: IRecipe;
+  onClose?: () => void;
+}
+
+const AddRecipeModal: FC<IProps> = ({ recipe, onClose = () => {} }) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const { backgroundColor } = useTheme();
 
-  const { onGetRecipes, onAddRecipe } = useRecipe();
+  const { onGetRecipes, onAddRecipe, onUpdateRecipe } = useRecipe();
 
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [costPrice, setCostPrice] = useState('');
-  const [time, setTime] = useState('');
-  const [weight, setWeight] = useState('');
+  const [name, setName] = useState<string>(recipe?.name ?? '');
+  const [description, setDescription] = useState<string>('');
+  const [costPrice, setCostPrice] = useState<string>('');
+  const [time, setTime] = useState<string>('');
+  const [weight, setWeight] = useState<string>('');
 
   const getError = (msg: string) => Alert.alert('Возникла ошибка!', msg);
+
+  const changeModalState = (data?: IRecipe): void => {
+    setName(data?.name ?? '');
+    setDescription(data?.description ?? '');
+    setCostPrice('' + data?.cost_price ?? '');
+    setTime('' + data?.time ?? '');
+    setWeight('' + data?.weight ?? '');
+  };
 
   const onConfirmModal = async (): Promise<void> => {
     if (name.length < 2) {
@@ -40,6 +53,23 @@ const AddRecipeModal: FC = () => {
     }
 
     const result = await onGetRecipes([where('name', '==', name)], 10, false);
+    if (
+      recipe &&
+      (result.result.length === 0 || result.result[0].name === recipe?.name)
+    ) {
+      await onUpdateRecipe({
+        ...recipe,
+        description,
+        name,
+        cost_price: +costPrice.replaceAll(' ', ''),
+        time: +time.replaceAll(' ', '') || 0,
+        weight: +weight.replaceAll(' ', '') || 0,
+      } as IRecipe);
+      changeModalState();
+      bottomSheetRef?.current?.close();
+      return;
+    }
+
     if (result.result.length === 0) {
       await onAddRecipe({
         description,
@@ -48,16 +78,22 @@ const AddRecipeModal: FC = () => {
         time: +time.replaceAll(' ', '') || 0,
         weight: +weight.replaceAll(' ', '') || 0,
       } as IRecipe);
-      setName('');
-      setDescription('');
-      setCostPrice('');
-      setTime('');
-      setWeight('');
+      changeModalState();
     } else {
       return getError('Рецепт с таким именем уже есть');
     }
+
     bottomSheetRef?.current?.close();
   };
+
+  useEffect(() => {
+    if (recipe) {
+      changeModalState(recipe);
+      bottomSheetRef?.current?.snapToIndex(0);
+    } else {
+      bottomSheetRef?.current?.close();
+    }
+  }, [recipe]);
 
   return (
     <>
@@ -73,11 +109,12 @@ const AddRecipeModal: FC = () => {
       <BottomSheet
         ref={bottomSheetRef}
         index={-1}
-        snapPoints={['60%', '100%']}
+        snapPoints={['50%', '100%']}
         containerStyle={{ zIndex: 2 }}
         enablePanDownToClose
         style={{ paddingHorizontal: 12 }}
         backgroundStyle={{ backgroundColor }}
+        onClose={onClose}
       >
         <>
           <Input

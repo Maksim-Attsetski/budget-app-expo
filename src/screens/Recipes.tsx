@@ -1,4 +1,4 @@
-import React, { FC, memo, useMemo } from 'react';
+import React, { FC, memo, useState } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { IScreen, ListWithInput } from '../shared';
@@ -14,6 +14,7 @@ import { routes } from '../widgets/App/types';
 
 const Recipes: FC<IScreen> = ({ navigation }) => {
   const { recipes, onGetRecipes, recipeLoading, onUpdateRecipe } = useRecipe();
+  const [activeRecipe, setActiveRecipe] = useState<IRecipe | null>(null);
 
   const onRefresh = async () => {
     await onGetRecipes([]);
@@ -35,7 +36,10 @@ const Recipes: FC<IScreen> = ({ navigation }) => {
   return (
     <Layout headerProps={{ children: 'Рецепты' }}>
       <Gap y={5} />
-      <AddRecipeModal />
+      <AddRecipeModal
+        onClose={() => setActiveRecipe(null)}
+        recipe={activeRecipe}
+      />
       <Gap y={7} />
       <ListWithInput
         search={(arr, query) =>
@@ -49,7 +53,13 @@ const Recipes: FC<IScreen> = ({ navigation }) => {
         loading={recipeLoading}
         onRefresh={onRefresh}
         data={recipes}
-        renderItem={(item) => <RecipeItem recipe={item} key={item?.uid} />}
+        renderItem={(item) => (
+          <RecipeItem
+            setActiveRecipe={setActiveRecipe}
+            recipe={item}
+            key={item?.uid}
+          />
+        )}
       />
       <Flex>
         <TouchableOpacity style={styles.bottom_btn} onPress={onClearTrash}>

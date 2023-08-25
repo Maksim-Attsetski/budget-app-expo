@@ -1,16 +1,19 @@
-import React, { FC, memo } from 'react';
+import React, { Dispatch, FC, SetStateAction, memo } from 'react';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+
 import { IRecipe } from '../types';
 import { Card, Title, Gap, Flex, Text } from '../../../UI';
-import TrashBtns from './TrashBtns';
-import { useRecipe } from '../useRecipes';
-import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Svg } from '../../../../assets';
+
+import { useRecipe } from '../useRecipes';
+import TrashBtns from './TrashBtns';
 
 interface IProps {
   recipe: IRecipe;
+  setActiveRecipe: Dispatch<SetStateAction<IRecipe>>;
 }
 
-const RecipeItem: FC<IProps> = ({ recipe }) => {
+const RecipeItem: FC<IProps> = ({ recipe, setActiveRecipe }) => {
   const { onDeleteRecipe } = useRecipe();
 
   return (
@@ -18,6 +21,11 @@ const RecipeItem: FC<IProps> = ({ recipe }) => {
       <View style={styles.delete_btn}>
         <TouchableOpacity onPress={() => onDeleteRecipe(recipe.uid)}>
           <Svg.remove size={20} />
+        </TouchableOpacity>
+      </View>
+      <View style={styles.edit_btn}>
+        <TouchableOpacity onPress={() => setActiveRecipe(recipe)}>
+          <Svg.edit size={20} />
         </TouchableOpacity>
       </View>
       <Title size='small'>{recipe?.name || 'Пустое название'}</Title>
@@ -40,6 +48,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 12,
     left: 12,
+    zIndex: 1,
+  },
+  edit_btn: {
+    position: 'absolute',
+    top: 12,
+    left: 42,
     zIndex: 1,
   },
 });
