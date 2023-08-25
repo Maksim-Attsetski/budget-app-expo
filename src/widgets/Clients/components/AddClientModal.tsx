@@ -160,7 +160,7 @@ const AddClientModal: FC<IProps> = ({
       <BottomSheet
         ref={bottomSheetRef}
         index={-1}
-        snapPoints={['75%', '100%']}
+        snapPoints={['50%', '100%']}
         containerStyle={{ zIndex: 2 }}
         enablePanDownToClose
         onClose={() => setClientModalVisible('')}
@@ -219,7 +219,7 @@ const AddClientModal: FC<IProps> = ({
           />
           <Gap y={7} />
           <DatePicker date={date} setDate={setDate} />
-          {totalProductCost && totalProductCost > 0 && (
+          {Boolean(totalProductCost && totalProductCost > 0) && (
             <>
               <Gap y={7} />
               <Button
