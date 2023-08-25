@@ -10,6 +10,7 @@ import { NearestOrder, OrderPerWeek } from '../widgets/Orders';
 
 const HomeScreen: FC<IScreen> = ({ navigation }) => {
   const { budget, setBudget, budgetLoading } = useBudget();
+  const styles = getStyles(colors);
 
   const inc: number = budget.reduce(
     (acc, cur) => (cur.type === 'inc' ? acc + cur.value : acc),
@@ -59,7 +60,10 @@ const HomeScreen: FC<IScreen> = ({ navigation }) => {
         ListHeaderComponent={
           <>
             <Gap y={5} />
-            <Card loading={budgetLoading} style={{ maxHeight: 130 }}>
+            <Card
+              loading={budgetLoading}
+              style={{ maxHeight: budgetLoading ? 130 : 'auto' }}
+            >
               <Flex justify='space-evenly'>
                 <Text style={styles.profitText}>Доход: {inc} р.</Text>
                 <Text style={styles.lossText}>Расходы: {dec} р.</Text>
@@ -111,34 +115,35 @@ const HomeScreen: FC<IScreen> = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  chartContainer: {
-    padding: 20,
-    backgroundColor: colors?.darkBlock,
-    borderRadius: 20,
-    marginVertical: 20,
-  },
-  boldText: {
-    fontSize: 20,
-  },
-  profitText: {
-    fontSize: 22,
-    color: colors?.green,
-    fontWeight: 'bold',
-  },
-  lossText: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: colors?.purple,
-  },
-  layer: {
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    right: 0,
-    bottom: 0,
-    zIndex: 3,
-  },
-});
+const getStyles = (_colors: typeof colors) =>
+  StyleSheet.create({
+    chartContainer: {
+      padding: 20,
+      backgroundColor: _colors?.darkBlock,
+      borderRadius: 20,
+      marginVertical: 20,
+    },
+    boldText: {
+      fontSize: 20,
+    },
+    profitText: {
+      fontSize: 20,
+      color: _colors?.green,
+      fontWeight: 'bold',
+    },
+    lossText: {
+      fontSize: 20,
+      fontWeight: 'bold',
+      color: _colors?.purple,
+    },
+    layer: {
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      right: 0,
+      bottom: 0,
+      zIndex: 3,
+    },
+  });
 
 export default memo(HomeScreen);
