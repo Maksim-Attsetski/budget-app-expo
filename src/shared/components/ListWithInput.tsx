@@ -68,6 +68,10 @@ const ListWithInput: FC<IProps> = ({
     [setIsFocused]
   );
 
+  const scrollToTop = () => {
+    containerRef?.current?.scrollTo?.({ animated: true, x: 0, y: offsetY });
+  };
+
   const onScrollEnd = (e: any) => {
     const newValue = e.nativeEvent.contentOffset.y;
     if (containerRef?.current && newValue < offsetY) {
@@ -75,17 +79,13 @@ const ListWithInput: FC<IProps> = ({
         onRefresh();
       }
 
-      setTimeout(() => {
-        // @ts-ignore
-        containerRef?.current?.scrollTo?.({ animated: true, x: 0, y: offsetY });
-      }, 200);
+      setTimeout(scrollToTop, 200);
     }
   };
 
   useEffect(() => {
-    isNeedInput &&
-      containerRef?.current?.scrollTo?.({ animated: true, x: 0, y: offsetY });
-  }, [isNeedInput]);
+    isNeedInput && scrollToTop();
+  }, [isNeedInput, offsetY]);
 
   useEffect(() => {
     onSearch(debouncedQuery);
@@ -126,7 +126,10 @@ const ListWithInput: FC<IProps> = ({
         ref={containerRef}
       >
         {isNeedInput && !loading && (
-          <View style={{ width: '100%', height: offsetY }} />
+          <View
+            onLayout={scrollToTop}
+            style={{ width: '100%', height: offsetY }}
+          />
         )}
         {loading ? (
           <>
