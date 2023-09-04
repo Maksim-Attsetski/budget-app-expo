@@ -12,14 +12,15 @@ import {
   orderBy,
   limit,
   QueryFilterConstraint,
-  and,
   getCountFromServer,
   addDoc,
   OrderByDirection,
+  or,
 } from 'firebase/firestore';
 import { User } from 'firebase/auth';
 
 import { fbStore } from '../../config';
+import { IClient } from '../../widgets/Clients';
 
 export type TCollectionId =
   | 'zefirka-clients'
@@ -98,14 +99,14 @@ export const useFirestore = (collectionId: TCollectionId) => {
   async function getAll(whereArr: QueryFilterConstraint[], limitVal?: number) {
     const q = query(
       collection(fbStore, collectionId),
-      and(...whereArr),
+      or(...whereArr),
       limit(limitVal ?? 10)
     );
     try {
       const querySnapshot = await getDocs(q);
       const result: any[] = [];
       const allData = await getCountFromServer(
-        query(collection(fbStore, collectionId), and(...whereArr), limit(999))
+        query(collection(fbStore, collectionId), or(...whereArr), limit(999))
       );
 
       querySnapshot.forEach((doc) => {
@@ -113,6 +114,37 @@ export const useFirestore = (collectionId: TCollectionId) => {
       });
 
       return { result, count: allData.data().count };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async function search<T = IClient>(
+    queryVal: string,
+    fields: (keyof T)[],
+    limitVal?: number
+  ) {
+    const q = query(collection(fbStore, collectionId));
+    try {
+      const querySnapshot = await getDocs(q);
+      const filteredData: any[] = [];
+
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+
+        for (let inx = 0; inx < fields.length; inx++) {
+          const field = fields[inx];
+          const value = data[field.toString()] as string;
+
+          if (value.includes(queryVal)) {
+            filteredData.push(data);
+            break;
+          }
+        }
+      });
+
+      const result = [...filteredData].slice(0, limitVal);
+      return { result, count: result.length };
     } catch (error) {
       throw error;
     }
@@ -127,5 +159,5 @@ export const useFirestore = (collectionId: TCollectionId) => {
     }
   };
 
-  return { add, addWithId, update, get, remove, getAll };
+  return { add, addWithId, update, get, remove, getAll, search };
 };

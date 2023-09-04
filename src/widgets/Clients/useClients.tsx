@@ -28,6 +28,28 @@ export const useClients = () => {
     }
   };
 
+  const onSearchClients = async (
+    query: string,
+    save: boolean = false,
+    limitVal: number = 10
+  ) => {
+    try {
+      setLoading(true);
+      const curClients = await fbClient.search(
+        query,
+        ['contacts', 'lastname', 'name'],
+        limitVal
+      );
+
+      save && action.setClientsAC(curClients.result);
+      return curClients;
+    } catch (error) {
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const onAddClient = async (data: IClient): Promise<string> => {
     try {
       setLoading(true);
@@ -79,5 +101,6 @@ export const useClients = () => {
     onUpdateClient,
     onDeleteClient,
     setClientModalVisible,
+    onSearchClients,
   };
 };

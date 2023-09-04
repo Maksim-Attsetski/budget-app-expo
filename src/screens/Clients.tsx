@@ -1,4 +1,5 @@
 import React, { FC, memo } from 'react';
+import { Alert } from 'react-native';
 
 import { Gap } from '../UI';
 import { ListWithInput } from '../shared';
@@ -7,13 +8,25 @@ import { AddClientModal, ClientItem, useClients } from '../widgets/Clients';
 import { useOrders } from '../widgets/Orders';
 
 const Clients: FC = () => {
-  const { clients, onGetClients, clientLoading } = useClients();
+  const { clients, onGetClients, clientLoading, onSearchClients } =
+    useClients();
   const { orderLoading, onGetOrders } = useOrders();
 
   const onRefresh = async (): Promise<void> => {
     const clients = await onGetClients();
     clients.result?.length > 0 &&
       (await onGetOrders(clients.result?.map((el) => el.uid)));
+  };
+
+  const onSearch = async (query: string): Promise<void> => {
+    try {
+      const clients = await onSearchClients(query, true, 50);
+
+      clients.result?.length > 0 &&
+        (await onGetOrders(clients.result?.map((el) => el.uid)));
+    } catch (error) {
+      Alert.alert('Ошибка', error?.message);
+    }
   };
 
   return (
@@ -26,9 +39,7 @@ const Clients: FC = () => {
         renderItem={(item) => (
           <ClientItem orderLoading={orderLoading} item={item} />
         )}
-        search={(arr, val) =>
-          arr.filter((item) => (item.name + item.lastname).includes(val))
-        }
+        onSearch={onSearch}
         inputPlaceholder='Введите имя пользователя'
         loading={clientLoading}
         onRefresh={onRefresh}

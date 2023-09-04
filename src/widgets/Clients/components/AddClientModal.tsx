@@ -96,11 +96,12 @@ const AddClientModal: FC<IProps> = ({
         } as IOrder);
       } else {
         const uid = await onAddClient({
-          contacts, // #TODO дата заказа
+          contacts,
           lastname,
           name,
+          username: name + lastname,
         } as IClient);
-        await onAddOrder(client?.uid, {
+        await onAddOrder(uid, {
           dealAt: date.getTime(),
           description,
           price: +price,

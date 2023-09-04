@@ -16,6 +16,7 @@ import Animated, {
 import { Card, Empty, Gap, Input } from '../../UI';
 import RefreshInput from './RefreshInput';
 import { Svg } from '../../../assets';
+import { useDebounce } from '../hooks';
 
 const { width } = Dimensions.get('window');
 
@@ -23,7 +24,7 @@ const offsetY = width / 2;
 const inputSize = 48;
 
 interface IProps {
-  search: (arr: any[], query: string) => any[];
+  onSearch: (query: string) => Promise<any>;
   data: any[];
   renderItem: (item: any, index: number) => ReactNode;
   limitForInput?: number;
@@ -34,7 +35,7 @@ interface IProps {
 }
 
 const ListWithInput: FC<IProps> = ({
-  search,
+  onSearch,
   data,
   renderItem,
   limitForInput = 3,
@@ -46,10 +47,10 @@ const ListWithInput: FC<IProps> = ({
   const scrollY = useSharedValue(0);
   const containerRef = useRef<Animated.ScrollView>();
   const [query, setQuery] = useState<string>('');
+  const debouncedQuery = useDebounce<string>(query, 500);
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
-  const searchData = search(data, query);
-  const isNeedInput = searchData.length > limitForInput;
+  const isNeedInput = data.length > limitForInput;
 
   const onInputFocus = (): void => {
     setIsFocused(true);
@@ -85,6 +86,10 @@ const ListWithInput: FC<IProps> = ({
     isNeedInput &&
       containerRef?.current?.scrollTo?.({ animated: true, x: 0, y: offsetY });
   }, [isNeedInput]);
+
+  useEffect(() => {
+    onSearch(debouncedQuery);
+  }, [debouncedQuery]);
 
   return (
     <>
@@ -131,8 +136,8 @@ const ListWithInput: FC<IProps> = ({
           </>
         ) : (
           <View onTouchStart={onInputBlur}>
-            {searchData.length > 0 ? (
-              searchData.map((item, inx) => (
+            {data.length > 0 ? (
+              data.map((item, inx) => (
                 <Fragment key={inx}>
                   <Gap y={3} />
                   {renderItem(item, inx)}
