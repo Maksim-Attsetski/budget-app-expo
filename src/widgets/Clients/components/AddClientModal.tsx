@@ -142,7 +142,7 @@ const AddClientModal: FC<IProps> = ({
     } else {
       bottomSheetRef?.current?.snapToIndex(-1);
       setDescription('');
-      setPrice('0');
+      setPrice('');
       setDate(new Date());
     }
   }, [addClientModalKey]);
