@@ -7,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Dimensions, View } from 'react-native';
+import { Dimensions, TouchableOpacity, View } from 'react-native';
 import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
@@ -15,7 +15,7 @@ import Animated, {
 
 import { Card, Empty, Gap, Input } from '../../UI';
 import RefreshInput from './RefreshInput';
-import { QueryFilterConstraint } from 'firebase/firestore';
+import { Svg } from '../../../assets';
 
 const { width } = Dimensions.get('window');
 
@@ -97,14 +97,22 @@ const ListWithInput: FC<IProps> = ({
           onFocus={onInputFocus}
         />
       ) : (
-        <Input
-          inversed
-          placeholder={inputPlaceholder}
-          setValue={setQuery}
-          value={query}
-          onBlur={onInputBlur}
-          autoFocus={isFocused}
-        />
+        <View style={{ position: 'relative' }}>
+          <Input
+            inversed
+            placeholder={inputPlaceholder}
+            setValue={setQuery}
+            value={query}
+            onBlur={onInputBlur}
+            autoFocus={isFocused}
+          />
+          <TouchableOpacity
+            style={{ position: 'absolute', top: '25%', right: 15 }}
+            onPress={onRefresh}
+          >
+            <Svg.search />
+          </TouchableOpacity>
+        </View>
       )}
       <Gap y={5} />
       <Animated.ScrollView

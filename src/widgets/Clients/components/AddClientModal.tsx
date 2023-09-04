@@ -160,7 +160,7 @@ const AddClientModal: FC<IProps> = ({
       <BottomSheet
         ref={bottomSheetRef}
         index={-1}
-        snapPoints={['50%', '100%']}
+        snapPoints={['75%', '100%']}
         containerStyle={{ zIndex: 2 }}
         enablePanDownToClose
         onClose={() => setClientModalVisible('')}

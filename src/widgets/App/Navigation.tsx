@@ -76,15 +76,14 @@ const Navigation: FC = () => {
     try {
       action.setAppLoadingAC(true);
 
-      await Promise.all([
-        checkVersion(),
+      const [clients] = await Promise.all([
         onGetClients(),
+        checkVersion(),
         setBudget(),
         onGetRecipes(),
         onGetSetting(),
       ]);
       await checkVersion();
-      const clients = await onGetClients();
       clients.result?.length > 0 &&
         (await onGetOrders(clients.result?.map((el) => el.uid)));
       console.log('get all');
