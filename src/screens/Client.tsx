@@ -1,25 +1,36 @@
 import React, { FC, memo, useCallback, useEffect, useState } from 'react';
-import { FlatList, Linking, StyleSheet } from 'react-native';
+import { FlatList, Linking, StyleSheet, TouchableOpacity } from 'react-native';
 import { where } from 'firebase/firestore';
 
 import { Card, Empty, Flex, Gap, List, Skeleton, Text, Title } from '../UI';
 import { IScreen, colors } from '../shared';
 import { Layout } from '../widgets/App';
 import { AddClientModal, IClient, useClients } from '../widgets/Clients';
-import { OrderItem, useOrders } from '../widgets/Orders';
+import { IOrder, OrderItem, useOrders } from '../widgets/Orders';
+import { Svg } from '../../assets';
 
 const mKey = 'one_client_modal';
 
-const Client: FC<IScreen> = ({ route }) => {
+const Client: FC<IScreen> = ({ route, navigation }) => {
   // @ts-ignore
   const clientId: string = route.params?.id ?? '';
 
-  const { clients, setClientModalVisible, clientLoading, onGetClients } =
-    useClients();
-  const { orders: ordersData, onGetOrders, orderLoading } = useOrders();
+  const {
+    clients,
+    setClientModalVisible,
+    clientLoading,
+    onGetClients,
+    onDeleteClient,
+  } = useClients();
+  const {
+    orders: ordersData,
+    onGetOrders,
+    orderLoading,
+    onDeleteOrder,
+  } = useOrders();
 
   const [client, setClient] = useState<IClient | null>(null);
-  const [userOrders, setUserOrders] = useState([]);
+  const [userOrders, setUserOrders] = useState<IOrder[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   const onGetClient = useCallback((): void => {
@@ -63,6 +74,18 @@ const Client: FC<IScreen> = ({ route }) => {
     }
   };
 
+  const onDeleteUser = async (): Promise<void> => {
+    if (client?.uid) {
+      const notDoneOrders = userOrders
+        .filter((order) => !order.isDone)
+        .map((el) => onDeleteOrder(el.uid));
+
+      await Promise.all([...notDoneOrders]);
+      await onDeleteClient(client.uid);
+      navigation.goBack();
+    }
+  };
+
   const allLoading = loading || clientLoading || orderLoading;
   const userName = client ? client?.name + ' ' + client?.lastname : '';
 
@@ -75,7 +98,16 @@ const Client: FC<IScreen> = ({ route }) => {
   }, [clientId]);
 
   return (
-    <Layout headerProps={{ children: userName }}>
+    <Layout
+      headerProps={{
+        children: userName,
+        right: (
+          <TouchableOpacity onPress={onDeleteUser}>
+            <Svg.remove stroke={colors.red} />
+          </TouchableOpacity>
+        ),
+      }}
+    >
       <Gap y={5} />
       <AddClientModal mKey={mKey} disabledBtn={clientLoading} client={client} />
       <Gap y={5} />
