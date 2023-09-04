@@ -9,8 +9,12 @@ const Empty: FC<PropsWithChildren> = ({ children }) => {
   return (
     <Card>
       <Title size='small'>Ничего не найдено</Title>
-      <Gap y={7} />
-      <Text style={{ textAlign: 'center' }}>{children}</Text>
+      {children && (
+        <>
+          <Gap y={7} />
+          <Text style={{ textAlign: 'center' }}>{children}</Text>
+        </>
+      )}
     </Card>
   );
 };
