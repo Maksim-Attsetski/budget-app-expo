@@ -38,6 +38,29 @@ export const useOrders = () => {
       setLoading(false);
     }
   };
+
+  const onSearchOrders = async (
+    query: string,
+    save: boolean = false,
+    limitVal: number = 10
+  ) => {
+    try {
+      setLoading(true);
+      const curData = await fbOrder.search<IOrder>(
+        query,
+        ['description'],
+        limitVal
+      );
+
+      save && action.setOrdersAC(curData);
+      return curData;
+    } catch (error) {
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const onGetOrdersByQuery = async (
     whereArr: QueryFilterConstraint[],
     limitVal?: number,
@@ -120,5 +143,6 @@ export const useOrders = () => {
     onDeleteOrder,
     onGetNeareastOrder,
     onGetOrdersByQuery,
+    onSearchOrders,
   };
 };

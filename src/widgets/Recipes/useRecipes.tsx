@@ -30,6 +30,28 @@ export const useRecipe = () => {
     }
   };
 
+  const onSearchRecipes = async (
+    query: string,
+    save: boolean = false,
+    limitVal: number = 10
+  ) => {
+    try {
+      setLoading(true);
+      const curData = await fbRecipes.search<IRecipe>(
+        query,
+        ['name', 'description', 'cost_price'],
+        limitVal
+      );
+
+      save && action.setRecipes(curData);
+      return curData;
+    } catch (error) {
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const onAddRecipe = async (data: IRecipe): Promise<void> => {
     try {
       setLoading(true);
@@ -106,5 +128,6 @@ export const useRecipe = () => {
     onAddRecipe,
     onUpdateRecipe,
     onDeleteRecipe,
+    onSearchRecipes,
   };
 };

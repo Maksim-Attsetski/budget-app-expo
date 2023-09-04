@@ -13,7 +13,13 @@ import {
 import { routes } from '../widgets/App/types';
 
 const Recipes: FC<IScreen> = ({ navigation }) => {
-  const { recipes, onGetRecipes, recipeLoading, onUpdateRecipe } = useRecipe();
+  const {
+    recipes,
+    onGetRecipes,
+    recipeLoading,
+    onUpdateRecipe,
+    onSearchRecipes,
+  } = useRecipe();
   const [activeRecipe, setActiveRecipe] = useState<IRecipe | null>(null);
 
   const onRefresh = async () => {
@@ -31,6 +37,10 @@ const Recipes: FC<IScreen> = ({ navigation }) => {
     await Promise.all(promises);
   };
 
+  const onSearch = async (query: string): Promise<void> => {
+    await onSearchRecipes(query, true, 50);
+  };
+
   const itemCountInTrash = recipes.reduce((acc, cur) => acc + cur.inTrash, 0);
 
   return (
@@ -42,11 +52,7 @@ const Recipes: FC<IScreen> = ({ navigation }) => {
       />
       <Gap y={7} />
       <ListWithInput
-        search={(arr, query) =>
-          arr.length > 0
-            ? (arr as IRecipe[]).filter((el) => el?.name?.includes(query))
-            : []
-        }
+        onSearch={onSearch}
         inputPlaceholder='Поиск по названию'
         limitForInput={4}
         emptyText='Вы не добавили ни одного рецепта'

@@ -11,7 +11,8 @@ const maxDateDefault = new Date();
 maxDateDefault.setDate(30);
 
 const Orders: FC<IScreen> = ({ route }) => {
-  const { onGetOrdersByQuery, orderLoading, orders } = useOrders();
+  const { onGetOrdersByQuery, orderLoading, orders, onSearchOrders } =
+    useOrders();
 
   // @ts-ignore
   const from = route.params?.from ?? minDateDefault.getTime();
@@ -27,6 +28,10 @@ const Orders: FC<IScreen> = ({ route }) => {
     }
   }, [from, to]);
 
+  const onSearch = async (query: string) => {
+    await onSearchOrders(query, true);
+  };
+
   useEffect(() => {
     // @ts-ignore
     route.params?.from && onCheckOrders();
@@ -37,9 +42,7 @@ const Orders: FC<IScreen> = ({ route }) => {
       <ListWithInput
         data={orders}
         renderItem={(item: IOrder) => <OrderItem order={item} />}
-        search={(data, query) =>
-          data.filter((item: IOrder) => item.description.includes(query))
-        }
+        onSearch={onSearch}
         inputPlaceholder='Поиск по описанию'
         loading={orderLoading}
         onRefresh={onCheckOrders}
